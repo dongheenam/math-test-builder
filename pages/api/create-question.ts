@@ -17,13 +17,15 @@ const createQuestion = async (req: NextApiRequest, res: NextApiResponse) => {
       solution: solution,
     });
 
-    res.send({ data: question });
+    res.send({ status: "success", data: { _id: question._id } });
   } catch (err) {
     console.log(err);
     if (err instanceof MongooseError.ValidationError) {
-      res.status(400).send({ error: "request body has incorrect type" });
+      res
+        .status(400)
+        .send({ status: "error", error: "question has incorrect type" });
     } else {
-      res.status(500).send({ error: "unknown error occured" });
+      res.status(500).send({ status: "error", error: "unknown error occured" });
     }
   }
 };

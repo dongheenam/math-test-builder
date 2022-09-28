@@ -25,10 +25,10 @@ const createQuestion = async () => {
 /* Main JSX */
 const Test = () => {
   return (
-    <div>
-      <span>Click this buton:</span>
-      <button onClick={() => createQuestion()}>Add a question</button>
-    </div>
+    <>
+      <span>Click this button: </span>
+      <button>Add a question</button>
+    </>
   );
 };
 

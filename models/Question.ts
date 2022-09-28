@@ -16,6 +16,6 @@ const questionSchema = new Schema(
   { collection: "questions", timestamps: true }
 );
 const Question =
-  (mongoose.models.questions as Model<IQuestion>) ||
+  (mongoose.models["questions"] as Model<IQuestion>) ||
   mongoose.model<IQuestion>("questions", questionSchema);
 export default Question;
