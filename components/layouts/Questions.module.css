@@ -1,0 +1,24 @@
+.q-container {
+  width: min(90vw, 1150px);
+
+  display: grid;
+  grid-template-columns: minmax(min-content, 250px) minmax(500px, 1fr);
+  column-gap: var(--md);
+}
+
+.main {
+  padding-top: var(--xl);
+}
+
+.navbar {
+  padding-top: var(--xl);
+  border-right: var(--border-thick);
+}
+.navbar-group {
+  border-left: var(--border-default);
+}
+
+/* sidebar is not ready yet */
+.sidebar {
+  display: none;
+}

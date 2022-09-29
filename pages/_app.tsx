@@ -1,17 +1,21 @@
 import { AppProps } from "next/app";
-import "styles/globals.css";
 
 import { MantineProvider } from "@mantine/core";
-import { AppLayout } from "components/Layout";
 
-export default function App(props: AppProps) {
+import "styles/globals.css";
+import { getDefaultLayout, NextPageWithLayout } from "components/layouts";
+
+export default function App(
+  props: AppProps & { Component: NextPageWithLayout }
+) {
   const { Component, pageProps } = props;
+  const getLayout = Component.getLayout ?? ((page) => getDefaultLayout(page));
 
-  return (
+  const MyApp = (
     <MantineProvider withGlobalStyles withNormalizeCSS withCSSVariables>
-      <AppLayout>
-        <Component {...pageProps} />
-      </AppLayout>
+      <Component {...pageProps} />
     </MantineProvider>
   );
+
+  return getLayout(MyApp);
 }

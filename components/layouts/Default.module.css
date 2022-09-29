@@ -10,15 +10,15 @@
   position: sticky;
   top: 0;
   width: 100%;
+  padding: var(--sm) var(--xl);
 
-  padding: var(--mantine-spacing-sm) var(--mantine-spacing-xl);
+  background-color: var(--mantine-color-gray-1);
   box-shadow: var(--mantine-shadow-xs);
-  background-color: var(--mantine-color-white);
 
   display: flex;
   justify-content: space-between;
   align-items: center;
-  gap: var(--mantine-spacing-sm);
+  gap: var(--md);
 }
 .header-title {
   font-size: var(--mantine-h2-font-size);
@@ -26,14 +26,17 @@
 }
 
 .footer {
-  padding: var(--mantine-spacing-sm);
+  padding: var(--sm);
 
   color: var(--mantine-color-gray-6);
   text-align: center;
 }
 
-.page-wrap {
+.child-wrap {
   flex-grow: 1;
-  padding: var(--mantine-spacing-sm);
+  padding: var(--sm);
+  padding-top: 0;
   margin: auto;
+
+  display: flex;
 }

@@ -1,6 +1,6 @@
 /* avoid flickering for dark mode */
 html {
-  background-color: #1a1b1e;
+  background-color: var(--mantine-color-dark-7);
 }
 
 /* the app fills the screen */
@@ -9,3 +9,6 @@ html {
   min-height: 100vh;
   isolation: isolate;
 }
+
+/* reused variables */
+@import "./variables.css";
