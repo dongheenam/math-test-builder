@@ -1,0 +1,37 @@
+.q-container {
+  width: min(90vw, 1150px);
+
+  display: grid;
+  grid-template-columns: minmax(min-content, 250px) minmax(500px, 1fr);
+  column-gap: var(--md);
+
+  background-color: var(--mantine-color-gray-1);
+}
+
+.main {
+  padding-top: var(--xl);
+  box-shadow: 0 0 0 100vmax var(--mantine-color-gray-1);
+  clip-path: inset(0 -100vmax 0 0);
+}
+
+.navbar-container {
+  background-color: var(--mantine-color-white);
+  border-right: var(--border-thick);
+}
+.navbar {
+  position: sticky;
+  top: 88px;
+}
+.navbar-link {
+  border-left: var(--border-default);
+
+  &.active {
+    border-left: var(--border-primary);
+    font-weight: 500;
+  }
+}
+
+/* sidebar is not ready yet */
+.sidebar {
+  display: none;
+}

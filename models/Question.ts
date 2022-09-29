@@ -7,7 +7,8 @@ import { IQuestion } from "types";
 const questionSchema = new Schema(
   {
     topic: { type: String, index: true, required: true },
-    yearLevel: { type: String, index: true, required: true },
+    yearLevel: { type: Number, index: true, required: true },
+    course: { type: String },
     tags: [String],
     text: { type: String, required: true },
     solution: { type: String, required: true },

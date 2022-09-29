@@ -1,43 +1,88 @@
-import { ActionIcon, Anchor, Tooltip } from "@mantine/core";
+import { Anchor, Button, Box, Tabs, Text } from "@mantine/core";
 import { NextLink } from "@mantine/next";
-import { TablerIcon, IconSearch, IconLogin } from "@tabler/icons";
+import classNames from "classnames";
+import { useRouter } from "next/router";
 
-import styles from "./Default.module.css";
+import styles from "./Default.module.scss";
 
-/* Header */
-const HeaderButton = ({
-  icon,
-  label,
-  href,
-}: {
-  icon: TablerIcon;
-  label: string;
-  href: string;
-}) => {
-  const Icon = icon;
+/* Main */
+const DefaultLayout = ({ children }: { children: React.ReactNode }) => {
   return (
-    <Tooltip label={label} openDelay={100}>
-      <ActionIcon
-        component={NextLink}
-        href={href}
-        variant="default"
-        size="lg"
-        sx={() => ({ backgroundColor: "transparent" })}
-      >
-        <Icon stroke={1.5} />
-      </ActionIcon>
-    </Tooltip>
+    <div className={styles["app-container"]}>
+      <Header />
+      <div className={styles["child-wrap"]}>{children}</div>
+      <Footer />
+    </div>
   );
 };
+export default DefaultLayout;
 
+/* Header */
 const Header = () => {
   return (
     <div className={styles["header"]}>
-      <span className={styles["header-title"]}>Test Builder</span>
-      <div style={{ flexGrow: 1 }}></div>
-      <HeaderButton icon={IconSearch} label="Questions" href="/questions" />
-      <HeaderButton icon={IconLogin} label="Login" href="#" />
+      <Text className={styles["header-title"]}>MathTestBuilder</Text>
+      <Box pt="xs">
+        <HeaderTopRow />
+        <HeaderBottomRow />
+      </Box>
     </div>
+  );
+};
+
+const HeaderTopRow = () => {
+  return (
+    <Button.Group className={styles["header-top"]}>
+      <HeaderTopButton label="log in" href="/auth" />
+    </Button.Group>
+  );
+};
+
+const HeaderTopButton = ({ label, href }: { label: string; href: string }) => {
+  return (
+    <Button
+      variant="subtle"
+      component={NextLink}
+      href={href}
+      className={styles["header-btn"]}
+    >
+      {label}
+    </Button>
+  );
+};
+
+const HeaderBottomRow = () => {
+  const router = useRouter();
+
+  return (
+    <Tabs
+      value={router.asPath}
+      onTabChange={(value: string) => router.push(value)}
+      variant="default"
+    >
+      <Tabs.List>
+        <HeaderBottomButton label="Home" href="/" />
+        <HeaderBottomButton label="Questions" href="/questions" />
+        <HeaderBottomButton label="Tests" href="/tests" />
+      </Tabs.List>
+    </Tabs>
+  );
+};
+
+const HeaderBottomButton = ({
+  label,
+  href,
+}: {
+  label: string;
+  href: string;
+}) => {
+  return (
+    <Tabs.Tab
+      value={href}
+      className={classNames(styles["header-btn"], styles["header-bot-btn"])}
+    >
+      {label}
+    </Tabs.Tab>
   );
 };
 
@@ -59,15 +104,3 @@ const Footer = () => {
     </footer>
   );
 };
-
-/* Main */
-const DefaultLayout = ({ children }: { children: React.ReactNode }) => {
-  return (
-    <div className={styles["app-container"]}>
-      <Header />
-      <div className={styles["child-wrap"]}>{children}</div>
-      <Footer />
-    </div>
-  );
-};
-export default DefaultLayout;

@@ -1,6 +1,7 @@
 :root {
   /* borders */
   --border-default: 1px solid var(--mantine-color-gray-3);
+  --border-primary: 1px solid var(--mantine-color-blue-4);
   --border-thick: 1.5px solid var(--mantine-color-gray-3);
 
   /* spacing */

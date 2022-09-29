@@ -1,8 +1,3 @@
-/* avoid flickering for dark mode */
-html {
-  background-color: var(--mantine-color-dark-7);
-}
-
 /* the app fills the screen */
 #__next {
   width: 100%;
