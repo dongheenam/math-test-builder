@@ -10,12 +10,11 @@ import {
 } from "@mantine/core";
 import { IconSearch, IconPlus } from "@tabler/icons";
 
-import { topics, yearLevels } from "types";
-import styles from "./Search.module.css";
+import { TOPICS, YEAR_LEVELS } from "types";
 
 const QuestionsSearch = () => {
   return (
-    <Card withBorder radius="xs" p="md" style={{ overflow: "visible" }}>
+    <Card withBorder radius="sm" p="md" style={{ overflow: "visible" }}>
       <Grid grow>
         <Grid.Col span={1}>
           <Select
@@ -24,7 +23,7 @@ const QuestionsSearch = () => {
             selectOnBlur
             allowDeselect
             maxDropdownHeight={240}
-            data={yearLevels.map((e: number) => e.toString())}
+            data={YEAR_LEVELS.map((e: number) => e.toString())}
           />
         </Grid.Col>
         <Grid.Col span={2}>
@@ -33,7 +32,7 @@ const QuestionsSearch = () => {
             searchable
             allowDeselect
             maxDropdownHeight={240}
-            data={topics}
+            data={Object.values(TOPICS)}
           />
         </Grid.Col>
         <Grid.Col span={6}>

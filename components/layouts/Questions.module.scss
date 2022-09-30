@@ -5,12 +5,12 @@
   grid-template-columns: minmax(min-content, 250px) minmax(500px, 1fr);
   column-gap: var(--md);
 
-  background-color: var(--mantine-color-gray-1);
+  background-color: var(--bg-behind);
 }
 
 .main {
   padding-top: var(--xl);
-  box-shadow: 0 0 0 100vmax var(--mantine-color-gray-1);
+  box-shadow: 0 0 0 100vmax var(--bg-behind);
   clip-path: inset(0 -100vmax 0 0);
 }
 
@@ -25,9 +25,9 @@
 .navbar-link {
   border-left: var(--border-default);
 
-  &.active {
+  &[data-active] {
     border-left: var(--border-primary);
-    font-weight: 500;
+    font-weight: 600;
   }
 }
 
