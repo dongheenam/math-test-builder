@@ -1,4 +1,5 @@
 import { Title, Stack } from "@mantine/core";
+
 import { getQuestionsLayout } from "components/layouts";
 import QuestionsList from "components/questions/List";
 import QuestionsSearch from "components/questions/Search";

@@ -1,9 +1,8 @@
 import { AppProps } from "next/app";
-
 import { MantineProvider } from "@mantine/core";
 
-import "styles/globals.css";
 import { getDefaultLayout, NextPageWithLayout } from "components/layouts";
+import "styles/globals.css";
 
 export default function App(
   props: AppProps & { Component: NextPageWithLayout }
