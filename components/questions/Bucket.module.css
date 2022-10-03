@@ -1,0 +1,8 @@
+.q-control {
+  display: none;
+}
+
+.q-box:hover .q-control,
+.q-box:active .q-control {
+  display: flex;
+}

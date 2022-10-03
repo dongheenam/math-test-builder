@@ -7,39 +7,13 @@ import {
   Text,
 } from "@mantine/core";
 import React from "react";
-
-import { TOPICS } from "types";
 import QuestionBox from "./QuestionBox";
 
 import styles from "./List.module.css";
+import useStore from "components/stores/useStore";
+import { SORT_DATA } from "types";
 
-const questions = [
-  {
-    id: 1,
-    topic: TOPICS.NUM,
-    yearLevel: 8,
-    text: "What is 3 plus 5?",
-    tags: ["arithmetic", "add"],
-    solution: "8",
-  },
-  {
-    id: 2,
-    topic: TOPICS.NUM,
-    yearLevel: 8,
-    text: "What is 8 minus -2?",
-    tags: ["arithmetic", "integer", "subtract"],
-    solution: "10",
-  },
-  {
-    id: 3,
-    topic: TOPICS.STAT,
-    yearLevel: 8,
-    text: "What is the mean of 2, 3, 5, and 7?",
-    tags: ["mean", "find"],
-    solution: "The mean is 4.",
-  },
-];
-
+/* main */
 const QuestionsList = () => {
   return (
     <div>
@@ -47,12 +21,7 @@ const QuestionsList = () => {
         <Card.Section>
           <ListControl />
         </Card.Section>
-        {questions.map((q, idx) => (
-          <React.Fragment key={q.id}>
-            {idx > 0 && <Divider my="sm" />}
-            <QuestionBox q={q} />
-          </React.Fragment>
-        ))}
+        <QuestionsContainer />
       </Card>
     </div>
   );
@@ -65,16 +34,57 @@ function ListControl() {
       <Group className={styles["list-ctrl"]}>
         <Checkbox />
         <Group style={{ alignItems: "baseline" }}>
-          <Text align="right" color="dimmed" size="sm">
-            showing 3 results
-          </Text>
-          <NativeSelect
-            size="sm"
-            placeholder="Sort by"
-            data={["newest first", "oldest first"]}
-          />
+          <CountText />
+          <SortByForm />
         </Group>
       </Group>
     </>
+  );
+}
+
+/* ListControl.elements */
+function CountText() {
+  const countQueried = useStore.use.questions_countQueried();
+  const countFetched = useStore.use.questions_countFetched();
+  const countText =
+    countQueried === 0
+      ? "no results"
+      : `showing ${countFetched} of ${countQueried} results`;
+  return (
+    <Text align="right" color="dimmed" size="sm">
+      {countText}
+    </Text>
+  );
+}
+function SortByForm() {
+  const sortBy = useStore.use.questionForm_sortBy();
+  const setSortBy = useStore.use.questionForm_set()("questionForm_sortBy");
+  const fetchQuestions = useStore.use.questions_fetch();
+  return (
+    <NativeSelect
+      size="sm"
+      placeholder="Sort by"
+      data={SORT_DATA}
+      value={sortBy}
+      onChange={(e) => {
+        const value = e.currentTarget.value;
+        setSortBy(value);
+        fetchQuestions({ append: false });
+      }}
+    />
+  );
+}
+
+function QuestionsContainer() {
+  const questions = useStore.use.questions_fetched();
+  return (
+    <div>
+      {Array.from(questions, ([_q_id, q], idx) => (
+        <React.Fragment key={idx}>
+          {idx > 0 && <Divider my="sm" />}
+          <QuestionBox question={q} />
+        </React.Fragment>
+      ))}
+    </div>
   );
 }

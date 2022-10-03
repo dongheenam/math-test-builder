@@ -55,7 +55,9 @@ async function createQuestion(req: NextApiRequest, res: NextApiResponse) {
 /* GET: search questions */
 async function getQuestion(req: NextApiRequest, res: NextApiResponse) {
   try {
-    // parse request body
+    // parse request
+    const parsedQuery = fromQuery(req.query);
+    console.log(`getQuestion.query = ${JSON.stringify(parsedQuery)}`);
     const {
       topic,
       yearLevel,
@@ -65,7 +67,7 @@ async function getQuestion(req: NextApiRequest, res: NextApiResponse) {
       sort = "-updatedAt",
       limit = 10,
       skip = 0,
-    } = fromQuery(req.query);
+    } = parsedQuery;
 
     // build filter from request
     let qFilter: {

@@ -1,32 +1,42 @@
-import { QuestionDoc, TOPICS } from "./";
+import { QuestionDoc, Topic } from "./";
 
-export interface QFormState {
-  qForm: {
-    yearLevel: "7" | "8" | "9" | "10" | "11" | "12" | "";
-    // topic: typeof valueof TOPICS
-    topic: typeof TOPICS[keyof typeof TOPICS] | "";
-    tags: string[];
-    text: string;
-    matchType: "any" | "all";
-    sort: string;
-    limit: number;
-  };
+/* questionFormSlice */
+export const SORT_DATA = [
+  { value: "-updatedAt", label: "newest first" },
+  { value: "+updatedAt", label: "oldest first" },
+];
+export const MATCH_TYPE_DATA = ["any", "all"];
+export interface QuestionFormState {
+  questionForm_yearLevel: "7" | "8" | "9" | "10" | "11" | "12" | "";
+  questionForm_topic: Topic | "";
+  questionForm_tags: Set<string>;
+  questionForm_text: string;
+  questionForm_matchType: "any" | "all";
+  questionForm_sortBy: string;
+  questionForm_limit: number;
+  questionForm_skip: number;
 }
-export interface QFormSlice extends QFormState {
+export interface QuestionFormSlice extends QuestionFormState {
   /* methods */
-  setQForm: <Key extends keyof QFormState["qForm"]>(
+  questionForm_set: <Key extends keyof QuestionFormSlice>(
     field: Key
-  ) => (value: QFormState["qForm"][Key]) => void;
-  addTag: (newTag: string) => void;
-  resetQForm: () => void;
+  ) => (value: QuestionFormSlice[Key]) => void;
+  questionForm_addTag: (newTag: string) => void;
+  questionForm_reset: () => void;
 }
 
+/* questionsSlice */
 export interface QuestionsState {
-  questions: QuestionDoc[];
-  qCount: number;
-  qCountFetched: number;
+  questions_fetched: Map<string, QuestionDoc>;
+  questions_cached: Map<string, QuestionDoc>;
+  questions_bucket: string[];
+  questions_countQueried: number;
+  questions_countFetched: number;
 }
 export interface QuestionsSlice extends QuestionsState {
   /* methods */
-  fetchQuestions: ({ append }: { append: boolean }) => Promise<void>;
+  questions_fetch: ({ append }: { append: boolean }) => Promise<void>;
+  questions_toggleBucket: (_id: string) => void;
+  questions_setBucket: (newBucket: string[]) => void;
+  questions_resetBucket: () => void;
 }

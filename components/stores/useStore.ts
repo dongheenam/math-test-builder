@@ -1,11 +1,12 @@
 import create from "zustand";
 
-import { QFormSlice, QuestionsSlice } from "types/stores";
+import { QuestionFormSlice, QuestionsSlice } from "types/stores";
 import createQuestionFormSlice from "./questionFormSlice";
 import createQuestionsSlice from "./questionsSlice";
 import { createSelectors } from "lib/util";
 
-const useStoreBase = create<QFormSlice & QuestionsSlice>()((...a) => ({
+export type StoreState = QuestionFormSlice & QuestionsSlice;
+const useStoreBase = create<StoreState>()((...a) => ({
   ...createQuestionFormSlice(...a),
   ...createQuestionsSlice(...a),
 }));

@@ -1,43 +1,51 @@
 import { StateCreator } from "zustand";
 import produce from "immer";
 
-import { QFormSlice } from "types/stores";
+import { QuestionFormSlice } from "types/stores";
 
 // states reset by invoking resetForm()
-const INITIAL_FORM_STATE: Omit<QFormSlice["qForm"], "sort" | "limit"> = {
-  yearLevel: "",
-  topic: "",
-  tags: [],
-  text: "",
-  matchType: "any",
+const INITIAL_FORM_STATE: Pick<
+  QuestionFormSlice,
+  | "questionForm_yearLevel"
+  | "questionForm_topic"
+  | "questionForm_tags"
+  | "questionForm_text"
+  | "questionForm_matchType"
+> = {
+  questionForm_yearLevel: "",
+  questionForm_topic: "",
+  questionForm_tags: new Set(),
+  questionForm_text: "",
+  questionForm_matchType: "any",
 };
 
 // main slice
-const createQuestionFormSlice: StateCreator<QFormSlice, [], [], QFormSlice> = (
-  set
-) => ({
+const createQuestionFormSlice: StateCreator<
+  QuestionFormSlice,
+  [],
+  [],
+  QuestionFormSlice
+> = (set) => ({
   // states
-  qForm: { ...INITIAL_FORM_STATE, sort: "-updatedAt", limit: 10 },
+  ...INITIAL_FORM_STATE,
+  questionForm_sortBy: "-updatedAt",
+  questionForm_limit: 10,
+  questionForm_skip: 0,
 
   // methods
-  setQForm: (field) => (value) =>
+  questionForm_set: (field) => (value) =>
     set(
-      produce((draft) => {
-        const qForm = draft.qForm;
-        qForm[field] = value;
+      produce((draft: QuestionFormSlice) => {
+        draft[field] = value;
       })
     ),
-  addTag: (newTag) =>
+  questionForm_addTag: (newTag) =>
     set(
-      produce((draft) => {
-        draft.qForm.tags.push(newTag);
+      produce((draft: QuestionFormSlice) => {
+        const tags = draft.questionForm_tags;
+        draft.questionForm_tags = new Set(tags).add(newTag);
       })
     ),
-  resetQForm: () =>
-    set(
-      produce((draft) => {
-        draft.qForm = INITIAL_FORM_STATE;
-      })
-    ),
+  questionForm_reset: () => set({ ...INITIAL_FORM_STATE }),
 });
 export default createQuestionFormSlice;

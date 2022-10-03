@@ -10,13 +10,12 @@ import {
   SegmentedControl,
   MultiSelect,
 } from "@mantine/core";
-import { IconSearch, IconPlus } from "@tabler/icons";
+import { IconSearch, IconPencilPlus } from "@tabler/icons";
 
 import useStore from "components/stores/useStore";
-import { TOPICS, YEAR_LEVELS } from "types";
+import { MATCH_TYPE_DATA, QuestionFormSlice, TOPICS, YEAR_LEVELS } from "types";
 
-let render = 1;
-
+/* main */
 const QuestionsSearch = () => {
   return (
     <Card withBorder radius="sm" p="md" style={{ overflow: "visible" }}>
@@ -30,96 +29,147 @@ const QuestionsSearch = () => {
 };
 export default QuestionsSearch;
 
+/* SearchPanel */
+type SetForm = QuestionFormSlice["questionForm_set"];
 function SearchPanel() {
-  const form = useStore.use.qForm();
-  const setForm = useStore.use.setQForm();
-
-  const addTag = useStore.use.addTag();
-  const [tagData, setTagData] = useState(form["tags"]);
+  const setForm: SetForm = useStore.use.questionForm_set();
 
   return (
     <>
       <Grid grow>
         <Grid.Col span={1}>
-          <Select
-            label="Year"
-            searchable
-            allowDeselect
-            maxDropdownHeight={240}
-            value={form["yearLevel"]}
-            onChange={setForm("yearLevel")}
-            data={YEAR_LEVELS.map((v: number) => v.toString())}
-          />
+          <YearLevelForm setForm={setForm} />
         </Grid.Col>
         <Grid.Col span={2}>
-          <Select
-            label="Topic"
-            searchable
-            allowDeselect
-            value={form["topic"]}
-            onChange={setForm("topic")}
-            maxDropdownHeight={240}
-            data={Object.values(TOPICS)}
-          />
+          <TopicForm setForm={setForm} />
         </Grid.Col>
         <Grid.Col span={6}>
           <Group style={{ alignItems: "flex-end" }}>
-            <MultiSelect
-              label="Tags"
-              searchable
-              clearable
-              creatable
-              getCreateLabel={(newTag) => newTag}
-              onCreate={(newTag) => {
-                addTag(newTag);
-                setTagData((tags) => [...tags, newTag].sort());
-                return newTag;
-              }}
-              onChange={setForm("tags")}
-              data={tagData}
-              style={{ flex: 1 }}
-            />
-            <SegmentedControl
-              data={["any", "all"]}
-              value={form["matchType"]}
-              onChange={setForm("matchType")}
-            />
+            <TagsForm setForm={setForm} />
+            <MatchTypeForm setForm={setForm} />
           </Group>
         </Grid.Col>
       </Grid>
-      <TextInput
-        label="Text"
-        value={form["text"]}
-        onChange={(e) => setForm("text")(e.currentTarget.value)}
-      />
+      <TextForm setForm={setForm} />
     </>
   );
 }
+/* SearchPanel.Forms */
+function YearLevelForm({ setForm }: { setForm: SetForm }) {
+  const yearLevel = useStore.use.questionForm_yearLevel();
+  const setYearLevel = setForm("questionForm_yearLevel");
+  return (
+    <Select
+      label="Year"
+      searchable
+      allowDeselect
+      maxDropdownHeight={240}
+      value={yearLevel}
+      onChange={setYearLevel}
+      data={YEAR_LEVELS.map((v: number) => v.toString())}
+    />
+  );
+}
+function TopicForm({ setForm }: { setForm: SetForm }) {
+  const topic = useStore.use.questionForm_topic();
+  const setTopic = setForm("questionForm_topic");
+  return (
+    <Select
+      label="Topic"
+      searchable
+      allowDeselect
+      value={topic}
+      onChange={setTopic}
+      maxDropdownHeight={240}
+      data={Object.values(TOPICS)}
+    />
+  );
+}
+function TagsForm({ setForm }: { setForm: SetForm }) {
+  const tags = useStore.use.questionForm_tags();
+  const setTags = setForm("questionForm_tags");
+  const addTag = useStore.use.questionForm_addTag();
+  const [tagData, setTagData] = useState<string[]>([...tags]);
+  return (
+    <MultiSelect
+      label="Tags"
+      searchable
+      clearable
+      creatable
+      getCreateLabel={(newTag) => newTag}
+      onCreate={(newTag) => {
+        addTag(newTag);
+        setTagData((tags) => [...tags, newTag].sort());
+        return newTag;
+      }}
+      onChange={(value) => setTags(new Set(value))}
+      data={tagData}
+      style={{ flex: 1 }}
+    />
+  );
+}
+function MatchTypeForm({ setForm }: { setForm: SetForm }) {
+  const matchType = useStore.use.questionForm_matchType();
+  const setMatchType = setForm("questionForm_matchType");
+  return (
+    <SegmentedControl
+      data={MATCH_TYPE_DATA}
+      value={matchType}
+      onChange={setMatchType}
+    />
+  );
+}
+function TextForm({ setForm }: { setForm: SetForm }) {
+  const text = useStore.use.questionForm_text();
+  const setText = setForm("questionForm_text");
+  return (
+    <TextInput
+      label="Text"
+      value={text}
+      onChange={(e) => setText(e.currentTarget.value)}
+    />
+  );
+}
 
+/* Buttons */
 function ButtonControls() {
-  const fetchQuestions = useStore.use.fetchQuestions();
-  const resetForm = useStore.use.resetQForm();
-
   return (
     <Group style={{ justifyContent: "space-between" }}>
       <Button.Group>
-        <Button
-          leftIcon={<IconSearch stroke={1.5} />}
-          onClick={() => fetchQuestions({ append: false })}
-        >
-          Search
-        </Button>
-        <Button color="gray" variant="outline" onClick={() => resetForm()}>
-          Reset Fields
-        </Button>
+        <SearchButton />
+        <ResetButton />
       </Button.Group>
-      <Button
-        leftIcon={<IconPlus stroke={1.5} />}
-        color="green"
-        variant="outline"
-      >
-        New
-      </Button>
+      <AddButton />
     </Group>
+  );
+}
+function SearchButton() {
+  const fetchQuestions = useStore.use.questions_fetch();
+  return (
+    <Button
+      leftIcon={<IconSearch stroke={1.5} />}
+      onClick={() => fetchQuestions({ append: false })}
+    >
+      Search
+    </Button>
+  );
+}
+function ResetButton() {
+  const resetForm = useStore.use.questionForm_reset();
+  return (
+    <Button color="gray" variant="outline" onClick={() => resetForm()}>
+      Reset Fields
+    </Button>
+  );
+}
+function AddButton() {
+  return (
+    <Button
+      leftIcon={<IconPencilPlus stroke={1.5} />}
+      color="green"
+      variant="outline"
+    >
+      New Question
+    </Button>
   );
 }

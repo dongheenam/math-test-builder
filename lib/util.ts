@@ -1,5 +1,14 @@
 import { StoreApi, UseBoundStore } from "zustand";
 
+/** toggle an item in an array */
+export function toggleItem<T>(array: T[], item: T) {
+  let newArray = [...array];
+  newArray.includes(item)
+    ? (newArray = newArray.filter((elem) => elem !== item))
+    : newArray.push(item);
+  return newArray;
+}
+
 /** return the first object if the input is an array */
 type NestedArray<T> = Array<T> | Array<NestedArray<T>>;
 export function stripArray<T>(maybeArray: T | NestedArray<T>): T {
@@ -15,6 +24,20 @@ export function isEmpty(
 ): boolean {
   for (let key in iterable) return false;
   return true;
+}
+
+/** from objects to maps */
+export function toMap<K extends string | number | symbol, V>(
+  obj: Record<K, V>
+): Map<K, V> {
+  return new Map(Object.entries(obj) as Array<[K, V]>);
+}
+
+/** from maps to objects */
+export function fromMap<K extends string | number | symbol, V>(
+  map: Map<K, V>
+): Record<K, V> {
+  return Object.fromEntries([...map]) as Record<K, V>;
 }
 
 /** objects to query strings */
@@ -68,8 +91,8 @@ function parseVal(val: Value): any {
   }
 
   // value can be parsed as number
-  if (!isNaN(parseFloat(val))) {
-    return parseFloat(val);
+  if (!isNaN(Number(val))) {
+    return Number(val);
   }
 
   // value is a string
@@ -81,7 +104,7 @@ function parseVal(val: Value): any {
  * getPath(obj, "data.targets[0].value") returns obj.data.targets[0].value
  * ref: https://www.30secondsofcode.org/js/s/get
  */
-export function getFromPath(from: Object, path: string) {
+export function getFrom(from: Object, path: string) {
   return (
     path
       .replace(/\[([^\[\]]*)\]/g, ".$1.")
