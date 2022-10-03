@@ -29,11 +29,11 @@ function BucketQuestion({
   _id: string;
   dragHandlers: DragHandlers;
 }) {
+  const ref = useRef(null);
+
   const question = useStore.use.questions_cached().get(_id);
   if (!question) return <></>;
   const { text } = question;
-
-  const ref = useRef(null);
 
   return (
     <Group ref={ref} key={_id} className={styles["q-box"]} spacing="xs" mr="xs">

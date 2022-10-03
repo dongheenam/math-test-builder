@@ -35,7 +35,6 @@ const createQuestionsSlice: StateCreator<
     });
     if (res === undefined) return;
     const { docs, count }: { docs: QuestionDoc[]; count: number } = res.data;
-    console.log(docs);
     const newQs: QuestionsSlice["questions_fetched"] = new Map(
       docs.map((q) => [q._id, q])
     );
