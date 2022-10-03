@@ -1,4 +1,4 @@
-import { NavLink } from "@mantine/core";
+import { NavLink, Space } from "@mantine/core";
 import { NextLink } from "@mantine/next";
 import Bucket from "components/questions/Bucket";
 import { useRouter } from "next/router";
@@ -25,6 +25,7 @@ function NavBar() {
         <MyLink label="New Question" href="/questions/new" disabled />
         <MyLink label="My Questions" href="/user/questions" disabled />
         <MyTitle label="bucket" />
+        <Space h="sm" />
         <Bucket />
       </nav>
     </div>

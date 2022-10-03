@@ -30,13 +30,19 @@ export interface QuestionsState {
   questions_fetched: Map<string, QuestionDoc>;
   questions_cached: Map<string, QuestionDoc>;
   questions_bucket: string[];
+  questions_chosen: string[];
   questions_countQueried: number;
   questions_countFetched: number;
 }
 export interface QuestionsSlice extends QuestionsState {
   /* methods */
   questions_fetch: ({ append }: { append: boolean }) => Promise<void>;
+  questions_toCache: (_id: string | string[]) => void;
   questions_toggleBucket: (_id: string) => void;
   questions_setBucket: (newBucket: string[]) => void;
   questions_resetBucket: () => void;
+  questions_toggleChosen: (_id: string) => void;
+  questions_isAllChosen: () => boolean;
+  questions_toggleAll: () => void;
+  questions_chosenToBucket: () => void;
 }

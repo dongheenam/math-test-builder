@@ -1,13 +1,15 @@
 import {
+  Button,
   Card,
   Checkbox,
   Divider,
   Group,
+  Menu,
   NativeSelect,
   Text,
 } from "@mantine/core";
 import React from "react";
-import QuestionBox from "./QuestionBox";
+import ListQuestion from "./ListQuestion";
 
 import styles from "./List.module.css";
 import useStore from "components/stores/useStore";
@@ -32,12 +34,43 @@ function ListControl() {
   return (
     <>
       <Group className={styles["list-ctrl"]}>
-        <Checkbox />
+        <Group>
+          <SelectControl />
+        </Group>
         <Group style={{ alignItems: "baseline" }}>
           <CountText />
           <SortByForm />
         </Group>
       </Group>
+    </>
+  );
+}
+
+function SelectControl() {
+  const chosen = useStore.use.questions_chosen();
+  const isAllChosen = useStore.use.questions_isAllChosen();
+  const toggleAll = useStore.use.questions_toggleAll();
+  const toBucket = useStore.use.questions_chosenToBucket();
+
+  const isChosenEmpty = chosen.length === 0;
+
+  return (
+    <>
+      <Checkbox
+        onChange={toggleAll}
+        checked={isAllChosen()}
+        indeterminate={!isChosenEmpty && !isAllChosen()}
+      />
+      <Text color="dimmed" size="sm">
+        {chosen.length} selected
+      </Text>
+      <Button
+        variant="outline"
+        onClick={() => toBucket()}
+        disabled={isChosenEmpty}
+      >
+        Add to bucket
+      </Button>
     </>
   );
 }
@@ -82,7 +115,7 @@ function QuestionsContainer() {
       {Array.from(questions, ([_q_id, q], idx) => (
         <React.Fragment key={idx}>
           {idx > 0 && <Divider my="sm" />}
-          <QuestionBox question={q} />
+          <ListQuestion question={q} />
         </React.Fragment>
       ))}
     </div>

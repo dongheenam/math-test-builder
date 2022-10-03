@@ -14,8 +14,8 @@ const Bucket = () => {
 
   return (
     <Stack onDragOver={(e) => e.preventDefault()}>
-      {bucket.map((_id) => (
-        <BucketQuestion key={_id} _id={_id} dragHandlers={dragHandlers} />
+      {bucket.map((_id, idx) => (
+        <BucketQuestion key={idx} _id={_id} dragHandlers={dragHandlers} />
       ))}
     </Stack>
   );

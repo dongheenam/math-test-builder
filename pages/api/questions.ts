@@ -64,7 +64,7 @@ async function getQuestion(req: NextApiRequest, res: NextApiResponse) {
       tags,
       text,
       matchType = "any",
-      sort = "-updatedAt",
+      sortBy = "-updatedAt",
       limit = 10,
       skip = 0,
     } = parsedQuery;
@@ -88,7 +88,7 @@ async function getQuestion(req: NextApiRequest, res: NextApiResponse) {
       qFilter.tags = tags as string;
     }
     const qOptions = {
-      sort: sort as string,
+      sort: sortBy as string,
       skip: skip as number,
       limit: limit as number,
     };
@@ -102,7 +102,7 @@ async function getQuestion(req: NextApiRequest, res: NextApiResponse) {
   } catch (err) {
     let status = 500;
     let message = "unknown problem occurred";
-    console.log(err);
+    console.error(err);
 
     if (err instanceof MongooseError.ValidationError) {
       status = 400;

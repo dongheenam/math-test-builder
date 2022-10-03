@@ -19,8 +19,9 @@ const createQuestionsSlice: StateCreator<
   questions_countQueried: 0,
   questions_countFetched: 0,
   questions_bucket: [],
+  questions_chosen: [],
 
-  // methods
+  // methods.questions
   questions_fetch: async ({ append = false }) => {
     const res = await callGetQuestions({
       topic: get().questionForm_topic,
@@ -34,6 +35,7 @@ const createQuestionsSlice: StateCreator<
     });
     if (res === undefined) return;
     const { docs, count }: { docs: QuestionDoc[]; count: number } = res.data;
+    console.log(docs);
     const newQs: QuestionsSlice["questions_fetched"] = new Map(
       docs.map((q) => [q._id, q])
     );
@@ -52,25 +54,77 @@ const createQuestionsSlice: StateCreator<
       })
     );
   },
-  questions_toggleBucket: (toggledId) =>
+  // methods.cache
+  questions_toCache: (input) => {
+    set(
+      produce((prev: QuestionsSlice) => {
+        const fetched = prev.questions_fetched;
+        const newCache = new Map(prev.questions_cached);
+
+        const _ids = Array.isArray(input) ? input : [input];
+        for (const _id of _ids) {
+          const q = fetched.get(_id);
+          q && newCache.set(_id, q);
+        }
+        prev.questions_cached = newCache;
+      })
+    );
+  },
+
+  // methods.bucket
+  questions_toggleBucket: (toggledId) => {
+    // add selected question to local cache
+    get().questions_toCache(toggledId);
     set(
       produce((prev: QuestionsSlice) => {
         const qBucket = prev.questions_bucket;
         if (qBucket.includes(toggledId)) {
+          // remove
           prev.questions_bucket = qBucket.filter(
             (id: string) => id !== toggledId
           );
         } else {
+          // add
           prev.questions_bucket.push(toggledId);
-          // add selected question to local cache as well
-          prev.questions_cached = new Map(prev.questions_cached).set(
-            toggledId,
-            prev.questions_fetched.get(toggledId) as QuestionDoc
-          );
         }
       })
-    ),
-  questions_setBucket: (newBucket) => set({ questions_bucket: newBucket }),
+    );
+  },
+  questions_setBucket: (newBucket) => {
+    // add selected question to local cache
+    get().questions_toCache(newBucket);
+    set(
+      produce((prev) => {
+        prev.questions_bucket = newBucket;
+      })
+    );
+  },
   questions_resetBucket: () => set({ questions_bucket: [] }),
+
+  // methods.chosen
+  questions_toggleChosen: (_id) =>
+    set((prev) => ({
+      questions_chosen: toggleItem(prev.questions_chosen, _id),
+    })),
+  questions_isAllChosen: () => {
+    const numChosen = get().questions_chosen.length;
+    return numChosen !== 0 && numChosen === get().questions_countFetched;
+  },
+  questions_toggleAll: () =>
+    set(
+      produce((prev) => {
+        prev.questions_isAllChosen()
+          ? (prev.questions_chosen = [])
+          : (prev.questions_chosen = [...prev.questions_fetched.keys()]);
+      })
+    ),
+  questions_chosenToBucket: () => {
+    // send chosen to bucket
+    get().questions_setBucket([
+      ...new Set([...get().questions_bucket, ...get().questions_chosen]),
+    ]);
+    // empty chosen
+    set({ questions_chosen: [] });
+  },
 });
 export default createQuestionsSlice;

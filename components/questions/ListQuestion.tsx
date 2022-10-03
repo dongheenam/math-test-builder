@@ -12,12 +12,12 @@ import useStore from "components/stores/useStore";
 import React, { useCallback } from "react";
 import { QuestionDoc, TOPIC_COLORS } from "types";
 
-const QuestionBox = ({ question }: { question: QuestionDoc }) => {
+const ListQuestion = ({ question }: { question: QuestionDoc }) => {
   const { topic, yearLevel, tags, text, _id } = question;
 
   return (
     <Group style={{ alignItems: "flex-start" }}>
-      <Checkbox />
+      <ChooseCheckbox _id={_id} />
       <Stack style={{ flex: 1 }}>
         <Group spacing={0}>
           <Badge radius="xs" color="dark" px={4}>
@@ -49,7 +49,18 @@ const QuestionBox = ({ question }: { question: QuestionDoc }) => {
     </Group>
   );
 };
-export default QuestionBox;
+export default ListQuestion;
+
+function ChooseCheckbox({ _id }: { _id: string }) {
+  const chosen = useStore.use.questions_chosen();
+  const toggleChosen = useStore.use.questions_toggleChosen();
+  return (
+    <Checkbox
+      checked={chosen.includes(_id)}
+      onChange={() => toggleChosen(_id)}
+    />
+  );
+}
 
 function BucketButton({ _id }: { _id: string }) {
   const bucket = useStore.use.questions_bucket();
