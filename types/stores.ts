@@ -1,43 +1,18 @@
-import { QuestionDoc, Topic } from "./";
-
-/* questionFormSlice */
-export const SORT_DATA = [
-  { value: "-updatedAt", label: "newest first" },
-  { value: "+updatedAt", label: "oldest first" },
-];
-export const MATCH_TYPE_DATA = ["any", "all"];
-export interface QuestionFormState {
-  questionForm_yearLevel: "7" | "8" | "9" | "10" | "11" | "12" | "";
-  questionForm_topic: Topic | "";
-  questionForm_tags: Set<string>;
-  questionForm_text: string;
-  questionForm_matchType: "any" | "all";
-  questionForm_sortBy: string;
-  questionForm_limit: number;
-  questionForm_skip: number;
-}
-export interface QuestionFormSlice extends QuestionFormState {
-  /* methods */
-  questionForm_set: <Key extends keyof QuestionFormSlice>(
-    field: Key
-  ) => (value: QuestionFormSlice[Key]) => void;
-  questionForm_addTag: (newTag: string) => void;
-  questionForm_reset: () => void;
-}
+import { QuestionDraft, QuestionDoc, Topic } from "./";
 
 /* questionsSlice */
-export interface QuestionsState {
+interface QuestionsStates {
   questions_fetched: Map<string, QuestionDoc>;
-  questions_cached: Map<string, QuestionDoc>;
+  questions_cached: Map<string, QuestionDraft | QuestionDoc>;
   questions_bucket: string[];
   questions_chosen: string[];
   questions_countQueried: number;
   questions_countFetched: number;
 }
-export interface QuestionsSlice extends QuestionsState {
-  /* methods */
+interface QuestionsActions {
   questions_fetch: ({ append }: { append: boolean }) => Promise<void>;
-  questions_toCache: (_id: string | string[]) => void;
+  questions_idToCache: (input: string | string[]) => void;
+  questions_toCache: (question: QuestionDraft | QuestionDoc) => void;
   questions_toggleBucket: (_id: string) => void;
   questions_setBucket: (newBucket: string[]) => void;
   questions_resetBucket: () => void;
@@ -46,3 +21,43 @@ export interface QuestionsSlice extends QuestionsState {
   questions_toggleAll: () => void;
   questions_chosenToBucket: () => void;
 }
+export type QuestionsSlice = QuestionsStates & QuestionsActions;
+
+/* questionFormSlice */
+export const SORT_DATA = [
+  { value: "-updatedAt", label: "newest first" },
+  { value: "+updatedAt", label: "oldest first" },
+];
+export const MATCH_TYPE_DATA = ["any", "all"];
+interface QuestionFormStates {
+  questionForm_yearLevel: QuestionDraft["yearLevel"];
+  questionForm_topic: Topic | "";
+  questionForm_tags: Set<string>;
+  questionForm_text: string;
+  questionForm_matchType: "any" | "all";
+  questionForm_sortBy: string;
+  questionForm_limit: number;
+  questionForm_skip: number;
+}
+interface QuestionFormActions {
+  questionForm_set: <Key extends keyof QuestionFormStates>(
+    field: Key
+  ) => (value: QuestionFormStates[Key]) => void;
+  questionForm_addTag: (newTag: string) => void;
+  questionForm_reset: () => void;
+}
+export type QuestionFormSlice = QuestionFormStates & QuestionFormActions;
+
+/* questionEditSlice */
+interface QuestionEditStates {
+  questionEdit_current: QuestionDraft | QuestionDoc | undefined;
+}
+interface QuestionEditActions {
+  questionEdit_toEditor: (_id?: string) => void;
+  questionEdit_edit: <Key extends keyof QuestionDraft>(
+    field: keyof QuestionDraft
+  ) => (value: QuestionDraft[Key]) => void;
+  questionEdit_save: ({ upload }: { upload: boolean }) => Promise<void>;
+  questionEdit_reset: () => void;
+}
+export type QuestionEditSlice = QuestionEditStates & QuestionEditActions;

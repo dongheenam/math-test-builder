@@ -26,13 +26,21 @@ export const YEAR_LEVELS = [7, 8, 9, 10, 11, 12] as const;
 //   HSC: "HSC",
 //   IB: "IB",
 // };
-export interface Question {
+export type Question = {
   topic: Topic;
   yearLevel: number;
-  tags?: string[];
+  tags: string[];
   text: string;
   solution: string;
-}
+};
+export type QuestionDraft = {
+  topic: Question["topic"] | "";
+  yearLevel: "7" | "8" | "9" | "10" | "11" | "12" | "";
+  tags: Question["tags"];
+  text: Question["text"];
+  solution: Question["solution"];
+  _id: string;
+};
 export interface QuestionDoc extends Document, Question {
   createdBy?: string;
   createdAt?: Date;

@@ -5,6 +5,7 @@ import dbConnect from "lib/dbConnect";
 import Question from "models/Question";
 import { fromQuery } from "lib/util";
 import pluralize from "pluralize";
+import { handleError } from "lib/handleError";
 
 /* main API handler */
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
@@ -15,7 +16,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
 
     case "GET":
     default:
-      await getQuestion(req, res);
+      await searchQuestion(req, res);
       break;
   }
 };
@@ -31,29 +32,21 @@ async function createQuestion(req: NextApiRequest, res: NextApiResponse) {
       topic: topic as string,
       yearLevel: yearLevel as number,
       // force singular form for the tags
-      tags: (tags as string[]).map((tag: string) => pluralize(tag, 1)),
+      tags: tags
+        ? (tags as string[]).map((tag: string) => pluralize(tag, 1))
+        : [],
       text: text as string,
       solution: solution as string,
     });
     res.send({ status: "ok", data: question });
+    res.end();
   } catch (err) {
-    let status = 500;
-    let message = "unknown problem occurred";
-    console.log(err);
-
-    if (err instanceof MongooseError.ValidationError) {
-      status = 400;
-      message = `db validation failed: ${err}`;
-    } else if (err instanceof Error) {
-      message = `unknown error occurred`;
-    }
-
-    res.status(status).send({ status: "error", message: message });
+    handleError(err, res);
   }
 }
 
 /* GET: search questions */
-async function getQuestion(req: NextApiRequest, res: NextApiResponse) {
+async function searchQuestion(req: NextApiRequest, res: NextApiResponse) {
   try {
     // parse request
     const parsedQuery = fromQuery(req.query);
@@ -98,19 +91,9 @@ async function getQuestion(req: NextApiRequest, res: NextApiResponse) {
     const docsPromise = Question.find(qFilter, null, qOptions).exec();
     const countPromise = Question.countDocuments(qFilter).exec();
     const [docs, count] = await Promise.all([docsPromise, countPromise]);
-    res.status(200).send({ status: "ok", data: { docs: docs, count: count } });
+    res.status(200).send({ status: "ok", data: { count: count, docs: docs } });
+    res.end();
   } catch (err) {
-    let status = 500;
-    let message = "unknown problem occurred";
-    console.error(err);
-
-    if (err instanceof MongooseError.ValidationError) {
-      status = 400;
-      message = `db validation failed: ${err}`;
-    } else if (err instanceof Error) {
-      message = `unknown error occurred`;
-    }
-
-    res.status(status).send({ status: "error", message: message });
+    handleError(err, res);
   }
 }

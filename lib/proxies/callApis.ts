@@ -1,5 +1,4 @@
 import { toQuery } from "lib/util";
-import { QuestionFormState } from "types/stores";
 
 type HTTP_METHOD =
   | "CONNECT"
@@ -45,6 +44,21 @@ export async function callGetQuestions(
 }
 
 export async function callCreateQuestions(
+  query: Record<string | number | symbol, any>
+) {
+  const URL = "/api/questions";
+  return callApi(URL, "POST", {
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      topic: query.topic,
+      yearLevel: query.yearLevel,
+      tags: query.tags,
+      text: query.text,
+      solution: query.solution,
+    }),
+  });
+}
+export async function callEditQuestions(
   query: Record<string | number | symbol, any>
 ) {
   const URL = "/api/questions";

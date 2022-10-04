@@ -53,6 +53,7 @@ function HeaderTopButton({ label, href }: { label: string; href: string }) {
       component={NextLink}
       href={href}
       className={styles["header-btn"]}
+      disabled
     >
       {label}
     </Button>

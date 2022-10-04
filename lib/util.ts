@@ -1,5 +1,9 @@
 import { StoreApi, UseBoundStore } from "zustand";
 
+/**
+ * JAVASCRIPT HELPERS - ARRAYS AND OBJECTS
+ */
+
 /** toggle an item in an array */
 export function toggleItem<T>(array: T[], item: T) {
   let newArray = [...array];
@@ -39,6 +43,25 @@ export function fromMap<K extends string | number | symbol, V>(
 ): Record<K, V> {
   return Object.fromEntries([...map]) as Record<K, V>;
 }
+
+/** get the value of an object from a path string
+ *  getPath(obj, "data.targets[0].value") returns obj.data.targets[0].value
+ *  ref: https://www.30secondsofcode.org/js/s/get
+ */
+export function getFrom(from: Object, path: string) {
+  return (
+    path
+      .replace(/\[([^\[\]]*)\]/g, ".$1.")
+      .split(".")
+      .filter((t) => t !== "")
+      // @ts-ignore
+      .reduce((prev, cur) => prev && prev[cur], from)
+  );
+}
+
+/**
+ * CALLING/RECEIVING API REQUESTS
+ */
 
 /** objects to query strings */
 export function toQuery(obj: Object) {
@@ -100,24 +123,36 @@ function parseVal(val: Value): any {
 }
 
 /**
- * get the value of an object from a path string
- * getPath(obj, "data.targets[0].value") returns obj.data.targets[0].value
- * ref: https://www.30secondsofcode.org/js/s/get
+ * MISC
  */
-export function getFrom(from: Object, path: string) {
-  return (
-    path
-      .replace(/\[([^\[\]]*)\]/g, ".$1.")
-      .split(".")
-      .filter((t) => t !== "")
-      // @ts-ignore
-      .reduce((prev, cur) => prev && prev[cur], from)
-  );
+
+/** creates a pseudo-random ID. Cannot guarantee uniqueness
+ *  but should be good enough for simple situations
+ *  ref: https://learnersbucket.com/examples/javascript/unique-id-generator-in-javascript/
+ * */
+export function generateId(length: number = 4, prefix: string = "") {
+  if (length < 0 || length > 100) throw new RangeError("length out of range!");
+
+  let id = prefix;
+  for (let i = 0; i < length; i++) {
+    id += s4();
+  }
+  return id;
+}
+// returns a random string from "0000" to "zzzz"
+function s4() {
+  // 36**4 * ( 36 * U(0,1) + 1 ) gives U(36**4,36**5)
+  return Math.floor(1679616 * (35 * Math.random() + 1))
+    .toString(36)
+    .substring(1);
 }
 
 /**
- * selector generator for Zustand
- * ref: https://github.com/pmndrs/zustand/blob/main/docs/guides/auto-generating-selectors.md
+ * FOR THIRD PARTY LIBRARIES
+ */
+
+/** selector generator for Zustand
+ *  ref: https://github.com/pmndrs/zustand/blob/main/docs/guides/auto-generating-selectors.md
  */
 type WithSelectors<S> = S extends { getState: () => infer T }
   ? S & { use: { [K in keyof T]: () => T[K] } }

@@ -46,6 +46,9 @@
     color: var(--mantine-color-black);
     background-color: inherit;
   }
+  &[data-disabled] {
+    background-color: transparent;
+  }
 }
 
 .header-bot-btn {

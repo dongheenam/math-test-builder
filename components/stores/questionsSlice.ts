@@ -4,7 +4,7 @@ enableMapSet();
 
 import { QuestionFormSlice, QuestionsSlice } from "types/stores";
 import { callGetQuestions } from "lib/proxies/callApis";
-import { QuestionDoc } from "types";
+import { Question, QuestionDoc } from "types";
 import { toggleItem } from "lib/util";
 
 const createQuestionsSlice: StateCreator<
@@ -21,7 +21,7 @@ const createQuestionsSlice: StateCreator<
   questions_bucket: [],
   questions_chosen: [],
 
-  // methods.questions
+  // methods: questions
   questions_fetch: async ({ append = false }) => {
     const res = await callGetQuestions({
       topic: get().questionForm_topic,
@@ -53,8 +53,9 @@ const createQuestionsSlice: StateCreator<
       })
     );
   },
-  // methods.cache
-  questions_toCache: (input) => {
+
+  // methods: cache
+  questions_idToCache: (input) => {
     set(
       produce((prev: QuestionsSlice) => {
         const fetched = prev.questions_fetched;
@@ -69,11 +70,22 @@ const createQuestionsSlice: StateCreator<
       })
     );
   },
+  questions_toCache: (question) => {
+    if (!("_id" in question)) {
+      throw new ReferenceError("_id does not exist in the question!");
+    }
+    set((prev) => ({
+      questions_cached: new Map(prev.questions_cached).set(
+        question._id,
+        question
+      ),
+    }));
+  },
 
-  // methods.bucket
+  // methods: bucket
   questions_toggleBucket: (toggledId) => {
     // add selected question to local cache
-    get().questions_toCache(toggledId);
+    get().questions_idToCache(toggledId);
     set(
       produce((prev: QuestionsSlice) => {
         const qBucket = prev.questions_bucket;
@@ -91,7 +103,7 @@ const createQuestionsSlice: StateCreator<
   },
   questions_setBucket: (newBucket) => {
     // add selected question to local cache
-    get().questions_toCache(newBucket);
+    get().questions_idToCache(newBucket);
     set(
       produce((prev) => {
         prev.questions_bucket = newBucket;
@@ -100,7 +112,7 @@ const createQuestionsSlice: StateCreator<
   },
   questions_resetBucket: () => set({ questions_bucket: [] }),
 
-  // methods.chosen
+  // methods: chosen
   questions_toggleChosen: (_id) =>
     set((prev) => ({
       questions_chosen: toggleItem(prev.questions_chosen, _id),
@@ -118,7 +130,7 @@ const createQuestionsSlice: StateCreator<
       })
     ),
   questions_chosenToBucket: () => {
-    // send chosen to bucket
+    // send chosen to bucket; do not allow duplicated ID
     get().questions_setBucket([
       ...new Set([...get().questions_bucket, ...get().questions_chosen]),
     ]);

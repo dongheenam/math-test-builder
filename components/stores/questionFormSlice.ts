@@ -33,12 +33,7 @@ const createQuestionFormSlice: StateCreator<
   questionForm_skip: 0,
 
   // methods
-  questionForm_set: (field) => (value) =>
-    set(
-      produce((draft: QuestionFormSlice) => {
-        draft[field] = value;
-      })
-    ),
+  questionForm_set: (field) => (value) => set({ [field]: value }),
   questionForm_addTag: (newTag) =>
     set(
       produce((draft: QuestionFormSlice) => {
