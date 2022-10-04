@@ -139,11 +139,10 @@ export function generateId(length: number = 4, prefix: string = "") {
   }
   return id;
 }
-// returns a random string from "0000" to "zzzz"
+// returns a random string from "0000" to "ffff"
 function s4() {
-  // 36**4 * ( 36 * U(0,1) + 1 ) gives U(36**4,36**5)
-  return Math.floor(1679616 * (35 * Math.random() + 1))
-    .toString(36)
+  return Math.floor((1 + Math.random()) * 0x10000)
+    .toString(16)
     .substring(1);
 }
 

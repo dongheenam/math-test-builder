@@ -1,5 +1,4 @@
 import type { NextApiRequest, NextApiResponse } from "next";
-import { Error as MongooseError } from "mongoose";
 import pluralize from "pluralize";
 
 import dbConnect from "lib/dbConnect";
