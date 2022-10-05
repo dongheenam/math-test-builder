@@ -1,7 +1,8 @@
-import type { Document } from "mongoose";
+import type * as Prisma from "@prisma/client";
 
 /* Questions */
-export const TOPICS = {
+export type Topic = Prisma.Topic;
+export const TOPIC_VALUES: Record<Prisma.Topic, string> = {
   NUM: "number",
   ALG: "algebra",
   MEAS: "measurement",
@@ -10,39 +11,25 @@ export const TOPICS = {
   PROB: "probability",
   CALC: "calculus",
 } as const;
-export type Topic = typeof TOPICS[keyof typeof TOPICS];
-export const TOPIC_COLORS: Record<Topic, string> = {
-  [TOPICS.NUM]: "yellow",
-  [TOPICS.ALG]: "pink",
-  [TOPICS.MEAS]: "indigo",
-  [TOPICS.GEO]: "blue",
-  [TOPICS.STAT]: "green",
-  [TOPICS.PROB]: "lime",
-  [TOPICS.CALC]: "red",
+export const TOPIC_COLORS: Record<Prisma.Topic, string> = {
+  NUM: "yellow",
+  ALG: "pink",
+  MEAS: "indigo",
+  GEO: "blue",
+  STAT: "green",
+  PROB: "lime",
+  CALC: "red",
 };
-export const YEAR_LEVELS = [7, 8, 9, 10, 11, 12] as const;
-// export const COURSES = {
-//   AC: "AC",
-//   HSC: "HSC",
-//   IB: "IB",
-// };
-export type Question = {
-  topic: Topic;
-  yearLevel: number;
+type Test = {
+  [x in keyof Prisma.Question]?: string;
+};
+const test: Test = {
+  id: "123",
+};
+
+export const YEAR_LEVELS = ["7", "8", "9", "10", "11", "12"] as const;
+export type QuestionModel = Prisma.Question;
+export type QuestionFetched = Prisma.Question & {
   tags: string[];
-  text: string;
-  solution: string;
 };
-export type QuestionDraft = {
-  topic: Question["topic"] | "";
-  yearLevel: "7" | "8" | "9" | "10" | "11" | "12" | "";
-  tags: Question["tags"];
-  text: Question["text"];
-  solution: Question["solution"];
-  _id: string;
-};
-export interface QuestionDoc extends Document, Question {
-  createdBy?: string;
-  createdAt?: Date;
-  updatedAt?: Date;
-}
+export type QuestionDraft = Partial<QuestionFetched>;

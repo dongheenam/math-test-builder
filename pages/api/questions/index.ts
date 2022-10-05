@@ -1,14 +1,15 @@
 import type { NextApiRequest, NextApiResponse } from "next";
-import { Error as MongooseError } from "mongoose";
-
-import dbConnect from "lib/dbConnect";
-import Question from "models/Question";
-import { fromQuery } from "lib/util";
 import pluralize from "pluralize";
-import { handleError } from "lib/handleError";
+import { Prisma } from "@prisma/client";
+
+import connectPrisma from "lib/connectPrisma";
+import { parseFloatIfDefined, handleTagsQuery, parseOrderBy } from "lib/util";
+import { handleApiError } from "lib/handleApiError";
+import { QuestionFetched, QuestionModel } from "types";
 
 /* main API handler */
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
+  console.log(`${req.method} /api/questions invoked with query`, req.query);
   switch (req.method) {
     case "POST":
       await createQuestion(req, res);
@@ -22,78 +23,169 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
 };
 export default handler;
 
+type CreateQuestionQuery = Pick<
+  QuestionFetched,
+  "topic" | "yearLevel" | "tags" | "content" | "solution" | "authorId"
+>;
+type CreateQuestionData = QuestionFetched;
+
 /* POST: create a new question */
 async function createQuestion(req: NextApiRequest, res: NextApiResponse) {
   try {
-    const { topic, yearLevel, tags, text, solution } = fromQuery(req.body);
+    // parse request
+    const {
+      topic,
+      yearLevel,
+      tags,
+      content,
+      solution,
+      authorId,
+    }: CreateQuestionQuery = {
+      ...req.body,
+      // ?yearLevel=7&yearLevel=8 still parses to yearLevel: 7
+      yearLevel: parseFloatIfDefined(req.body.yearLevel as string),
+      tags: handleTagsQuery(req.body.tags),
+    };
 
-    await dbConnect();
-    const question = await Question.create({
-      topic: topic as string,
-      yearLevel: yearLevel as number,
-      // force singular form for the tags
-      tags: tags
-        ? (tags as string[]).map((tag: string) => pluralize(tag, 1))
-        : [],
-      text: text as string,
-      solution: solution as string,
+    // build query
+    let questionData: Partial<Prisma.QuestionCreateInput> = {
+      topic,
+      yearLevel,
+      content,
+      solution,
+    };
+    questionData.tags = {
+      connectOrCreate: tags.map((tag) => ({
+        where: { name: tag },
+        create: { name: tag },
+      })),
+    };
+
+    // send query and return the result
+    prisma = connectPrisma();
+    const question = await prisma.question.create({
+      data: questionData as Prisma.QuestionCreateInput,
+      include: {
+        tags: {
+          select: { name: true },
+        },
+      },
     });
-    res.send({ status: "ok", data: question });
+    const result: CreateQuestionData = {
+      ...question,
+      tags: question.tags.map((tag) => tag.name),
+    };
+    res.send({ status: "ok", data: result });
     res.end();
   } catch (err) {
-    handleError(err, res);
+    handleApiError(err, res);
   }
 }
+
+type SearchQuestionQuery = Partial<
+  Pick<QuestionFetched, "topic" | "yearLevel" | "content" | "authorId">
+> & {
+  tags?: string[];
+  tagMatch?: "any" | "all";
+  orderBy?: string;
+  cursor?: QuestionFetched["id"];
+  take?: number;
+  count?: boolean;
+};
+type SearchQuestionData = {
+  questions?: QuestionFetched[];
+  count?: number;
+};
 
 /* GET: search questions */
 async function searchQuestion(req: NextApiRequest, res: NextApiResponse) {
   try {
     // parse request
-    const parsedQuery = fromQuery(req.query);
-    console.log(`getQuestion.query = ${JSON.stringify(parsedQuery)}`);
     const {
       topic,
       yearLevel,
+      content,
+      authorId,
       tags,
-      text,
-      matchType = "any",
-      sortBy = "-updatedAt",
-      limit = 10,
-      skip = 0,
-    } = parsedQuery;
-
-    // build filter from request
-    let qFilter: {
-      topic?: string;
-      yearLevel?: number;
-      tags?: { $all: string[] } | { $in: string[] } | string;
-      text?: string;
-    } = {};
-    if (topic) qFilter.topic = topic as string;
-    if (yearLevel) qFilter.yearLevel = yearLevel as number;
-    if (text) qFilter.text = text as string;
-    if (Array.isArray(tags)) {
-      qFilter.tags =
-        matchType === "all"
-          ? { $all: tags as string[] }
-          : { $in: tags as string[] };
-    } else if (tags) {
-      qFilter.tags = tags as string;
-    }
-    const qOptions = {
-      sort: sortBy as string,
-      skip: skip as number,
-      limit: limit as number,
+      tagMatch = "any",
+      orderBy = "-updatedAt",
+      count = true,
+      cursor,
+      take = 10,
+    }: SearchQuestionQuery = {
+      ...req.query,
+      tags: handleTagsQuery(req.query.tags),
+      // ?yearLevel=7&yearLevel=8 still parses to yearLevel: 7
+      yearLevel: parseFloatIfDefined(req.query.yearLevel),
+      take: parseFloatIfDefined(req.query.take),
+      count: req.query.count === "true",
     };
+    // build query
+    let where: Prisma.QuestionWhereInput = {};
+    if (topic) where.topic = topic;
+    if (yearLevel) where.yearLevel = yearLevel;
+    if (content) where.content = { contains: content };
+    if (tags) {
+      const OPEARTOR = tagMatch === "any" ? "OR" : "AND";
+      where.tags = {
+        some: {
+          [OPEARTOR]: tags.map((tag) => ({
+            name: tag,
+          })),
+        },
+      };
+    }
+    // options
+    let args: Prisma.QuestionFindManyArgs = {
+      take: take,
+      where: where,
+    };
+    if (cursor) {
+      args.cursor = { id: cursor };
+      args.skip = 1;
+    }
+    if (orderBy) {
+      args.orderBy = parseOrderBy<QuestionModel>(orderBy);
+    }
 
     // fetch documents
-    await dbConnect();
-    const docsPromise = Question.find(qFilter, null, qOptions).exec();
-    const countPromise = Question.countDocuments(qFilter).exec();
-    const [docs, count] = await Promise.all([docsPromise, countPromise]);
-    res.status(200).send({ status: "ok", data: { count: count, docs: docs } });
+    prisma = connectPrisma();
+    const questionsPromise = prisma.question.findMany({
+      ...args,
+      include: {
+        tags: { select: { name: true } },
+      },
+    });
+    let result: SearchQuestionData = {};
+    if (count) {
+      const countPromise = prisma.question.count({ where: where });
+      const [questions, countResult] = await prisma.$transaction([
+        questionsPromise,
+        countPromise,
+      ]);
+      result = {
+        count: countResult,
+        questions: questions.map((q) => ({
+          ...q,
+          tags: q.tags.map((tag) => tag.name),
+        })),
+      };
+    } else {
+      const questions = await questionsPromise;
+      result = {
+        questions: questions.map((q) => ({
+          ...q,
+          tags: q.tags.map((tag) => tag.name),
+        })),
+      };
+    }
+
+    res.status(200).send({
+      status: "ok",
+      data: result,
+    });
     res.end();
   } catch (err) {
-    handleError(err, res);
+    handleApiError(err, res);
   }
 }

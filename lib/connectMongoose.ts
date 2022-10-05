@@ -18,7 +18,7 @@ declare global {
   var mongooseState: MongooseState | undefined;
 }
 
-async function dbConnect() {
+async function connectMongoose() {
   let cached = global.mongooseState;
   if (!cached) {
     cached = global.mongooseState = { mongoose: null, promise: null };
@@ -50,4 +50,4 @@ async function dbConnect() {
   return cached.mongoose;
 }
 
-export default dbConnect;
+export default connectMongoose;

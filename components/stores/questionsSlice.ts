@@ -4,7 +4,7 @@ enableMapSet();
 
 import { QuestionFormSlice, QuestionsSlice } from "types/stores";
 import { callGetQuestions } from "lib/proxies/callApis";
-import { Question, QuestionDoc } from "types";
+import { QuestionFetched, QuestionDoc } from "types";
 import { toggleItem } from "lib/util";
 
 const createQuestionsSlice: StateCreator<

@@ -1,3 +1,4 @@
+import pluralize from "pluralize";
 import { StoreApi, UseBoundStore } from "zustand";
 
 /**
@@ -120,6 +121,48 @@ function parseVal(val: Value): any {
 
   // value is a string
   return val;
+}
+
+/** parseFloat the input if defined */
+export function parseFloatIfDefined(input: any) {
+  if (input === undefined) return;
+
+  const parsed = Number(input);
+
+  if (!isNaN(parsed)) return parsed;
+}
+
+/** by default, query parameters are parsed as string or string[]
+ *  this function forces the tags parameter to be string[]
+ */
+export function handleTagsQuery(
+  tags: string | string[] | undefined
+): string[] | undefined {
+  if (tags === undefined) return;
+  let tagArray = Array.isArray(tags) ? tags : [tags];
+
+  // force singular form for the tags
+  return tagArray.map((tag) => pluralize(tag, 1));
+}
+
+/** generates Prisma orderBy option from a string
+ *  e.g. parseOrderBy("-updatedAt") returns { updatedAt: "desc" }
+ */
+export function parseOrderBy<Model extends Record<string, any>>(str: string) {
+  const prefix = str.substring(0, 1);
+  const field = str.substring(1) as keyof Model;
+  let direction: "asc" | "desc";
+  switch (prefix) {
+    case "+":
+      direction = "asc";
+      break;
+    case "-":
+      direction = "desc";
+      break;
+    default:
+      throw new ReferenceError("input string has a wrong form");
+  }
+  return { [field]: direction } as { [x in keyof Model]?: "asc" | "desc" };
 }
 
 /**
