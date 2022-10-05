@@ -1,5 +1,4 @@
 import { NextApiResponse } from "next";
-import { Error as Mongoose } from "mongoose";
 import { Prisma } from "@prisma/client";
 
 export function handleApiError(err: unknown, res: NextApiResponse): void {
