@@ -14,8 +14,8 @@ const Bucket = () => {
 
   return (
     <Stack onDragOver={(e) => e.preventDefault()}>
-      {bucket.map((_id, idx) => (
-        <BucketQuestion key={idx} _id={_id} dragHandlers={dragHandlers} />
+      {bucket.map((id, idx) => (
+        <BucketQuestion key={idx} id={id} dragHandlers={dragHandlers} />
       ))}
     </Stack>
   );
@@ -23,25 +23,25 @@ const Bucket = () => {
 export default Bucket;
 
 function BucketQuestion({
-  _id,
+  id,
   dragHandlers,
 }: {
-  _id: string;
+  id: string;
   dragHandlers: DragHandlers;
 }) {
   const ref = useRef(null);
 
-  const question = useStore.use.questions_cached().get(_id);
+  const question = useStore.use.questions_cached().get(id);
   if (!question) return <></>;
-  const { text } = question;
+  const { content } = question;
 
   return (
-    <Group ref={ref} key={_id} className={styles["q-box"]} spacing="xs" mr="xs">
-      <DragButton _id={_id} dragHandlers={dragHandlers} draggedRef={ref} />
-      <QuestionText text={text} />
+    <Group ref={ref} className={styles["q-box"]} spacing="xs" mr="xs">
+      <DragButton id={id} dragHandlers={dragHandlers} draggedRef={ref} />
+      <QuestionText content={content} />
       <Group spacing={0} className={styles["q-control"]}>
-        <RemoveButton _id={_id} />
-        <EditButton _id={_id} />
+        <RemoveButton id={id} />
+        <EditButton id={id} />
       </Group>
     </Group>
   );
@@ -49,11 +49,11 @@ function BucketQuestion({
 
 /* BucketQuestion.elements */
 function DragButton({
-  _id,
+  id,
   dragHandlers,
   draggedRef,
 }: {
-  _id: string;
+  id: string;
   dragHandlers: DragHandlers;
   draggedRef: React.RefObject<HTMLElement>;
 }) {
@@ -62,8 +62,8 @@ function DragButton({
     <ActionIcon
       size="sm"
       draggable
-      onDragStart={onDragStart(_id, draggedRef)}
-      onDragOver={onDragOver(_id)}
+      onDragStart={onDragStart(id, draggedRef)}
+      onDragOver={onDragOver(id)}
       onDragEnd={onDragEnd()}
       style={{ cursor: "grab" }}
     >
@@ -71,22 +71,22 @@ function DragButton({
     </ActionIcon>
   );
 }
-function QuestionText({ text }: { text: string }) {
+function QuestionText({ content }: { content?: string }) {
   return (
     <Text size="sm" lineClamp={1} style={{ flex: 1 }}>
-      {text}
+      {content}
     </Text>
   );
 }
-function RemoveButton({ _id }: { _id: string }) {
+function RemoveButton({ id }: { id: string }) {
   const toggleBucket = useStore.use.questions_toggleBucket();
   return (
-    <ActionIcon size="sm" onClick={() => toggleBucket(_id)}>
+    <ActionIcon size="sm" onClick={() => toggleBucket(id)}>
       <IconMinus stroke={1} />
     </ActionIcon>
   );
 }
-function EditButton({ _id }: { _id: string }) {
+function EditButton({ id }: { id: string }) {
   return (
     <ActionIcon size="sm">
       <IconEdit stroke={1} />

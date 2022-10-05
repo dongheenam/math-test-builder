@@ -37,7 +37,16 @@ async function callApi(
 export async function callGetQuestions(
   query: Record<string | number | symbol, any>
 ) {
-  const URL = "/api/questions?" + toQuery(query);
+  const parsedQuery = {
+    topic: query.topic,
+    yearLevel: query.yearLevel,
+    tags: query.tags,
+    content: query.content,
+    tagMatch: query.tagMatch,
+    orderBy: query.orderBy,
+    take: query.take,
+  };
+  const URL = "/api/questions?" + toQuery(parsedQuery);
   return callApi(URL, "GET", {
     headers: { "Content-Type": "application/json" },
   });
@@ -53,7 +62,7 @@ export async function callCreateQuestions(
       topic: query.topic,
       yearLevel: query.yearLevel,
       tags: query.tags,
-      text: query.text,
+      content: query.content,
       solution: query.solution,
     }),
   });
@@ -68,7 +77,7 @@ export async function callEditQuestions(
       topic: query.topic,
       yearLevel: query.yearLevel,
       tags: query.tags,
-      text: query.text,
+      content: query.content,
       solution: query.solution,
     }),
   });

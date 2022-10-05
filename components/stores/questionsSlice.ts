@@ -29,14 +29,14 @@ const createQuestionsSlice: StateCreator<
       tags: [...get().questionForm_tags], // Set => Array
       content: get().questionForm_content,
       tagMatch: get().questionForm_tagMatch,
-      sortBy: get().questionForm_orderBy,
+      orderBy: get().questionForm_orderBy,
       take: get().questionForm_take,
     });
     if (res === undefined) return;
     const {
-      docs: questions,
+      questions,
       count,
-    }: { docs: QuestionFetched[]; count: number } = res.data;
+    }: { questions: QuestionFetched[]; count: number } = res.data;
     const newQs: QuestionsSlice["questions_fetched"] = new Map(
       questions.map((q) => [q.id, q])
     );

@@ -90,18 +90,18 @@ function CountText() {
   );
 }
 function SortByForm() {
-  const sortBy = useStore.use.questionForm_orderBy();
-  const setSortBy = useStore.use.questionForm_set()("questionForm_sortBy");
+  const orderBy = useStore.use.questionForm_orderBy();
+  const setOrderBy = useStore.use.questionForm_set()("questionForm_orderBy");
   const fetchQuestions = useStore.use.questions_fetch();
   return (
     <NativeSelect
       size="sm"
       placeholder="Sort by"
       data={SORT_DATA}
-      value={sortBy}
+      value={orderBy}
       onChange={(e) => {
         const value = e.currentTarget.value;
-        setSortBy(value);
+        setOrderBy(value);
         fetchQuestions({ append: false });
       }}
     />

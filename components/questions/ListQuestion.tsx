@@ -10,72 +10,85 @@ import {
 import { IconEdit, IconPlus, IconMinus } from "@tabler/icons";
 import useStore from "components/stores/useStore";
 import React, { useCallback } from "react";
-import { QuestionDoc, TOPIC_COLORS } from "types";
+import { QuestionFetched, TOPIC_VALUES, TOPIC_COLORS, Topic } from "types";
 
-const ListQuestion = ({ question }: { question: QuestionDoc }) => {
-  const { topic, yearLevel, tags, text, _id } = question;
+const ListQuestion = ({ question }: { question: QuestionFetched }) => {
+  const { topic, yearLevel, tags, content, id } = question;
 
   return (
     <Group style={{ alignItems: "flex-start" }}>
-      <ChooseCheckbox _id={_id} />
+      <ChooseCheckbox id={id} />
       <Stack style={{ flex: 1 }}>
-        <Group spacing={0}>
-          <Badge radius="xs" color="dark" px={4}>
-            {yearLevel}
-          </Badge>
-          <Badge radius="xs" mr="xs" color={TOPIC_COLORS[topic]}>
-            {topic}
-          </Badge>
-          {tags?.map((tag, idx) => (
-            <Badge
-              color="gray"
-              key={idx}
-              style={{ textTransform: "lowercase" }}
-            >
-              {tag}
-            </Badge>
-          ))}
-        </Group>
-        <Text>{text}</Text>
+        <Badges topic={topic} yearLevel={yearLevel} tags={tags} />
+        <Text>{content}</Text>
       </Stack>
       <Group spacing={0} mt={-4}>
-        <BucketButton _id={_id} />
-        <Tooltip label="Edit question">
-          <ActionIcon>
-            <IconEdit stroke={1} />
-          </ActionIcon>
-        </Tooltip>
+        <BucketButton id={id} />
+        <EditButton id={id} />
       </Group>
     </Group>
   );
 };
 export default ListQuestion;
 
-function ChooseCheckbox({ _id }: { _id: string }) {
-  const chosen = useStore.use.questions_chosen();
-  const toggleChosen = useStore.use.questions_toggleChosen();
+function Badges({
+  topic,
+  yearLevel,
+  tags,
+}: {
+  topic: Topic;
+  yearLevel: number;
+  tags: string[];
+}) {
   return (
-    <Checkbox
-      checked={chosen.includes(_id)}
-      onChange={() => toggleChosen(_id)}
-    />
+    <Group spacing={0}>
+      <Badge radius="xs" color="dark" px={4}>
+        {yearLevel}
+      </Badge>
+      <Badge radius="xs" mr="xs" color={TOPIC_COLORS[topic]}>
+        {TOPIC_VALUES[topic]}
+      </Badge>
+      {tags?.map((tag, idx) => (
+        <Badge color="gray" key={idx} style={{ textTransform: "lowercase" }}>
+          {tag}
+        </Badge>
+      ))}
+    </Group>
   );
 }
 
-function BucketButton({ _id }: { _id: string }) {
+function ChooseCheckbox({ id }: { id: string }) {
+  const chosen = useStore.use.questions_chosen();
+  const toggleChosen = useStore.use.questions_toggleChosen();
+  return (
+    <Checkbox checked={chosen.includes(id)} onChange={() => toggleChosen(id)} />
+  );
+}
+
+function BucketButton({ id }: { id: string }) {
   const bucket = useStore.use.questions_bucket();
   const toggleBucket = useStore.use.questions_toggleBucket();
 
-  return bucket.includes(_id) ? (
+  return bucket.includes(id) ? (
     <Tooltip label="Remove from bucket">
-      <ActionIcon onClick={() => toggleBucket(_id)}>
+      <ActionIcon onClick={() => toggleBucket(id)}>
         <IconMinus stroke={1} />
       </ActionIcon>
     </Tooltip>
   ) : (
     <Tooltip label="Add to bucket">
-      <ActionIcon onClick={() => toggleBucket(_id)}>
+      <ActionIcon onClick={() => toggleBucket(id)}>
         <IconPlus stroke={1} />
+      </ActionIcon>
+    </Tooltip>
+  );
+}
+
+function EditButton({ id }: { id: string }) {
+  return (
+    <Tooltip label="Edit question">
+      <ActionIcon>
+        <IconEdit stroke={1} />
       </ActionIcon>
     </Tooltip>
   );
