@@ -109,7 +109,7 @@ function TagsForm({ setForm }: { setForm: SetForm }) {
   );
 }
 function MatchTypeForm({ setForm }: { setForm: SetForm }) {
-  const matchType = useStore.use.questionForm_matchType();
+  const matchType = useStore.use.questionForm_tagMatch();
   const setMatchType = setForm("questionForm_matchType");
   return (
     <SegmentedControl
@@ -120,7 +120,7 @@ function MatchTypeForm({ setForm }: { setForm: SetForm }) {
   );
 }
 function TextForm({ setForm }: { setForm: SetForm }) {
-  const text = useStore.use.questionForm_text();
+  const text = useStore.use.questionForm_content();
   const setText = setForm("questionForm_text");
   return (
     <TextInput

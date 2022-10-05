@@ -126,9 +126,7 @@ function parseVal(val: Value): any {
 /** parseFloat the input if defined */
 export function parseFloatIfDefined(input: any) {
   if (input === undefined) return;
-
   const parsed = Number(input);
-
   if (!isNaN(parsed)) return parsed;
 }
 
@@ -146,21 +144,20 @@ export function handleTagsQuery(
 }
 
 /** generates Prisma orderBy option from a string
- *  e.g. parseOrderBy("-updatedAt") returns { updatedAt: "desc" }
+ *  e.g. parseOrderBy("-updatedAt") returns { updatedAt: "desc" } and
+ *       parseOrderBy("topic") returns { topic: "asc" }
  */
 export function parseOrderBy<Model extends Record<string, any>>(str: string) {
   const prefix = str.substring(0, 1);
-  const field = str.substring(1) as keyof Model;
+  let field: keyof Model;
   let direction: "asc" | "desc";
-  switch (prefix) {
-    case "+":
-      direction = "asc";
-      break;
-    case "-":
-      direction = "desc";
-      break;
-    default:
-      throw new ReferenceError("input string has a wrong form");
+
+  if (str.substring(0, 1) === "-") {
+    field = str.substring(1);
+    direction = "desc";
+  } else {
+    field = str;
+    direction = "asc";
   }
   return { [field]: direction } as { [x in keyof Model]?: "asc" | "desc" };
 }

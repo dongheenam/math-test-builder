@@ -4,7 +4,7 @@ enableMapSet();
 
 import { QuestionFormSlice, QuestionsSlice } from "types/stores";
 import { callGetQuestions } from "lib/proxies/callApis";
-import { QuestionFetched, QuestionDoc } from "types";
+import { QuestionFetched } from "types";
 import { toggleItem } from "lib/util";
 
 const createQuestionsSlice: StateCreator<
@@ -27,16 +27,18 @@ const createQuestionsSlice: StateCreator<
       topic: get().questionForm_topic,
       yearLevel: get().questionForm_yearLevel,
       tags: [...get().questionForm_tags], // Set => Array
-      text: get().questionForm_text,
-      matchType: get().questionForm_matchType,
-      sortBy: get().questionForm_sortBy,
-      limit: get().questionForm_limit,
-      skip: get().questionForm_skip,
+      content: get().questionForm_content,
+      tagMatch: get().questionForm_tagMatch,
+      sortBy: get().questionForm_orderBy,
+      take: get().questionForm_take,
     });
     if (res === undefined) return;
-    const { docs, count }: { docs: QuestionDoc[]; count: number } = res.data;
+    const {
+      docs: questions,
+      count,
+    }: { docs: QuestionFetched[]; count: number } = res.data;
     const newQs: QuestionsSlice["questions_fetched"] = new Map(
-      docs.map((q) => [q._id, q])
+      questions.map((q) => [q.id, q])
     );
 
     set(
@@ -55,13 +57,13 @@ const createQuestionsSlice: StateCreator<
   },
 
   // methods: cache
-  questions_idToCache: (input) => {
+  questions_idToCache: (ids) => {
     set(
       produce((prev: QuestionsSlice) => {
         const fetched = prev.questions_fetched;
         const newCache = new Map(prev.questions_cached);
 
-        const _ids = Array.isArray(input) ? input : [input];
+        const _ids = Array.isArray(ids) ? ids : [ids];
         for (const _id of _ids) {
           const q = fetched.get(_id);
           q && newCache.set(_id, q);
@@ -71,12 +73,12 @@ const createQuestionsSlice: StateCreator<
     );
   },
   questions_toCache: (question) => {
-    if (!("_id" in question)) {
-      throw new ReferenceError("_id does not exist in the question!");
+    if (question.id === undefined) {
+      throw new ReferenceError("id does not exist in the question!");
     }
     set((prev) => ({
       questions_cached: new Map(prev.questions_cached).set(
-        question._id,
+        question.id as string,
         question
       ),
     }));

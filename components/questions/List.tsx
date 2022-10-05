@@ -90,7 +90,7 @@ function CountText() {
   );
 }
 function SortByForm() {
-  const sortBy = useStore.use.questionForm_sortBy();
+  const sortBy = useStore.use.questionForm_orderBy();
   const setSortBy = useStore.use.questionForm_set()("questionForm_sortBy");
   const fetchQuestions = useStore.use.questions_fetch();
   return (

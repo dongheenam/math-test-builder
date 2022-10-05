@@ -9,14 +9,14 @@ const INITIAL_FORM_STATE: Pick<
   | "questionForm_yearLevel"
   | "questionForm_topic"
   | "questionForm_tags"
-  | "questionForm_text"
-  | "questionForm_matchType"
+  | "questionForm_content"
+  | "questionForm_tagMatch"
 > = {
   questionForm_yearLevel: "",
   questionForm_topic: "",
   questionForm_tags: new Set(),
-  questionForm_text: "",
-  questionForm_matchType: "any",
+  questionForm_content: "",
+  questionForm_tagMatch: "any",
 };
 
 // main slice
@@ -28,9 +28,8 @@ const createQuestionFormSlice: StateCreator<
 > = (set) => ({
   // states
   ...INITIAL_FORM_STATE,
-  questionForm_sortBy: "-updatedAt",
-  questionForm_limit: 10,
-  questionForm_skip: 0,
+  questionForm_orderBy: "-updatedAt",
+  questionForm_take: 10,
 
   // methods
   questionForm_set: (field) => (value) => set({ [field]: value }),
