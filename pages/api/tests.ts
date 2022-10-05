@@ -1,47 +1,17 @@
 import { PrismaClient } from "@prisma/client";
+import connectPrisma from "lib/connectPrisma";
 import { NextApiRequest, NextApiResponse } from "next";
 
-let prisma: PrismaClient;
-
-async function createRow(text: string) {
-  if (!global.prisma) {
-    global.prisma = new PrismaClient();
-  }
-  prisma = global.prisma;
-
-  const result = await prisma.testOne.create({
-    data: {
-      content: text,
-    },
-  });
-
-  return { result };
-}
-
-async function getRow() {
-  if (!global.prisma) {
-    global.prisma = new PrismaClient();
-  }
-  prisma = global.prisma;
-
-  const result = await prisma.testOne.findMany({
-    where: {
-      content: {
-        contains: "mongo",
-      },
-    },
-  });
-  return { result };
-}
-
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
+  const prisma = connectPrisma();
+
   switch (req.method) {
     case "POST":
-      res.send(await createRow("hello, cockroach!"));
       break;
 
     case "GET":
-      res.send(await getRow());
+      // @ts-ignore
+      res.send(await prisma.$metrics.json());
 
     default:
       break;

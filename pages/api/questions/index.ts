@@ -118,7 +118,7 @@ async function searchQuestion(req: NextApiRequest, res: NextApiResponse) {
       // ?yearLevel=7&yearLevel=8 still parses to yearLevel: 7
       yearLevel: parseFloatIfDefined(req.query.yearLevel),
       take: parseFloatIfDefined(req.query.take),
-      count: req.query.count === "true",
+      count: !(req.query.count === "false"),
     };
     // build query
     let where: Prisma.QuestionWhereInput = {};

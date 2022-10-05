@@ -7,20 +7,19 @@ generator client {
 }
 
 datasource db {
-  provider = "mongodb"
-  url      = env("DATABASE_URL_MONGO")
+  provider = "cockroachdb"
+  url      = env("DATABASE_URL_COCKROACH")
 }
 
 model Question {
-  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  id        String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   topic     Topic
-  yearLevel Int
-  tags      Tag[]    @relation(fields: [tagIds], references: [id])
-  tagIds    String[] @db.ObjectId
+  yearLevel Int      @db.Int2
+  tags      Tag[]
   content   String
   solution  String
   author    User?    @relation(fields: [authorId], references: [id])
-  authorId  String?  @db.ObjectId
+  authorId  String?  @unique @db.Uuid
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now())
 
@@ -28,15 +27,14 @@ model Question {
 }
 
 model PrivateQuestion {
-  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  id        String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   topic     Topic
-  yearLevel Int
-  tags      Tag[]    @relation(fields: [tagIds], references: [id])
-  tagIds    String[] @db.ObjectId
+  yearLevel Int      @db.Int2
+  tags      Tag[]
   content   String
   solution  String
   author    User?    @relation(fields: [authorId], references: [id])
-  authorId  String?  @db.ObjectId
+  authorId  String?  @unique @db.Uuid
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now())
 
@@ -44,16 +42,16 @@ model PrivateQuestion {
 }
 
 model Tag {
-  id                 String            @id @default(auto()) @map("_id") @db.ObjectId
-  name               String            @unique
-  questions          Question[]        @relation(fields: [questionIds], references: [id])
-  questionIds        String[]          @db.ObjectId
-  privateQuestions   PrivateQuestion[] @relation(fields: [privateQuestionIds], references: [id])
-  privateQuestionIds String[]          @db.ObjectId
+  id               String            @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  name             String            @unique
+  questions        Question[]
+  privateQuestions PrivateQuestion[]
+
+  @@index([name])
 }
 
 model User {
-  id               String            @id @default(auto()) @map("_id") @db.ObjectId
+  id               String            @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   email            String            @unique
   name             String
   role             UserRole          @default(USER)
