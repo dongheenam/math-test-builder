@@ -13,7 +13,12 @@ import {
 import { IconSearch, IconPencilPlus } from "@tabler/icons";
 
 import useStore from "components/stores/useStore";
-import { MATCH_TYPE_DATA, QuestionFormSlice, TOPICS, YEAR_LEVELS } from "types";
+import {
+  MATCH_TYPE_DATA,
+  QuestionFormSlice,
+  TOPIC_VALUES,
+  YEAR_LEVELS,
+} from "types";
 
 /* main */
 const QuestionsSearch = () => {
@@ -66,10 +71,16 @@ function YearLevelForm({ setForm }: { setForm: SetForm }) {
       maxDropdownHeight={240}
       value={yearLevel}
       onChange={setYearLevel}
-      data={YEAR_LEVELS.map((v: number) => v.toString())}
+      data={[...YEAR_LEVELS]}
     />
   );
 }
+
+const TOPIC_DATA = Object.entries(TOPIC_VALUES).map(([key, value]) => ({
+  value: key,
+  label: value,
+}));
+
 function TopicForm({ setForm }: { setForm: SetForm }) {
   const topic = useStore.use.questionForm_topic();
   const setTopic = setForm("questionForm_topic");
@@ -81,7 +92,7 @@ function TopicForm({ setForm }: { setForm: SetForm }) {
       value={topic}
       onChange={setTopic}
       maxDropdownHeight={240}
-      data={Object.values(TOPICS)}
+      data={TOPIC_DATA}
     />
   );
 }
@@ -109,24 +120,24 @@ function TagsForm({ setForm }: { setForm: SetForm }) {
   );
 }
 function MatchTypeForm({ setForm }: { setForm: SetForm }) {
-  const matchType = useStore.use.questionForm_matchType();
-  const setMatchType = setForm("questionForm_matchType");
+  const tagMatch = useStore.use.questionForm_tagMatch();
+  const setTagMatch = setForm("questionForm_tagMatch");
   return (
     <SegmentedControl
       data={MATCH_TYPE_DATA}
-      value={matchType}
-      onChange={setMatchType}
+      value={tagMatch}
+      onChange={setTagMatch}
     />
   );
 }
 function TextForm({ setForm }: { setForm: SetForm }) {
-  const text = useStore.use.questionForm_text();
-  const setText = setForm("questionForm_text");
+  const content = useStore.use.questionForm_content();
+  const setContent = setForm("questionForm_content");
   return (
     <TextInput
       label="Text"
-      value={text}
-      onChange={(e) => setText(e.currentTarget.value)}
+      value={content}
+      onChange={(e) => setContent(e.currentTarget.value)}
     />
   );
 }

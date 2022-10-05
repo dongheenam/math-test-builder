@@ -1,0 +1,81 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = ["fullTextSearch"]
+}
+
+datasource db {
+  provider = "cockroachdb"
+  url      = env("DATABASE_URL")
+}
+
+model TestOne {
+  id      String @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  content String
+}
+
+model Question {
+  id        String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  topic     Topic
+  yearLevel Int      @db.Int2
+  tags      Tag[]
+  content   String
+  solution  String
+  author    User?    @relation(fields: [authorId], references: [id])
+  authorId  String?  @unique @db.Uuid
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now())
+
+  @@index([topic, yearLevel, updatedAt])
+}
+
+model PrivateQuestion {
+  id        String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  topic     Topic
+  yearLevel Int      @db.Int2
+  tags      Tag[]
+  content   String
+  solution  String
+  author    User?    @relation(fields: [authorId], references: [id])
+  authorId  String?  @unique @db.Uuid
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now())
+
+  @@index([topic, yearLevel, updatedAt])
+}
+
+model Tag {
+  id               String            @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  name             String            @unique
+  questions        Question[]
+  privateQuestions PrivateQuestion[]
+
+  @@index([name])
+}
+
+model User {
+  id               String            @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  email            String            @unique
+  name             String
+  role             UserRole          @default(USER)
+  questions        Question[]
+  privateQuestions PrivateQuestion[]
+}
+
+enum Topic {
+  NUM
+  ALG
+  MEAS
+  GEO
+  STAT
+  PROB
+  CALC
+}
+
+enum UserRole {
+  ADMIN
+  MANAGER
+  USER
+}

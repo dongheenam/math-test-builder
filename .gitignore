@@ -3,7 +3,7 @@
 ### User
 
 # sandbox
-pages/tests.tsx
+# pages/tests.tsx
 
 # MS Office
 ~$*
@@ -37,7 +37,7 @@ yarn-error.log*
 .pnpm-debug.log*
 
 # local env files
-.env*.local
+.env*
 
 # vercel
 .vercel

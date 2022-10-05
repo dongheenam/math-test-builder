@@ -2,9 +2,9 @@ import { StateCreator } from "zustand";
 import produce from "immer";
 
 import { callCreateQuestions } from "lib/proxies/callApis";
-import { generateId } from "lib/util";
+import { generateId, parseFloatIfDefined } from "lib/util";
 import {
-  QuestionDoc,
+  QuestionFetched,
   QuestionDraft,
   QuestionEditSlice,
   QuestionFormSlice,
@@ -22,7 +22,7 @@ const createQuestionEditSlice: StateCreator<
 
   // methods: editor
   questionEdit_toEditor: (_id) => {
-    let qEditing: QuestionDraft | QuestionDoc | undefined;
+    let qEditing: QuestionDraft | QuestionFetched | undefined;
     if (_id) {
       qEditing =
         // prefer local copy
@@ -36,11 +36,11 @@ const createQuestionEditSlice: StateCreator<
     // new question; fetch values from the question form
     qEditing = {
       topic: get().questionForm_topic,
-      yearLevel: get().questionForm_yearLevel,
+      yearLevel: parseFloatIfDefined(get().questionForm_yearLevel),
       tags: [],
-      text: "",
+      content: "",
       solution: "",
-      _id: generateId(4, "temp-"),
+      id: generateId(4, "temp-"),
     } as QuestionDraft;
     set({ questionEdit_current: qEditing });
   },
@@ -68,22 +68,8 @@ const createQuestionEditSlice: StateCreator<
 
     // upload to main
     const res = await callCreateQuestions(qEditing);
-    const qUploaded: QuestionDoc = res.data;
+    const qUploaded: QuestionFetched = res.data;
     get().questions_toCache(qUploaded);
   },
 });
 export default createQuestionEditSlice;
-
-// let qEditing: Question | QuestionDoc | undefined;
-//     if (_id) {
-//       // prefer local copy
-//
-//     }
-//     const isNew = !!qEditing;
-//     if (isNew) {
-//       qEditing = {
-//         tags: [],
-//         text: "",
-//         solution: "",
-//       };
-//     }
