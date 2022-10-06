@@ -8,7 +8,7 @@ import { useRef } from "react";
 import styles from "./Bucket.module.css";
 
 const Bucket = () => {
-  const bucket = useStore.use.questions_bucket();
+  const bucket = useStore.use.questions_bucketedIds();
   const setBucket = useStore.use.questions_setBucket();
   const dragHandlers = useDrag(bucket, setBucket);
 
@@ -31,7 +31,7 @@ function BucketQuestion({
 }) {
   const ref = useRef(null);
 
-  const question = useStore.use.questions_cached().get(id);
+  const question = useStore.use.questions_cache().get(id);
   if (!question) return <></>;
   const { content } = question;
 

@@ -1,11 +1,23 @@
 import type { NextApiRequest, NextApiResponse } from "next";
-import pluralize from "pluralize";
 import { Prisma } from "@prisma/client";
 
 import connectPrisma from "lib/connectPrisma";
-import { parseFloatIfDefined, handleTagsQuery, parseOrderBy } from "lib/util";
+import {
+  parseFloatIfDefined,
+  handleTagsQuery,
+  parseOrderBy,
+  includeTagsQuery,
+  createTagsQuery,
+  rawToFetched,
+} from "lib/util";
 import { handleApiError } from "lib/handleApiError";
-import { QuestionFetched, QuestionModel } from "types";
+import {
+  CreateQuestionData,
+  CreateQuestionQuery,
+  QuestionRaw,
+  GetQuestionsData,
+  GetQuestionsQuery,
+} from "types";
 
 /* main API handler */
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
@@ -17,17 +29,11 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
 
     case "GET":
     default:
-      await searchQuestion(req, res);
+      await getQuestions(req, res);
       break;
   }
 };
 export default handler;
-
-type CreateQuestionQuery = Pick<
-  QuestionFetched,
-  "topic" | "yearLevel" | "tags" | "content" | "solution" | "authorId"
->;
-type CreateQuestionData = QuestionFetched;
 
 /* POST: create a new question */
 async function createQuestion(req: NextApiRequest, res: NextApiResponse) {
@@ -53,52 +59,27 @@ async function createQuestion(req: NextApiRequest, res: NextApiResponse) {
       yearLevel,
       content,
       solution,
-    };
-    questionData.tags = {
-      connectOrCreate: tags.map((tag) => ({
-        where: { name: tag },
-        create: { name: tag },
-      })),
+      ...createTagsQuery(tags),
     };
 
     // send query and return the result
     prisma = connectPrisma();
     const question = await prisma.question.create({
       data: questionData as Prisma.QuestionCreateInput,
-      include: {
-        tags: {
-          select: { name: true },
-        },
-      },
+      ...includeTagsQuery,
     });
-    const result: CreateQuestionData = {
-      ...question,
-      tags: question.tags.map((tag) => tag.name),
-    };
-    res.send({ status: "ok", data: result });
+    res.send({
+      status: "ok",
+      data: rawToFetched(question) as CreateQuestionData,
+    });
     res.end();
   } catch (err) {
     handleApiError(err, res);
   }
 }
 
-type SearchQuestionQuery = Partial<
-  Pick<QuestionFetched, "topic" | "yearLevel" | "content" | "authorId">
-> & {
-  tags?: string[];
-  tagMatch?: "any" | "all";
-  orderBy?: string;
-  cursor?: QuestionFetched["id"];
-  take?: number;
-  count?: boolean;
-};
-type SearchQuestionData = {
-  questions?: QuestionFetched[];
-  count?: number;
-};
-
 /* GET: search questions */
-async function searchQuestion(req: NextApiRequest, res: NextApiResponse) {
+async function getQuestions(req: NextApiRequest, res: NextApiResponse) {
   try {
     // parse request
     const {
@@ -112,7 +93,7 @@ async function searchQuestion(req: NextApiRequest, res: NextApiResponse) {
       count = true,
       cursor,
       take = 10,
-    }: SearchQuestionQuery = {
+    }: GetQuestionsQuery = {
       ...req.query,
       tags: handleTagsQuery(req.query.tags),
       // ?yearLevel=7&yearLevel=8 still parses to yearLevel: 7
@@ -144,19 +125,17 @@ async function searchQuestion(req: NextApiRequest, res: NextApiResponse) {
       args.cursor = { id: cursor };
       args.skip = 1;
     }
-    if (orderBy) {
-      args.orderBy = parseOrderBy<QuestionModel>(orderBy);
+    if (orderBy && orderBy !== "tags") {
+      args.orderBy = parseOrderBy<Omit<QuestionRaw, "tags">>(orderBy);
     }
 
     // fetch documents
     prisma = connectPrisma();
     const questionsPromise = prisma.question.findMany({
       ...args,
-      include: {
-        tags: { select: { name: true } },
-      },
+      ...includeTagsQuery,
     });
-    let result: SearchQuestionData = {};
+    let result: GetQuestionsData = {};
     if (count) {
       const countPromise = prisma.question.count({ where: where });
       const [questions, countResult] = await prisma.$transaction([
@@ -165,18 +144,12 @@ async function searchQuestion(req: NextApiRequest, res: NextApiResponse) {
       ]);
       result = {
         count: countResult,
-        questions: questions.map((q) => ({
-          ...q,
-          tags: q.tags.map((tag) => tag.name),
-        })),
+        questions: questions.map((q) => rawToFetched(q)),
       };
     } else {
       const questions = await questionsPromise;
       result = {
-        questions: questions.map((q) => ({
-          ...q,
-          tags: q.tags.map((tag) => tag.name),
-        })),
+        questions: questions.map((q) => rawToFetched(q)),
       };
     }
 

@@ -47,10 +47,10 @@ function ListControl() {
 }
 
 function SelectControl() {
-  const chosen = useStore.use.questions_chosen();
-  const isAllChosen = useStore.use.questions_isAllChosen();
+  const chosen = useStore.use.questions_selectedIds();
+  const isAllChosen = useStore.use.questions_isAllSelected();
   const toggleAll = useStore.use.questions_toggleAll();
-  const toBucket = useStore.use.questions_chosenToBucket();
+  const toBucket = useStore.use.questions_selectedToBucket();
 
   const isChosenEmpty = chosen.length === 0;
 

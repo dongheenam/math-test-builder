@@ -58,15 +58,15 @@ function Badges({
 }
 
 function ChooseCheckbox({ id }: { id: string }) {
-  const chosen = useStore.use.questions_chosen();
-  const toggleChosen = useStore.use.questions_toggleChosen();
+  const chosen = useStore.use.questions_selectedIds();
+  const toggleChosen = useStore.use.questions_toggleSelected();
   return (
     <Checkbox checked={chosen.includes(id)} onChange={() => toggleChosen(id)} />
   );
 }
 
 function BucketButton({ id }: { id: string }) {
-  const bucket = useStore.use.questions_bucket();
+  const bucket = useStore.use.questions_bucketedIds();
   const toggleBucket = useStore.use.questions_toggleBucket();
 
   return bucket.includes(id) ? (

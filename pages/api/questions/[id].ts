@@ -1,15 +1,20 @@
 import type { NextApiRequest, NextApiResponse } from "next";
-import pluralize from "pluralize";
 import { Prisma } from "@prisma/client";
 
 import connectPrisma from "lib/connectPrisma";
-import { parseFloatIfDefined, handleTagsQuery, parseOrderBy } from "lib/util";
+import {
+  parseFloatIfDefined,
+  handleTagsQuery,
+  createTagsQuery,
+  rawToFetched,
+  includeTagsQuery,
+} from "lib/util";
 import {
   handleApiError,
   DocumentIdError,
   QueryError,
 } from "lib/handleApiError";
-import { QuestionFetched, QuestionModel } from "types";
+import { EditQuestionQuery, QuestionFetched } from "types";
 
 /* main API handler */
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
@@ -34,13 +39,6 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   }
 };
 export default handler;
-
-type EditQuestionQuery = Partial<
-  Pick<
-    QuestionFetched,
-    "topic" | "yearLevel" | "tags" | "content" | "solution" | "authorId"
-  >
->;
 
 /* PUT/PATCH: edit the question */
 async function editQuestion(
@@ -75,14 +73,7 @@ async function editQuestion(
     if (yearLevel) questionData.yearLevel = yearLevel;
     if (content) questionData.content = content;
     if (solution) questionData.content = solution;
-    if (tags) {
-      questionData.tags = {
-        connectOrCreate: tags.map((tag) => ({
-          where: { name: tag },
-          create: { name: tag },
-        })),
-      };
-    }
+    if (tags) questionData.tags = createTagsQuery(tags).tags;
 
     prisma = connectPrisma();
     const question = await prisma.question.update({
@@ -94,11 +85,7 @@ async function editQuestion(
         },
       },
     });
-    const result = {
-      ...question,
-      tags: question.tags.map((tag) => tag.name),
-    };
-    res.send({ status: "ok", data: result });
+    res.send({ status: "ok", data: rawToFetched(question) });
     res.end();
   } catch (err) {
     handleApiError(err, res);
@@ -115,11 +102,7 @@ async function deleteQuestion(
     prisma = connectPrisma();
     const question = await prisma.question.delete({
       where: { id: id },
-      include: {
-        tags: {
-          select: { name: true },
-        },
-      },
+      ...includeTagsQuery,
     });
     res.send({ status: "ok" });
     res.end();
@@ -138,18 +121,10 @@ async function getQuestion(
     prisma = connectPrisma();
     const question = await prisma.question.findFirstOrThrow({
       where: { id: id },
-      include: {
-        tags: {
-          select: { name: true },
-        },
-      },
+      ...includeTagsQuery,
     });
 
-    const result = {
-      ...question,
-      tags: question.tags.map((tag) => tag.name),
-    };
-    res.send({ status: "ok", data: result });
+    res.send({ status: "ok", data: rawToFetched(question) });
     res.end();
   } catch (err) {
     handleApiError(err, res);

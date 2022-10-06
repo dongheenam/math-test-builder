@@ -1,4 +1,10 @@
 import { toQuery } from "lib/util";
+import {
+  CreateQuestionData,
+  CreateQuestionQuery,
+  GetQuestionsData,
+  GetQuestionsQuery,
+} from "types";
 
 type HTTP_METHOD =
   | "CONNECT"
@@ -27,16 +33,14 @@ async function callApi(
     headers: headers,
     body: body,
   });
-  const data = await res.json();
-  if (!res.ok) {
+  const data = (await res.json()) as ApiCallResult;
+  if (!res.ok || data.status !== "ok" || data.error !== undefined) {
     throw new Error(`Response was not OK. Received: ${JSON.stringify(data)}`);
   }
-  return data as ApiCallResult;
+  return data.data;
 }
 
-export async function callGetQuestions(
-  query: Record<string | number | symbol, any>
-) {
+export async function callGetQuestions(query: GetQuestionsQuery) {
   const parsedQuery = {
     topic: query.topic,
     yearLevel: query.yearLevel,
@@ -49,12 +53,10 @@ export async function callGetQuestions(
   const URL = "/api/questions?" + toQuery(parsedQuery);
   return callApi(URL, "GET", {
     headers: { "Content-Type": "application/json" },
-  });
+  }) as Promise<GetQuestionsData>;
 }
 
-export async function callCreateQuestions(
-  query: Record<string | number | symbol, any>
-) {
+export async function callCreateQuestions(query: CreateQuestionQuery) {
   const URL = "/api/questions";
   return callApi(URL, "POST", {
     headers: { "Content-Type": "application/json" },
@@ -65,7 +67,7 @@ export async function callCreateQuestions(
       content: query.content,
       solution: query.solution,
     }),
-  });
+  }) as Promise<CreateQuestionData>;
 }
 export async function callEditQuestions(
   query: Record<string | number | symbol, any>
@@ -80,5 +82,5 @@ export async function callEditQuestions(
       content: query.content,
       solution: query.solution,
     }),
-  });
+  }) as Promise<CreateQuestionData>;
 }

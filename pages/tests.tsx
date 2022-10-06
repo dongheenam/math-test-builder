@@ -1,7 +1,5 @@
 import { TextInput, Button, Group } from "@mantine/core";
 
-import { randomId } from "@mantine/hooks";
-
 export default function Test() {
   return (
     <div style={{ maxWidth: 320, margin: "auto" }}>

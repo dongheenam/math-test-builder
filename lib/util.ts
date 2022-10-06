@@ -1,5 +1,8 @@
 import pluralize from "pluralize";
+import { QuestionDraft, QuestionFetched, QuestionRaw } from "types";
 import { StoreApi, UseBoundStore } from "zustand";
+
+type Key = string | number | symbol;
 
 /**
  * JAVASCRIPT HELPERS - ARRAYS AND OBJECTS
@@ -21,27 +24,30 @@ export function stripArray<T>(maybeArray: T | NestedArray<T>): T {
   else return maybeArray;
 }
 
+/** returns if the input is an object
+ *  ref: https://stackoverflow.com/questions/8511281/check-if-a-value-is-an-object-in-javascript
+ */
+export function isObject(input: any) {
+  return input === Object(input);
+}
+
 /**
  * check if an iterable (array, object, ...) is empty
  * caution: isEmpty(new Date()) returns true */
 export function isEmpty(
-  iterable: any[] | Record<string | number | symbol, any> | Iterable<any>
+  iterable: any[] | Record<Key, any> | Iterable<any>
 ): boolean {
   for (let key in iterable) return false;
   return true;
 }
 
 /** from objects to maps */
-export function toMap<K extends string | number | symbol, V>(
-  obj: Record<K, V>
-): Map<K, V> {
+export function toMap<K extends Key, V>(obj: Record<K, V>): Map<K, V> {
   return new Map(Object.entries(obj) as Array<[K, V]>);
 }
 
 /** from maps to objects */
-export function fromMap<K extends string | number | symbol, V>(
-  map: Map<K, V>
-): Record<K, V> {
+export function fromMap<K extends Key, V>(map: Map<K, V>): Record<K, V> {
   return Object.fromEntries([...map]) as Record<K, V>;
 }
 
@@ -123,6 +129,26 @@ function parseVal(val: Value): any {
   return val;
 }
 
+/** remove the property in an object if its value is falsy
+ *  specify the specific keys to ignore
+ */
+type Falsy = false | 0 | "" | null | undefined;
+const isTruthy = <T>(x: T | Falsy): x is T => !!x;
+
+export function removeFalsyValues<T extends object>(input: {
+  [K in keyof T]: T[K] | Falsy;
+}): T {
+  let result = { ...input };
+  // seems Typescript cannot cast types through Object.entries() yet
+  for (const key in result) {
+    const value = result[key];
+    if (!isTruthy(value)) {
+      delete result[key];
+    }
+  }
+  return result as T;
+}
+
 /** parseFloat the input if defined */
 export function parseFloatIfDefined(input: any) {
   if (input === undefined) return;
@@ -148,7 +174,6 @@ export function handleTagsQuery(
  *       parseOrderBy("topic") returns { topic: "asc" }
  */
 export function parseOrderBy<Model extends Record<string, any>>(str: string) {
-  const prefix = str.substring(0, 1);
   let field: keyof Model;
   let direction: "asc" | "desc";
 
@@ -160,6 +185,50 @@ export function parseOrderBy<Model extends Record<string, any>>(str: string) {
     direction = "asc";
   }
   return { [field]: direction } as { [x in keyof Model]?: "asc" | "desc" };
+}
+
+/**
+ * APP-SPECIFIC UTILS
+ */
+/** tags query */
+export const includeTagsQuery = {
+  include: {
+    tags: { select: { name: true } },
+  },
+};
+export function createTagsQuery(tags: string[]) {
+  return {
+    tags: {
+      connectOrCreate: tags.map((tag) => ({
+        where: { name: tag },
+        create: { name: tag },
+      })),
+    },
+  };
+}
+
+/** converts between QuestionRaw, QuestionDraft, QuestionFetched */
+export function draftToFetched(draft: QuestionDraft): QuestionFetched {
+  // draft may contain empty values
+  const cleaned = removeFalsyValues({
+    ...draft,
+    yearLevel: parseFloatIfDefined(draft.yearLevel),
+    tags: [...draft.tags],
+  });
+  return cleaned as QuestionFetched;
+}
+export function fetchedToDraft(fetched: QuestionFetched): QuestionDraft {
+  return {
+    ...fetched,
+    yearLevel: fetched.yearLevel.toString(),
+    tags: new Set(fetched.tags),
+  } as QuestionDraft;
+}
+export function rawToFetched(raw: QuestionRaw): QuestionFetched {
+  return {
+    ...raw,
+    tags: raw.tags.map((tag) => tag.name),
+  } as QuestionFetched;
 }
 
 /**

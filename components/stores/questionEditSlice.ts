@@ -1,8 +1,10 @@
 import { StateCreator } from "zustand";
-import produce from "immer";
 
-import { callCreateQuestions } from "lib/proxies/callApis";
-import { generateId, parseFloatIfDefined } from "lib/util";
+import {
+  callCreateQuestions,
+  callEditQuestions,
+} from "lib/proxies/callQuestions";
+import { draftToFetched, fetchedToDraft, generateId } from "lib/util";
 import {
   QuestionFetched,
   QuestionDraft,
@@ -11,6 +13,23 @@ import {
   QuestionsSlice,
 } from "types";
 
+const INITIAL_EDIT_STATE: Pick<
+  QuestionEditSlice,
+  | "questionEdit_id"
+  | "questionEdit_topic"
+  | "questionEdit_yearLevel"
+  | "questionEdit_tags"
+  | "questionEdit_content"
+  | "questionEdit_solution"
+> = {
+  questionEdit_id: "",
+  questionEdit_topic: "",
+  questionEdit_yearLevel: "",
+  questionEdit_tags: new Set(),
+  questionEdit_content: "",
+  questionEdit_solution: "",
+};
+
 const createQuestionEditSlice: StateCreator<
   QuestionEditSlice & QuestionsSlice & QuestionFormSlice,
   [],
@@ -18,58 +37,79 @@ const createQuestionEditSlice: StateCreator<
   QuestionEditSlice
 > = (set, get) => ({
   // states
-  questionEdit_current: undefined,
+  ...INITIAL_EDIT_STATE,
 
   // methods: editor
-  questionEdit_toEditor: (_id) => {
-    let qEditing: QuestionDraft | QuestionFetched | undefined;
-    if (_id) {
-      qEditing =
-        // prefer local copy
-        get().questions_cached.get(_id) || get().questions_fetched.get(_id);
+  questionEdit_toEdit: (id) => {
+    let fetched: QuestionFetched | undefined;
+    let draft: QuestionDraft;
+    if (id) {
+      // prefer local copy
+      fetched =
+        get().questions_cache.get(id) || get().questions_fetched.get(id);
     }
-    if (!!qEditing) {
-      set({ questionEdit_current: qEditing });
-      return;
+    if (fetched !== undefined) {
+      draft = fetchedToDraft(fetched);
+    } else {
+      // new question; fetch values from the question form
+      draft = {
+        topic: get().questionForm_topic,
+        yearLevel: get().questionForm_yearLevel,
+        tags: get().questionForm_tags,
+        content: "",
+        solution: "",
+        id: generateId(4, "temp-"),
+      };
     }
-
-    // new question; fetch values from the question form
-    qEditing = {
-      topic: get().questionForm_topic,
-      yearLevel: parseFloatIfDefined(get().questionForm_yearLevel),
-      tags: [],
-      content: "",
-      solution: "",
-      id: generateId(4, "temp-"),
-    } as QuestionDraft;
-    set({ questionEdit_current: qEditing });
+    set({
+      questionEdit_id: draft.id,
+      questionEdit_yearLevel: draft.yearLevel,
+      questionEdit_topic: draft.topic,
+      questionEdit_tags: draft.tags,
+      questionEdit_content: draft.content,
+      questionEdit_solution: draft.solution,
+    });
   },
-  questionEdit_edit: (field) => (value) =>
-    set(
-      produce((prev: QuestionEditSlice) => {
-        if (prev.questionEdit_current !== undefined) {
-          prev.questionEdit_current[field] = value;
-        }
-      })
-    ),
+  questionEdit_set: (field) => (value) => set({ [field]: value }),
   questionEdit_reset: () => {
-    set({ questionEdit_current: undefined });
+    set({ ...INITIAL_EDIT_STATE });
   },
 
   // methods: export
   questionEdit_save: async ({ upload = false }) => {
-    const qEditing = get().questionEdit_current;
-    if (!qEditing) return;
+    const draft: QuestionDraft = {
+      id: get().questionEdit_id,
+      yearLevel: get().questionEdit_yearLevel,
+      topic: get().questionEdit_topic,
+      tags: get().questionEdit_tags,
+      content: get().questionEdit_content,
+      solution: get().questionEdit_solution,
+    };
+    // clears out falsy values
+    const toFetch = draftToFetched(draft);
+    if (
+      ["yearLevel", "topic", "content", "solution"].some(
+        (key) => !Object.hasOwn(toFetch, key)
+      )
+    ) {
+      throw new Error("Some mandatory fields are missing!");
+    }
+
     if (!upload) {
       // save a local copy
-      get().questions_toCache(qEditing);
+      get().questions_addCache(toFetch);
       return;
     }
 
     // upload to main
-    const res = await callCreateQuestions(qEditing);
-    const qUploaded: QuestionFetched = res.data;
-    get().questions_toCache(qUploaded);
+    let qUploaded: QuestionFetched;
+    const isTemp = toFetch.id.substring(0, 4) === "temp";
+    if (isTemp) {
+      qUploaded = await callCreateQuestions(toFetch);
+    } else {
+      qUploaded = await callEditQuestions(toFetch);
+    }
+    get().questions_addCache(qUploaded);
   },
 });
 export default createQuestionEditSlice;

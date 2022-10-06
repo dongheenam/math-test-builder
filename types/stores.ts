@@ -1,25 +1,26 @@
-import { QuestionDraft, QuestionFetched, Topic } from "./";
+import { GetQuestionsQuery, QuestionDraft, QuestionFetched, Topic } from "./";
 
 /* questionsSlice */
 interface QuestionsStates {
   questions_fetched: Map<string, QuestionFetched>;
-  questions_cached: Map<string, QuestionDraft | QuestionFetched>;
-  questions_bucket: string[];
-  questions_chosen: string[];
+  questions_cache: Map<string, QuestionFetched>;
+  questions_bucketedIds: string[];
+  questions_selectedIds: string[];
   questions_countQueried: number;
   questions_countFetched: number;
 }
 interface QuestionsActions {
   questions_fetch: ({ append }: { append: boolean }) => Promise<void>;
-  questions_idToCache: (input: string | string[]) => void;
-  questions_toCache: (question: QuestionDraft | QuestionFetched) => void;
+  questions_addCache: (input: QuestionFetched | QuestionFetched[]) => void;
+  questions_addCacheById: (input: string | string[]) => void;
+  questions_addBucket: (input: string | string[]) => void;
+  questions_removeBucket: (input: string | string[]) => void;
   questions_toggleBucket: (id: string) => void;
-  questions_setBucket: (newBucket: string[]) => void;
   questions_resetBucket: () => void;
-  questions_toggleChosen: (id: string) => void;
-  questions_isAllChosen: () => boolean;
+  questions_toggleSelected: (id: string) => void;
+  questions_isAllSelected: () => boolean;
   questions_toggleAll: () => void;
-  questions_chosenToBucket: () => void;
+  questions_selectedToBucket: () => void;
 }
 export type QuestionsSlice = QuestionsStates & QuestionsActions;
 
@@ -30,13 +31,13 @@ export const SORT_DATA = [
 ];
 export const MATCH_TYPE_DATA = ["any", "all"];
 interface QuestionFormStates {
-  questionForm_yearLevel: string;
-  questionForm_topic: Topic | "";
-  questionForm_tags: Set<string>;
-  questionForm_content: string;
-  questionForm_tagMatch: "any" | "all";
-  questionForm_orderBy: string;
-  questionForm_take: number;
+  questionForm_yearLevel: QuestionDraft["yearLevel"];
+  questionForm_topic: QuestionDraft["topic"];
+  questionForm_tags: QuestionDraft["tags"];
+  questionForm_content: QuestionDraft["content"];
+  questionForm_tagMatch: GetQuestionsQuery["tagMatch"];
+  questionForm_orderBy: GetQuestionsQuery["orderBy"];
+  questionForm_take: GetQuestionsQuery["take"];
 }
 interface QuestionFormActions {
   questionForm_set: <Key extends keyof QuestionFormStates>(
@@ -49,13 +50,18 @@ export type QuestionFormSlice = QuestionFormStates & QuestionFormActions;
 
 /* questionEditSlice */
 interface QuestionEditStates {
-  questionEdit_current: QuestionDraft | QuestionFetched | undefined;
+  questionEdit_id: QuestionDraft["id"];
+  questionEdit_yearLevel: QuestionDraft["yearLevel"];
+  questionEdit_topic: QuestionDraft["topic"];
+  questionEdit_tags: QuestionDraft["tags"];
+  questionEdit_content: QuestionDraft["content"];
+  questionEdit_solution: QuestionDraft["solution"];
 }
 interface QuestionEditActions {
-  questionEdit_toEditor: (_id?: string) => void;
-  questionEdit_edit: <Key extends keyof QuestionFetched>(
+  questionEdit_toEdit: (id?: string) => void;
+  questionEdit_set: <Key extends keyof QuestionEditStates>(
     field: Key
-  ) => (value: QuestionFetched[Key]) => void;
+  ) => (value: QuestionEditStates[Key]) => void;
   questionEdit_save: ({ upload }: { upload: boolean }) => Promise<void>;
   questionEdit_reset: () => void;
 }
