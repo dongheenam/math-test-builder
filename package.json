@@ -7,7 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "vercel-build": "prisma generate && prisma db push && next build"
+    "vercel-build": "prisma db push && next build"
   },
   "dependencies": {
     "@emotion/react": "^11.10.4",
@@ -29,7 +29,9 @@
     "pluralize": "^8.0.0",
     "react": "18.2.0",
     "react-dom": "18.2.0",
-    "react-hook-form": "^7.36.1",
+    "react-markdown": "^8.0.3",
+    "rehype-katex": "^6.0.2",
+    "remark-math": "^5.1.1",
     "sass": "^1.55.0",
     "zustand": "^4.1.1"
   },

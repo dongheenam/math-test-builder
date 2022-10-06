@@ -21,7 +21,12 @@ import {
 
 /* main API handler */
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
-  console.log(`${req.method} /api/questions invoked with query`, req.query);
+  console.log(
+    `${req.method} /api/questions invoked with query:`,
+    req.query,
+    ", body:",
+    req.body
+  );
   switch (req.method) {
     case "POST":
       await createQuestion(req, res);

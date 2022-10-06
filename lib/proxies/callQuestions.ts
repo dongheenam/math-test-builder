@@ -2,6 +2,7 @@ import { toQuery } from "lib/util";
 import {
   CreateQuestionData,
   CreateQuestionQuery,
+  EditQuestionQuery,
   GetQuestionsData,
   GetQuestionsQuery,
 } from "types";
@@ -56,7 +57,7 @@ export async function callGetQuestions(query: GetQuestionsQuery) {
   }) as Promise<GetQuestionsData>;
 }
 
-export async function callCreateQuestions(query: CreateQuestionQuery) {
+export async function callCreateQuestion(query: CreateQuestionQuery) {
   const URL = "/api/questions";
   return callApi(URL, "POST", {
     headers: { "Content-Type": "application/json" },
@@ -69,11 +70,9 @@ export async function callCreateQuestions(query: CreateQuestionQuery) {
     }),
   }) as Promise<CreateQuestionData>;
 }
-export async function callEditQuestions(
-  query: Record<string | number | symbol, any>
-) {
-  const URL = "/api/questions";
-  return callApi(URL, "POST", {
+export async function callEditQuestion(query: EditQuestionQuery) {
+  const URL = `/api/questions/${query.id}`;
+  return callApi(URL, "PATCH", {
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({
       topic: query.topic,

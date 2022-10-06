@@ -85,9 +85,11 @@ function BucketButton({ id }: { id: string }) {
 }
 
 function EditButton({ id }: { id: string }) {
+  const toEdit = useStore.use.questionEdit_toEdit();
+
   return (
     <Tooltip label="Edit question">
-      <ActionIcon>
+      <ActionIcon onClick={() => toEdit(id)}>
         <IconEdit stroke={1} />
       </ActionIcon>
     </Tooltip>

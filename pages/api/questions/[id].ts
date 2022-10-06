@@ -23,6 +23,13 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     throw new DocumentIdError("editQuestion called without _id");
   }
 
+  console.log(
+    `${req.method} /api/questions/${id} invoked with query:`,
+    req.query,
+    ", body:",
+    req.body
+  );
+
   switch (req.method) {
     case "PUT":
     case "PATCH":
@@ -72,11 +79,23 @@ async function editQuestion(
     if (topic) questionData.topic = topic;
     if (yearLevel) questionData.yearLevel = yearLevel;
     if (content) questionData.content = content;
-    if (solution) questionData.content = solution;
+    if (solution) questionData.solution = solution;
     if (tags) questionData.tags = createTagsQuery(tags).tags;
 
     prisma = connectPrisma();
-    const question = await prisma.question.update({
+    let disconnectTagsPromise;
+    if (tags) {
+      disconnectTagsPromise = prisma.question.update({
+        where: { id: id },
+        data: { tags: { set: [] } },
+      });
+    } else {
+      // do nothing
+      disconnectTagsPromise = prisma.question.aggregateRaw({
+        pipeline: [],
+      });
+    }
+    const updateQuestionPromise = prisma.question.update({
       where: { id: id },
       data: questionData,
       include: {
@@ -85,6 +104,10 @@ async function editQuestion(
         },
       },
     });
+    const [_, question] = await prisma.$transaction([
+      disconnectTagsPromise,
+      updateQuestionPromise,
+    ]);
     res.send({ status: "ok", data: rawToFetched(question) });
     res.end();
   } catch (err) {

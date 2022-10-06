@@ -87,8 +87,9 @@ function RemoveButton({ id }: { id: string }) {
   );
 }
 function EditButton({ id }: { id: string }) {
+  const toEdit = useStore.use.questionEdit_toEdit();
   return (
-    <ActionIcon size="sm">
+    <ActionIcon size="sm" onClick={() => toEdit(id)}>
       <IconEdit stroke={1} />
     </ActionIcon>
   );

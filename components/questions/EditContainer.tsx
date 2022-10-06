@@ -1,12 +1,15 @@
 import { Modal } from "@mantine/core";
-import useModal from "components/hooks/useModal";
+import useStore from "components/stores/useStore";
 import Editor from "./Editor";
 
+import styles from "./Editor.module.css";
+
 const EditContainer = () => {
-  const [opened, modalHandlers] = useModal(false);
-  const { close } = modalHandlers;
+  const isOpen = useStore.use.questionEdit_isOpen();
+  const close = useStore.use.questionEdit_close();
+
   return (
-    <Modal opened={opened} onClose={close} size="xl" title="Edit question">
+    <Modal opened={isOpen} onClose={close} size="90vw" title="Edit question">
       <Editor />
     </Modal>
   );

@@ -52,6 +52,8 @@ export type QuestionFormSlice = QuestionFormStates & QuestionFormActions;
 
 /* questionEditSlice */
 interface QuestionEditStates {
+  questionEdit_isOpen: boolean;
+  questionEdit_isDirty: boolean;
   questionEdit_id: QuestionDraft["id"];
   questionEdit_yearLevel: QuestionDraft["yearLevel"];
   questionEdit_topic: QuestionDraft["topic"];
@@ -60,10 +62,13 @@ interface QuestionEditStates {
   questionEdit_solution: QuestionDraft["solution"];
 }
 interface QuestionEditActions {
+  questionEdit_open: () => void;
+  questionEdit_close: () => void;
   questionEdit_toEdit: (id?: string) => void;
-  questionEdit_set: <Key extends keyof QuestionEditStates>(
+  questionEdit_setEdit: <Key extends keyof QuestionEditStates>(
     field: Key
   ) => (value: QuestionEditStates[Key]) => void;
+  questionEdit_addTag: (tag: string) => void;
   questionEdit_save: ({ upload }: { upload: boolean }) => Promise<void>;
   questionEdit_reset: () => void;
 }

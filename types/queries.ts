@@ -24,9 +24,10 @@ export type GetQuestionsData = {
 };
 
 /** PUT /api/questions/[id] */
-export type EditQuestionQuery = Partial<
-  Pick<
-    QuestionFetched,
-    "topic" | "yearLevel" | "tags" | "content" | "solution" | "authorId"
-  >
->;
+export type EditQuestionQuery = Pick<QuestionFetched, "id"> &
+  Partial<
+    Pick<
+      QuestionFetched,
+      "topic" | "yearLevel" | "tags" | "content" | "solution" | "authorId"
+    >
+  >;

@@ -1,5 +1,6 @@
 import { StateCreator } from "zustand";
-import produce from "immer";
+import produce, { enableMapSet } from "immer";
+enableMapSet();
 
 import { QuestionFormSlice } from "types/stores";
 

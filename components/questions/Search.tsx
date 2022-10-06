@@ -174,11 +174,13 @@ function ResetButton() {
   );
 }
 function AddButton() {
+  const toEdit = useStore.use.questionEdit_toEdit();
   return (
     <Button
       leftIcon={<IconPencilPlus stroke={1.5} />}
       color="green"
       variant="outline"
+      onClick={() => toEdit()}
     >
       New Question
     </Button>
