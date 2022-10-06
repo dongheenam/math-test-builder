@@ -16,6 +16,8 @@ interface QuestionsActions {
   questions_addBucket: (input: string | string[]) => void;
   questions_removeBucket: (input: string | string[]) => void;
   questions_toggleBucket: (id: string) => void;
+  // needed for drag-and-drop feature
+  questions_shuffleBucket: (newBucket: string[]) => void;
   questions_resetBucket: () => void;
   questions_toggleSelected: (id: string) => void;
   questions_isAllSelected: () => boolean;
@@ -29,7 +31,7 @@ export const SORT_DATA = [
   { value: "-updatedAt", label: "newest first" },
   { value: "updatedAt", label: "oldest first" },
 ];
-export const MATCH_TYPE_DATA = ["any", "all"];
+export const MATCH_TYPE_DATA = ["any", "all"] as const;
 interface QuestionFormStates {
   questionForm_yearLevel: QuestionDraft["yearLevel"];
   questionForm_topic: QuestionDraft["topic"];

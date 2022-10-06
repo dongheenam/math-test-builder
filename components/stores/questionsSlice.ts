@@ -80,18 +80,6 @@ const createQuestionsSlice: StateCreator<
   },
 
   // methods: bucket
-  questions_toggleBucket: (id) => {
-    const qBucket = get().questions_bucketedIds;
-    const inBucket = qBucket.includes(id);
-    if (inBucket) {
-      // remove
-      set({ questions_bucketedIds: qBucket.filter((value) => value !== id) });
-    } else {
-      // add
-      get().questions_addCacheById(id);
-      set({ questions_bucketedIds: [...qBucket, id] });
-    }
-  },
   questions_addBucket: (input) => {
     const ids = Array.isArray(input) ? input : [input];
     // add the questions to local cache (override)
@@ -111,6 +99,17 @@ const createQuestionsSlice: StateCreator<
       ),
     }));
   },
+  questions_toggleBucket: (id) => {
+    const qBucket = get().questions_bucketedIds;
+    const inBucket = qBucket.includes(id);
+    if (inBucket) {
+      get().questions_removeBucket(id);
+    } else {
+      get().questions_addBucket(id);
+    }
+  },
+  questions_shuffleBucket: (newBucket) =>
+    set({ questions_bucketedIds: newBucket }),
   questions_resetBucket: () => set({ questions_bucketedIds: [] }),
 
   // methods: chosen

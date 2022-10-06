@@ -124,9 +124,9 @@ function MatchTypeForm({ setForm }: { setForm: SetForm }) {
   const setTagMatch = setForm("questionForm_tagMatch");
   return (
     <SegmentedControl
-      data={MATCH_TYPE_DATA}
+      data={[...MATCH_TYPE_DATA]}
       value={tagMatch}
-      onChange={setTagMatch}
+      onChange={(v: "any" | "all") => setTagMatch(v)}
     />
   );
 }

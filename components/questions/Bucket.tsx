@@ -9,7 +9,7 @@ import styles from "./Bucket.module.css";
 
 const Bucket = () => {
   const bucket = useStore.use.questions_bucketedIds();
-  const setBucket = useStore.use.questions_setBucket();
+  const setBucket = useStore.use.questions_shuffleBucket();
   const dragHandlers = useDrag(bucket, setBucket);
 
   return (
