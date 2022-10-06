@@ -105,7 +105,7 @@ async function getQuestions(req: NextApiRequest, res: NextApiResponse) {
     let where: Prisma.QuestionWhereInput = {};
     if (topic) where.topic = topic;
     if (yearLevel) where.yearLevel = yearLevel;
-    if (content) where.content = { contains: content };
+    if (content) where.content = { contains: content, mode: "insensitive" };
     if (tags) {
       const OPEARTOR = tagMatch === "any" ? "OR" : "AND";
       where.tags = {
