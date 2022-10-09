@@ -12,8 +12,8 @@ import React from "react";
 import ListQuestion from "./ListQuestion";
 
 import styles from "./List.module.css";
-import useStore from "components/stores/useStore";
-import { SORT_DATA } from "types";
+import useStore from "stores/useStore";
+import { SORT_DATA } from "./constants";
 
 /* main */
 const QuestionsList = () => {

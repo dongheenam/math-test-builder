@@ -1,8 +1,8 @@
 import { ActionIcon, Group, Stack, Text } from "@mantine/core";
 import { IconEdit, IconMenu, IconMinus } from "@tabler/icons";
-import useDrag, { DragHandlers } from "components/hooks/useDrag";
+import useDrag, { DragHandlers } from "common/hooks/useDrag";
 
-import useStore from "components/stores/useStore";
+import useStore from "stores/useStore";
 import { useRef } from "react";
 
 import styles from "./Bucket.module.css";

@@ -1,10 +1,8 @@
 import { Modal } from "@mantine/core";
-import useStore from "components/stores/useStore";
+import useStore from "stores/useStore";
 import Editor from "./Editor";
 
-import styles from "./Editor.module.css";
-
-const EditContainer = () => {
+const Edit = () => {
   const isOpen = useStore.use.questionEdit_isOpen();
   const close = useStore.use.questionEdit_close();
 
@@ -14,4 +12,4 @@ const EditContainer = () => {
     </Modal>
   );
 };
-export default EditContainer;
+export default Edit;

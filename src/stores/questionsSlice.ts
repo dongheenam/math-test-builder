@@ -2,10 +2,10 @@ import { StateCreator } from "zustand";
 import produce, { enableMapSet } from "immer";
 enableMapSet();
 
-import { QuestionFormSlice, QuestionsSlice } from "types/stores";
-import { callGetQuestions } from "lib/proxies/callQuestions";
-import { removeFalsyValues, toggleItem } from "lib/util";
-import { QuestionFetched } from "types";
+import { removeFalsyValues, toggleItem } from "./utils";
+import { callGetQuestions } from "questions/callApi";
+import { QuestionFetched } from "questions/types";
+import { QuestionsSlice, QuestionFormSlice } from "./types";
 
 const createQuestionsSlice: StateCreator<
   QuestionsSlice & QuestionFormSlice,

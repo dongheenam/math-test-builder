@@ -1,4 +1,5 @@
-import { GetQuestionsQuery, QuestionDraft, QuestionFetched, Topic } from "./";
+import { QuestionDraft, QuestionFetched, Topic } from "questions/types";
+import { GetQuestionsQuery } from "server/questions/types";
 
 /* questionsSlice */
 interface QuestionsStates {
@@ -27,10 +28,6 @@ interface QuestionsActions {
 export type QuestionsSlice = QuestionsStates & QuestionsActions;
 
 /* questionFormSlice */
-export const SORT_DATA = [
-  { value: "-updatedAt", label: "newest first" },
-  { value: "updatedAt", label: "oldest first" },
-];
 export const MATCH_TYPE_DATA = ["any", "all"] as const;
 interface QuestionFormStates {
   questionForm_yearLevel: QuestionDraft["yearLevel"];

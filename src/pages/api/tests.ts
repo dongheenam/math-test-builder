@@ -1,5 +1,5 @@
 import { PrismaClient } from "@prisma/client";
-import connectPrisma from "src/modules/api/connectPrisma";
+import connectPrisma from "server/connectPrisma";
 import { NextApiRequest, NextApiResponse } from "next";
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {

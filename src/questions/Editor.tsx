@@ -1,3 +1,4 @@
+import { useState } from "react";
 import {
   Button,
   Divider,
@@ -7,12 +8,11 @@ import {
   Select,
   Stack,
   Text,
-  Textarea,
 } from "@mantine/core";
-import MarkdownEditor from "components/common/MarkdownEditor";
-import useStore from "components/stores/useStore";
-import { useState } from "react";
-import { QuestionEditSlice, TOPIC_VALUES, YEAR_LEVELS } from "types";
+import MarkdownEditor from "common/components/markdown/Editor";
+import useStore from "../stores/useStore";
+import { QuestionEditSlice } from "stores/types";
+import { YEAR_LEVELS, TOPIC_VALUES } from "./constants";
 
 type SetEdit = QuestionEditSlice["questionEdit_setEdit"];
 

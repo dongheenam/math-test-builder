@@ -2,7 +2,7 @@ import { StateCreator } from "zustand";
 import produce, { enableMapSet } from "immer";
 enableMapSet();
 
-import { QuestionFormSlice } from "types/stores";
+import { QuestionFormSlice } from "./types";
 
 // states reset by invoking resetForm()
 const INITIAL_FORM_STATE: Pick<

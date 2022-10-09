@@ -14,10 +14,9 @@ import {
 
 import styles from "./Markdown.module.scss";
 
-const MarkdownParser = dynamic(
-  () => import("components/common/MarkdownParser"),
-  { suspense: true }
-);
+const MarkdownParser = dynamic(() => import("./Parser"), {
+  suspense: true,
+});
 
 const MarkdownEditor = ({
   text,

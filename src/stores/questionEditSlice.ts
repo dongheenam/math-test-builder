@@ -2,18 +2,10 @@ import { StateCreator } from "zustand";
 import produce, { enableMapSet } from "immer";
 enableMapSet();
 
-import {
-  callCreateQuestion,
-  callEditQuestion,
-} from "lib/proxies/callQuestions";
-import { draftToFetched, fetchedToDraft, generateId } from "lib/util";
-import {
-  QuestionFetched,
-  QuestionDraft,
-  QuestionEditSlice,
-  QuestionFormSlice,
-  QuestionsSlice,
-} from "types";
+import { callCreateQuestion, callEditQuestion } from "questions/callApi";
+import { draftToFetched, fetchedToDraft, generateId } from "./utils";
+import { QuestionEditSlice, QuestionFormSlice, QuestionsSlice } from "./types";
+import { QuestionFetched, QuestionDraft } from "questions/types";
 
 const INITIAL_EDIT_STATE: Pick<
   QuestionEditSlice,

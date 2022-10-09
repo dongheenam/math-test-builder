@@ -1,6 +1,6 @@
 import { NavLink, Space } from "@mantine/core";
 import { NextLink } from "@mantine/next";
-import Bucket from "components/questions/Bucket";
+import Bucket from "questions/Bucket";
 import { useRouter } from "next/router";
 
 import styles from "./Questions.module.scss";

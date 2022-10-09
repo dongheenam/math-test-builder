@@ -11,14 +11,9 @@ import {
   MultiSelect,
 } from "@mantine/core";
 import { IconSearch, IconPencilPlus } from "@tabler/icons";
-
-import useStore from "components/stores/useStore";
-import {
-  MATCH_TYPE_DATA,
-  QuestionFormSlice,
-  TOPIC_VALUES,
-  YEAR_LEVELS,
-} from "types";
+import { QuestionFormSlice, MATCH_TYPE_DATA } from "stores/types";
+import useStore from "stores/useStore";
+import { YEAR_LEVELS, TOPIC_VALUES } from "./constants";
 
 /* main */
 const QuestionsSearch = () => {

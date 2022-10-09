@@ -8,9 +8,11 @@ import {
   Tooltip,
 } from "@mantine/core";
 import { IconEdit, IconPlus, IconMinus } from "@tabler/icons";
-import useStore from "components/stores/useStore";
-import React, { useCallback } from "react";
-import { QuestionFetched, TOPIC_VALUES, TOPIC_COLORS, Topic } from "types";
+import useStore from "stores/useStore";
+import React from "react";
+import { Topic } from "@prisma/client";
+import { TOPIC_COLORS, TOPIC_VALUES } from "./constants";
+import { QuestionFetched } from "./types";
 
 const ListQuestion = ({ question }: { question: QuestionFetched }) => {
   const { topic, yearLevel, tags, content, id } = question;
