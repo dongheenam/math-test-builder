@@ -60,6 +60,7 @@ function SelectControl() {
         onChange={toggleAll}
         checked={isAllChosen()}
         indeterminate={!isChosenEmpty && !isAllChosen()}
+        style={{ maxWidth: "40px" }}
       />
       <Text color="dimmed" size="sm">
         {chosen.length} selected
