@@ -1,0 +1,98 @@
+@use "variables" as *;
+
+// normalise css
+// ref: https://www.joshwcomeau.com/css/custom-css-reset/
+*, *::before, *::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+html, body, #__next {
+  height: 100%;
+}
+#__next {
+  isolation: isolate;
+}
+
+img, picture, video, canvas, svg {
+  display: block;
+  max-width: 100%;
+}
+input, button, textarea, select {
+  font: inherit;
+}
+
+// typography
+// ref: https://github.com/devinhunt/typebase.css
+html, body {
+  // default height for any UI elements
+  font-size: 100%;
+  line-height: 1;
+  -webkit-font-smoothing: antialiased;
+}
+
+p, h1, h2, h3, h4, h5, h6 {
+  overflow-wrap: break-word;
+}
+
+p {
+  line-height: 1.5;
+  margin-top: 1.5rem;
+  margin-bottom: 0;
+}
+ul,
+ol {
+  margin-top: 1.5rem;
+  margin-bottom: 1.5rem;
+  li {
+      line-height: 1.5;
+  }
+  ul,
+  ol {
+      margin-top: 0;
+      margin-bottom: 0;
+  }
+}
+blockquote {
+  line-height: 1.5;
+  margin-top: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: sans-serif;
+  margin-top: 1.5rem;
+  margin-bottom: 0;
+  line-height: 1.5rem;
+}
+h1 {
+  font-size: $size-h1;
+  line-height: $h1-height;
+  margin-top: $h1-mt;
+}
+h2 {
+  font-size: $size-h2;
+  line-height: $h2-height;
+  margin-top: $h2-mt;
+}
+h3 {
+  font-size: $size-h3;
+  line-height: $h3-height;
+  margin-top: $h3-mt;
+}
+
+table {
+  margin-top: 1.5rem;
+  border-spacing: 0px;
+  border-collapse: collapse;
+}
+td,
+th {
+  padding: 0;
+  line-height: 1.5;
+}

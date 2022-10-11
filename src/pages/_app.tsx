@@ -1,7 +1,7 @@
 import { AppProps } from "next/app";
 
 import { NextPageWithLayout } from "layouts";
-import "styles/globals.css";
+import "styles/globals.scss";
 
 export default function App(
   props: AppProps & { Component: NextPageWithLayout }
