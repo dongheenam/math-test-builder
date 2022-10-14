@@ -1,0 +1,87 @@
+@use "styles/variables" as *;
+
+/* ROOT */
+.root {
+  min-height: 100%;
+  width: 100%;
+
+  display: flex;
+  flex-direction: column;
+}
+.container {
+  flex-grow: 1;
+  padding: 0 0.5rem;
+  margin: auto;
+
+  display: flex;
+}
+
+/* HEADER */
+.header {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  width: 100%;
+  padding: 0 1.5rem;
+
+  background-color: var(--white);
+  box-shadow: $shadow-xs;
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+}
+
+// header title
+.headerTitle {
+  display: flex;
+  align-items: baseline;
+  gap: 0.5rem;
+}
+.headerLogo {
+  font-size: $size-h2;
+  font-weight: 300;
+
+  color: inherit;
+  text-decoration: none;
+}
+.headerVersion {
+  $py: 0.125rem;
+  padding: $py 0.5rem;
+  font-size: $size-sm;
+  font-weight: 500;
+
+  background-color: var(--gray5);
+  border-radius: ($py + $size-sm)/2;
+}
+
+// header menus
+.headerMenu {
+  margin-top: 0.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+.headerMenuTop {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+}
+.TopBtn {
+  font-weight: 300;
+  text-transform: uppercase;
+  color: var(--gray6);
+
+  &:hover {
+    color: var(--text);
+  }
+}
+
+// footer
+.footer {
+  border-top: 1px solid var(--gray6);
+  padding: 1rem;
+  color: var(--gray11);
+  text-align: center;
+}

@@ -1,37 +1,104 @@
 @use "variables" as *;
+@use "colors";
 
 // normalise css
 // ref: https://www.joshwcomeau.com/css/custom-css-reset/
-*, *::before, *::after {
+*,
+*::before,
+*::after {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
 }
-html, body, #__next {
+html,
+body,
+#__next {
   height: 100%;
 }
 #__next {
   isolation: isolate;
 }
 
-img, picture, video, canvas, svg {
+img,
+picture,
+video,
+canvas,
+svg {
   display: block;
   max-width: 100%;
 }
-input, button, textarea, select {
+
+// styling
+input,
+button,
+textarea,
+select {
   font: inherit;
+  color: var(--black);
+  border: 1px solid var(--gray7);
+  text-decoration: none;
+  text-align: center;
+  cursor: pointer;
+
+  &:focus {
+    outline: 3px solid var(--primary8);
+  }
+}
+
+button {
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+
+  background-color: var(--gray3);
+  font-weight: 600;
+
+  &:hover {
+    border-color: var(--primary8);
+    background-color: var(--gray4);
+  }
+  &:active {
+    background-color: var(--gray5);
+  }
 }
 
 // typography
 // ref: https://github.com/devinhunt/typebase.css
-html, body {
-  // default height for any UI elements
+// ref: https://github.com/necolas/normalize.css
+html,
+body {
+  font-family: $sans-serif;
   font-size: 100%;
-  line-height: 1;
+  line-height: 1.15;
+  -webkit-text-size-adjust: 100%;
   -webkit-font-smoothing: antialiased;
 }
 
-p, h1, h2, h3, h4, h5, h6 {
+b,
+strong {
+  font-weight: bolder;
+}
+
+sub,
+sup {
+  font-size: 75%;
+  line-height: 0;
+  position: relative;
+  vertical-align: baseline;
+}
+sub {
+  bottom: -0.25em;
+}
+sup {
+  top: -0.5em;
+}
+
+p,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
   overflow-wrap: break-word;
 }
 
@@ -45,12 +112,12 @@ ol {
   margin-top: 1.5rem;
   margin-bottom: 1.5rem;
   li {
-      line-height: 1.5;
+    line-height: 1.5;
   }
   ul,
   ol {
-      margin-top: 0;
-      margin-bottom: 0;
+    margin-top: 0;
+    margin-bottom: 0;
   }
 }
 blockquote {

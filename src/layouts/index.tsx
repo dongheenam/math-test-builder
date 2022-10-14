@@ -1,5 +1,5 @@
 import type { NextPage } from "next";
-// import DefaultLayout from "./Default";
+import DefaultLayout from "./DefaultLayout";
 // import QuestionsLayout from "./Questions";
 
 export type NextPageWithLayout<P = {}, IP = P> = NextPage<P, IP> & {
@@ -7,9 +7,9 @@ export type NextPageWithLayout<P = {}, IP = P> = NextPage<P, IP> & {
 };
 
 // default layout (header and footer)
-// export const getDefaultLayout = (page: React.ReactElement) => {
-//   return <DefaultLayout>{page}</DefaultLayout>;
-// };
+export const getDefaultLayout = (page: React.ReactElement) => {
+  return <DefaultLayout>{page}</DefaultLayout>;
+};
 
 // layouts for questions/* (default + navbar)
 // export const getQuestionsLayout = (page: React.ReactElement) => {

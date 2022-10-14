@@ -1,17 +1,16 @@
 import { AppProps } from "next/app";
 
-import { NextPageWithLayout } from "layouts";
+import { getDefaultLayout, NextPageWithLayout } from "layouts";
 import "styles/globals.scss";
 
 export default function App(
   props: AppProps & { Component: NextPageWithLayout }
 ) {
   const { Component, pageProps } = props;
-  // const getLayout = Component.getLayout ?? ((page) => getDefaultLayout(page));
+  const getLayout = Component.getLayout ?? ((page) => getDefaultLayout(page));
 
   const MyApp = (
       <Component {...pageProps} />
   );
-  return MyApp;
-  // return getLayout(MyApp);
+  return getLayout(MyApp);
 }
