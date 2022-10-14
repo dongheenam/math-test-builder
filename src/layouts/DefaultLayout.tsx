@@ -1,5 +1,6 @@
-import classNames from "classnames";
 import { useRouter } from "next/router";
+import * as NavigationMenu from "@radix-ui/react-navigation-menu";
+import classNames from "classnames";
 
 import styles from "./DefaultLayout.module.scss";
 
@@ -28,15 +29,35 @@ function Header() {
       </div>
       <div className={styles.headerMenu}>
         <div className={styles.headerMenuTop}>
-          <button>log in</button>
+          <button className={styles.TopBtn}>log in</button>
         </div>
-        <div className={styles.headerMenuBottom}>
-          <button>Home</button>
-          <button>Questions</button>
-          <button>Tests</button>
-        </div>
+        <HeaderMenuBottom />
       </div>
     </div>
+  );
+}
+
+function HeaderMenuBottom() {
+  return (
+    <NavigationMenu.Root>
+      <NavigationMenu.List className={styles.headerMenuBottom}>
+        <NavigationMenu.Item className={styles.BottomBtn}>
+          <NavigationMenu.Link className={styles.BottomLink}>
+            Home
+          </NavigationMenu.Link>
+        </NavigationMenu.Item>
+        <NavigationMenu.Item className={styles.BottomBtn}>
+          <NavigationMenu.Link className={styles.BottomLink}>
+            Questions
+          </NavigationMenu.Link>
+        </NavigationMenu.Item>
+        <NavigationMenu.Item className={styles.BottomBtn}>
+          <NavigationMenu.Link className={styles.BottomLink}>
+            Tests
+          </NavigationMenu.Link>
+        </NavigationMenu.Item>
+      </NavigationMenu.List>
+    </NavigationMenu.Root>
   );
 }
 

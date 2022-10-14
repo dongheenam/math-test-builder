@@ -1,0 +1,16 @@
+:root {
+  /* borders */
+  --border-default: 1px solid var(--mantine-color-gray-3);
+  --border-primary: 1px solid var(--mantine-color-blue-4);
+  --border-thick: 1.5px solid var(--mantine-color-gray-3);
+
+  /* spacing */
+  --xs: var(--mantine-spacing-xs);
+  --sm: var(--mantine-spacing-sm);
+  --md: var(--mantine-spacing-md);
+  --lg: var(--mantine-spacing-lg);
+  --xl: var(--mantine-spacing-xl);
+
+  /* color */
+  --bg-behind: var(--mantine-color-gray-1);
+}

@@ -45,7 +45,8 @@ select {
   }
 }
 
-button {
+button,
+.btn {
   padding: 0.5rem 1rem;
   border-radius: 0.5rem;
 
@@ -53,7 +54,7 @@ button {
   font-weight: 600;
 
   &:hover {
-    border-color: var(--primary8);
+    border-color: var(--gray8);
     background-color: var(--gray4);
   }
   &:active {
@@ -68,7 +69,7 @@ html,
 body {
   font-family: $sans-serif;
   font-size: 100%;
-  line-height: 1.15;
+  line-height: 1;
   -webkit-text-size-adjust: 100%;
   -webkit-font-smoothing: antialiased;
 }
@@ -109,6 +110,7 @@ p {
 }
 ul,
 ol {
+  list-style-type: none;
   margin-top: 1.5rem;
   margin-bottom: 1.5rem;
   li {

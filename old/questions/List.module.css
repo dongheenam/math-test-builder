@@ -1,0 +1,7 @@
+.list-ctrl {
+  padding: 4pt var(--md);
+  margin-bottom: var(--md);
+  border-bottom: var(--border-default);
+
+  justify-content: space-between;
+}
