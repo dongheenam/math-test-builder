@@ -17,7 +17,7 @@
   // }
   "Import Variables": {
     "scope": "sass,scss",
-    "prefix": "use",
+    "prefix": "useVar",
     "body": ["@use 'styles/variables' as *;", "$0"],
     "description": "Import variables with a @use statement"
   }

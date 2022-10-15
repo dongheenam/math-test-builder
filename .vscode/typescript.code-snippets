@@ -30,7 +30,7 @@
   "Import modular SCSS": {
     "scope": "javascriptreact,typescriptreact",
     "prefix": "importStyles",
-    "body": ["import styles from '${TM_FILENAME_BASE}.module.scss';", "$0"],
+    "body": ["import styles from './${TM_FILENAME_BASE}.module.scss';", "$0"],
     "description": "Create a new React functional component"
   },
   "Set className prop": {

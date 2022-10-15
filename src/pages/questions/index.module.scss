@@ -1,0 +1,16 @@
+@use "styles/variables" as *;
+
+// root
+.root {
+  display: flex;
+  gap: 1rem;
+}
+// search
+.search {
+  width: 100%;
+  padding: 12px;
+
+  background-color: var(--bg);
+  border-radius: 8px;
+  box-shadow: $shadow-xs;
+}

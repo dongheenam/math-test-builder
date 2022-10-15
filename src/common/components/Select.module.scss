@@ -1,0 +1,56 @@
+@use "styles/variables" as *;
+
+$border-radius: 8px;
+
+// visible components
+.root {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.label {
+  font-size: $size-sm;
+  font-weight: 600;
+}
+.trigger {
+  width: 100%;
+  padding: 8px 16px;
+  border-radius: $border-radius;
+
+  display: flex;
+  justify-content: space-between;
+  background-color: var(--bg);
+}
+.selectIcon {
+  translate: 8px;
+}
+
+// content list
+.options {
+  background-color: var(--bg);
+  border: 1px solid var(--gray8);
+  border-radius: $border-radius;
+  box-shadow: $shadow-md;
+}
+.item {
+  height: 2rem;
+  padding: 8px 1rem;
+  position: relative;
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  &:focus {
+    outline: none;
+    background-color: var(--primary4);
+  }
+
+  &[data-state="checked"] {
+    color: var(--primary11);
+    font-weight: 600;
+  }
+}
+.checkedIcon {
+  translate: 8px;
+}
