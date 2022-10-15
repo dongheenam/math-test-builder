@@ -10,12 +10,12 @@ export const TOPIC_VALUES: Record<Topic, string> = {
   CALC: "calculus",
 } as const;
 export const TOPIC_COLORS: Record<Topic, string> = {
-  NUM: "yellow",
+  NUM: "orange",
   ALG: "pink",
   MEAS: "indigo",
   GEO: "blue",
   STAT: "green",
-  PROB: "lime",
+  PROB: "teal",
   CALC: "red",
 };
 export const SORT_DATA = [

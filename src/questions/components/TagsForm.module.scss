@@ -1,0 +1,140 @@
+@use "styles/variables" as *;
+
+$border-radius: 8px;
+
+// visible components
+.root {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.label {
+  font-size: $size-sm;
+  font-weight: 600;
+}
+.comboboxWrapper {
+  position: relative;
+}
+.trigger {
+  width: 100%;
+  padding: 0 16px;
+
+  border: 1px solid var(--gray7);
+  border-radius: $border-radius;
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 4px;
+  background-color: var(--bg);
+
+  &:focus-within {
+    outline: 3px solid var(--primary8);
+  }
+}
+
+.selectedItem {
+  font-size: $size-xs;
+  text-transform: uppercase;
+  font-weight: 600;
+  color: var(--gray11);
+
+  display: flex;
+  padding: 4px 0.5rem;
+  margin: 6px 0;
+  gap: 2px;
+  border-radius: 0.25rem;
+
+  &:hover,
+  &:focus {
+    outline: none;
+    color: var(--text);
+    background-color: var(--gray4);
+  }
+}
+
+.inputWrapper {
+  flex: 1;
+  flex-wrap: wrap;
+  align-items: center;
+
+  display: flex;
+  gap: 4px;
+}
+.input {
+  display: block;
+  flex: 1;
+  height: 1em;
+  width: min-content;
+  padding: 16px 0;
+  text-align: left;
+
+  border: none;
+  &:focus {
+    outline: none;
+  }
+}
+.selectIcon {
+  translate: 8px;
+
+  cursor: pointer;
+}
+.emptyIcon {
+  background-color: transparent;
+  border: none;
+
+  &:hover,
+  &:focus {
+    outline: none;
+    background-color: var(--gray4);
+  }
+  &:active {
+    background-color: var(--gray5);
+  }
+}
+.selectIcon,
+.emptyIcon {
+  border-radius: 4px;
+}
+
+// content list
+.options {
+  position: absolute;
+  width: 100%;
+  margin-top: 8px;
+  margin-bottom: 0;
+
+  background-color: var(--bg);
+  border: 1px solid var(--gray8);
+  border-radius: 8px;
+  box-shadow: $shadow-sm;
+}
+.divider {
+  font-size: $size-sm;
+
+  border-top: 1px solid var(--gray7);
+  color: var(--gray9);
+}
+.item {
+  height: 2rem;
+  padding: 8px 1rem;
+  position: relative;
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  &[aria-selected="true"] {
+    color: var(--primary11);
+    font-weight: 600;
+  }
+
+  &:hover,
+  &:focus {
+    outline: none;
+    background-color: var(--primary4);
+  }
+}
+.checkedIcon {
+  translate: 8px;
+}

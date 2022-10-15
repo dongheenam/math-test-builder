@@ -10,13 +10,16 @@
     "vercel-build": "prisma db push && next build"
   },
   "dependencies": {
+    "@headlessui/react": "^1.7.3",
     "@prisma/client": "^4.4.0",
     "@radix-ui/colors": "^0.1.8",
+    "@radix-ui/react-accessible-icon": "^1.0.0",
     "@radix-ui/react-label": "^1.0.0",
     "@radix-ui/react-navigation-menu": "^1.0.0",
     "@radix-ui/react-select": "^1.0.0",
     "@tabler/icons": "^1.101.0",
     "classnames": "^2.3.2",
+    "downshift": "^6.1.12",
     "immer": "^9.0.15",
     "next": "12.3.1",
     "pluralize": "^8.0.0",
