@@ -1,6 +1,7 @@
+import React from "react";
 import { useRouter } from "next/router";
+import Link from "next/link";
 import * as NavigationMenu from "@radix-ui/react-navigation-menu";
-import classNames from "classnames";
 
 import styles from "./DefaultLayout.module.scss";
 
@@ -29,7 +30,9 @@ function Header() {
       </div>
       <div className={styles.headerMenu}>
         <div className={styles.headerMenuTop}>
-          <button className={styles.TopBtn}>log in</button>
+          <button className={styles.TopBtn} data-disabled="true">
+            log in
+          </button>
         </div>
         <HeaderMenuBottom />
       </div>
@@ -41,23 +44,39 @@ function HeaderMenuBottom() {
   return (
     <NavigationMenu.Root>
       <NavigationMenu.List className={styles.headerMenuBottom}>
-        <NavigationMenu.Item className={styles.BottomBtn}>
-          <NavigationMenu.Link className={styles.BottomLink}>
-            Home
-          </NavigationMenu.Link>
-        </NavigationMenu.Item>
-        <NavigationMenu.Item className={styles.BottomBtn}>
-          <NavigationMenu.Link className={styles.BottomLink}>
-            Questions
-          </NavigationMenu.Link>
-        </NavigationMenu.Item>
-        <NavigationMenu.Item className={styles.BottomBtn}>
-          <NavigationMenu.Link className={styles.BottomLink}>
-            Tests
-          </NavigationMenu.Link>
-        </NavigationMenu.Item>
+        <NavItem href="/">Home</NavItem>
+        <NavItem href="/questions">Questions</NavItem>
+        <NavItem href="/tests" disabled>
+          Tests
+        </NavItem>
       </NavigationMenu.List>
     </NavigationMenu.Root>
+  );
+}
+
+function NavItem({
+  href,
+  children,
+  disabled = false,
+}: {
+  href: string;
+  children: React.ReactNode;
+  disabled?: boolean;
+}) {
+  const router = useRouter();
+
+  return (
+    <NavigationMenu.Item className={styles.BottomBtn}>
+      <Link href={href} passHref>
+        <NavigationMenu.Link
+          className={styles.BottomLink}
+          active={!disabled && href === router.asPath}
+          data-disabled={disabled}
+        >
+          {children}
+        </NavigationMenu.Link>
+      </Link>
+    </NavigationMenu.Item>
   );
 }
 
@@ -67,7 +86,7 @@ function Footer() {
     <footer className={styles.footer}>
       <span>2022 Donghee Nam | </span>
       <a href="https://github.com/dongheenam/math-test-builder" target="_blank">
-        GitHub
+        Source
       </a>
       <span> | </span>
       <a href="https://twitter.com/codeforteaching" target="_blank">

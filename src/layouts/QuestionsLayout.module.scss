@@ -1,0 +1,80 @@
+@use "styles/variables" as *;
+
+.root {
+  width: min(90vw, 1150px);
+
+  display: grid;
+  grid-template-columns: minmax(min-content, 250px) minmax(500px, 1fr);
+  column-gap: 1rem;
+
+  background-color: var(--gray2);
+}
+
+.main {
+  padding-top: 2rem;
+  box-shadow: 0 0 0 100vmax var(--gray2);
+  clip-path: inset(0 -100vmax 0 0);
+
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.navbarBox {
+  background-color: var(--bg);
+  border-right: 1px solid var(--gray6);
+}
+.navbar {
+  position: sticky;
+  top: 6rem;
+}
+
+.navList {
+  margin-top: 0;
+  margin-bottom: 1.25rem;
+
+  display: flex;
+  flex-direction: column;
+}
+.navTitle {
+  padding: 16px 0;
+
+  font-weight: 500;
+  font-variant: small-caps;
+  color: var(--gray10);
+}
+.navItem {
+  display: block;
+  line-height: 1;
+
+  color: var(--gray10);
+  border-left: 1px solid var(--gray8);
+
+  a {
+    display: block;
+    padding: 12px 8px 12px 16px;
+  }
+
+  &:not([data-disabled]) {
+    background-color: var(--bg);
+  }
+  &:not([data-disabled]):hover {
+    color: var(--black);
+    background-color: var(--primary4);
+  }
+  &:not([data-disabled]):active {
+    color: var(--black);
+    background-color: var(--primary5);
+  }
+
+  &[data-active="true"] {
+    color: var(--primary10);
+    background-color: var(--primary4);
+    border-left: 1.5px solid var(--primary10);
+    font-weight: 600;
+
+    a {
+      cursor: default;
+    }
+  }
+}

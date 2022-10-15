@@ -53,7 +53,8 @@
   font-weight: 500;
 
   background-color: var(--gray5);
-  border-radius: ($py + $size-sm)/2;
+  // radius equal to half of height
+  border-radius: (2 * $py + $size-sm)/2;
 }
 
 // header menus
@@ -75,7 +76,7 @@
   background-color: transparent;
   border: none;
 
-  &:hover {
+  &:not([data-disabled]):hover {
     color: var(--text);
   }
 }
@@ -94,15 +95,24 @@
   padding: 0.5rem 1rem;
   border-bottom: 1.5px solid var(--gray7);
 
-  &:hover {
+  &:not([data-disabled="true"]):hover {
     background-color: var(--gray4);
   }
-  &:active {
+  &:not([data-disabled="true"]):active {
     background-color: var(--gray5);
   }
-
   &:focus {
     outline: 3px solid var(--primary8);
+  }
+
+  &[data-disabled="true"] {
+    background-color: transparent;
+  }
+
+  // current page
+  &[data-active] {
+    color: var(--primary11);
+    border-bottom: 2px solid var(--primary8);
   }
 }
 

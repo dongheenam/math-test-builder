@@ -1,6 +1,6 @@
 import type { NextPage } from "next";
 import DefaultLayout from "./DefaultLayout";
-// import QuestionsLayout from "./Questions";
+import QuestionsLayout from "./QuestionsLayout";
 
 export type NextPageWithLayout<P = {}, IP = P> = NextPage<P, IP> & {
   getLayout?: (page: React.ReactElement) => React.ReactNode;
@@ -11,11 +11,11 @@ export const getDefaultLayout = (page: React.ReactElement) => {
   return <DefaultLayout>{page}</DefaultLayout>;
 };
 
-// layouts for questions/* (default + navbar)
-// export const getQuestionsLayout = (page: React.ReactElement) => {
-//   return (
-//     <DefaultLayout>
-//       <QuestionsLayout>{page}</QuestionsLayout>
-//     </DefaultLayout>
-//   );
-// };
+// layouts for questions (default + navbar)
+export const getQuestionsLayout = (page: React.ReactElement) => {
+  return (
+    <DefaultLayout>
+      <QuestionsLayout>{page}</QuestionsLayout>
+    </DefaultLayout>
+  );
+};

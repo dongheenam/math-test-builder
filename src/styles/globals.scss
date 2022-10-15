@@ -45,6 +45,27 @@ select {
   }
 }
 
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.anchor {
+  color: var(--primary11);
+  text-decoration: underline;
+
+  &:hover,
+  &:active {
+    color: var(--primary12);
+    text-decoration: none;
+  }
+
+  &:focus-visible {
+    color: var(--bg);
+    background-color: var(--primary9);
+  }
+}
+
 button,
 .btn {
   padding: 0.5rem 1rem;
@@ -53,12 +74,23 @@ button,
   background-color: var(--gray3);
   font-weight: 600;
 
-  &:hover {
+  &:not([data-disabled="true"]):hover {
     border-color: var(--gray8);
     background-color: var(--gray4);
   }
-  &:active {
+  &:not([data-disabled="true"]):active {
     background-color: var(--gray5);
+  }
+}
+
+:disabled,
+[data-disabled="true"] {
+  color: var(--gray10);
+  background-color: var(--gray2);
+
+  &,
+  * {
+    cursor: not-allowed;
   }
 }
 
