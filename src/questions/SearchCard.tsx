@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 import { TopicForm, YearForm, TagsForm, TextForm } from "questions/components";
 import { IconSearch, IconFilePlus } from "@tabler/icons";
-import styles from "./SearchPanel.module.scss";
+import styles from "./SearchCard.module.scss";
 
-export function SearchPanel() {
+export function SearchCard() {
   const [year, setYear] = useState("");
   const [topic, setTopic] = useState("");
   const [tags, setTags] = useState<string[]>(["arithmetic", "add", "subtract"]);
