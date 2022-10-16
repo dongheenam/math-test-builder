@@ -6,7 +6,7 @@
   padding-top: 24px;
 
   background-color: var(--bg);
-  border-radius: 12px;
+  border-radius: 8px;
   box-shadow: $shadow-xs;
 
   display: flex;
@@ -21,10 +21,10 @@
   gap: 16px;
 }
 .yearBox {
-  min-width: 5rem;
+  min-width: 4rem;
 }
 .topicBox {
-  min-width: 10rem;
+  min-width: 9rem;
 }
 .tagsBox {
   flex: 1;
@@ -42,7 +42,7 @@
 .btnReset,
 .btnNew {
   padding: 0.6rem 1rem;
-  border-radius: 0.5rem;
+  border-radius: 4px;
   font-weight: 600;
 
   display: flex;
@@ -66,6 +66,8 @@
 }
 .btnReset {
   composes: btn from global;
+
+  color: var(--gray11);
 }
 .btnNew {
   margin-left: auto;

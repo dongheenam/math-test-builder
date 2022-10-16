@@ -1,3 +1,5 @@
 {
-  "prisma.fileWatcher": true
+  "prisma.fileWatcher": true,
+  "css.lint.validProperties": ["composes"],
+  "scss.lint.validProperties": ["composes"]
 }

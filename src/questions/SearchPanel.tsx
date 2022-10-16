@@ -34,9 +34,9 @@ export function SearchPanel() {
           <IconSearch stroke={2} size="1em" />
           <span>Search questions</span>
         </button>
-        <button className={styles.btnReset}>Reset field</button>
+        <button className={styles.btnReset}>Reset form</button>
         <button className={styles.btnNew}>
-          <IconSearch stroke={2} size="1em" />
+          <IconFilePlus stroke={2} size="1em" />
           <span>New question</span>
         </button>
       </div>

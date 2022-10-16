@@ -5,7 +5,7 @@ const formLabel = "Year";
 
 export type YearFormStates = {
   year: string;
-  setYear: (value: string) => void;
+  setYear: React.Dispatch<React.SetStateAction<string>>;
 };
 export function YearForm({ year, setYear }: YearFormStates) {
   return (

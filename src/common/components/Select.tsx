@@ -7,8 +7,8 @@ import styles from "./Select.module.scss";
 
 export type SelectProps = React.ComponentProps<typeof PrimSelect.Root> & {
   value: string;
-  setValue: (value: string) => void;
-  label: string;
+  setValue: React.Dispatch<React.SetStateAction<string>>;
+  label?: string;
 };
 export const Select = React.forwardRef<
   React.ElementRef<typeof PrimSelect.Trigger>,
@@ -20,7 +20,7 @@ export const Select = React.forwardRef<
   return (
     <Label asChild>
       <div className={styles.root}>
-        <span className={styles.label}>{label}</span>
+        {label && <span className={styles.label}>{label}</span>}
         <PrimSelect.Root value={value} onValueChange={setValue} {...props}>
           <PrimSelect.Trigger className={styles.trigger} ref={forwardedRef}>
             <PrimSelect.Value />

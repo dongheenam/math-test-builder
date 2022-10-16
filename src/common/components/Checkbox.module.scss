@@ -1,0 +1,38 @@
+@use "styles/variables" as *;
+
+$border-radius: 4px;
+
+.root {
+  width: 1.25em;
+  height: 1.25em;
+
+  color: var(--bg);
+  border-radius: $border-radius;
+
+  display: flex;
+  place-items: center;
+
+  background-color: transparent;
+  &:hover {
+    border-color: var(--gray8);
+    background-color: var(--gray4);
+  }
+  &:active {
+    background-color: var(--gray5);
+  }
+  &[data-state="checked"],
+  &[data-state="indeterminate"] {
+    background-color: var(--primary9);
+    &:hover {
+      background-color: var(--primary10);
+    }
+    &:active {
+      background-color: var(--primary11);
+    }
+  }
+  &[data-disabled],
+  &[data-disabled]:hover {
+    background-color: var(--gray3);
+    color: var(--gray11);
+  }
+}

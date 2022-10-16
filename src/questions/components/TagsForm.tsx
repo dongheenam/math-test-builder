@@ -30,7 +30,7 @@ export function TagsForm({ tags, setTags }: TagsFormStates) {
   const handleChange = (tags: string[]) => {
     // update selected state
     setTags(tags);
-    // update  and show options
+    // update and show options
     setTagsData((prev) => [...new Set([...prev, ...tags])].sort());
     setQuery("");
     // reset and focus the input
@@ -40,28 +40,6 @@ export function TagsForm({ tags, setTags }: TagsFormStates) {
     }
   };
 
-  const removeAll = useCallback(() => {
-    setTags([]);
-  }, [setTags]);
-
-  /* COMPONENTS */
-  const emptyButton = tags.length > 0 && (
-    <button onClick={() => removeAll()} className={styles.emptyIcon}>
-      <IconX size="1em" stroke={1.5} />
-    </button>
-  );
-
-  const selectedItems = tags.map((tag, idx) => (
-    <button
-      key={idx}
-      className={styles.selectedItem}
-      onClick={() => setTags((prev) => prev.filter((item) => item !== tag))}
-    >
-      <span>{tag}</span>
-      <IconX size="1em" stroke={1.5} />
-    </button>
-  ));
-
   /* MAIN JSX */
   return (
     <div role="label" className={styles.root}>
@@ -69,15 +47,17 @@ export function TagsForm({ tags, setTags }: TagsFormStates) {
         <span className={styles.label}>{formLabel}</span>
         <div className={styles.comboboxWrapper}>
           <div className={styles.trigger}>
-            <Combobox.Button as="div" className={styles.inputWrapper}>
-              {selectedItems}
-              <Combobox.Input
-                ref={inputRef}
-                onChange={(e) => setQuery(e.target.value)}
-                className={styles.input}
-              />
-            </Combobox.Button>
-            {emptyButton}
+            <div className={styles.inputWrapper}>
+              <SelectedItems tags={tags} setTags={setTags} />
+              <Combobox.Button as={React.Fragment}>
+                <Combobox.Input
+                  ref={inputRef}
+                  onChange={(e) => setQuery(e.target.value)}
+                  className={styles.input}
+                />
+              </Combobox.Button>
+            </div>
+            {tags.length > 0 && <EmptyIcon setTags={setTags} />}
             <IconSelector
               size="1em"
               stroke={1.5}
@@ -90,8 +70,8 @@ export function TagsForm({ tags, setTags }: TagsFormStates) {
                 Type a new tag and press enter...
               </li>
             ) : (
-              optionItems.map((tag, idx) => (
-                <Option key={idx} value={tag}>
+              optionItems.map((tag) => (
+                <Option key={tag} value={tag}>
                   {tag}
                 </Option>
               ))
@@ -100,6 +80,41 @@ export function TagsForm({ tags, setTags }: TagsFormStates) {
         </div>
       </Combobox>
     </div>
+  );
+}
+
+function SelectedItems({
+  tags,
+  setTags,
+}: {
+  tags: string[];
+  setTags: React.Dispatch<React.SetStateAction<string[]>>;
+}) {
+  return (
+    <>
+      {tags.map((tag) => (
+        <button
+          key={tag}
+          className={styles.selectedItem}
+          onClick={() => setTags((prev) => prev.filter((item) => item !== tag))}
+        >
+          <span>{tag}</span>
+          <IconX size="1em" stroke={1.5} />
+        </button>
+      ))}
+    </>
+  );
+}
+
+function EmptyIcon({
+  setTags,
+}: {
+  setTags: React.Dispatch<React.SetStateAction<string[]>>;
+}) {
+  return (
+    <button onClick={() => setTags((prev) => [])} className={styles.emptyIcon}>
+      <IconX size="1em" stroke={1.5} />
+    </button>
   );
 }
 

@@ -6,7 +6,7 @@ const formLabel = "Topic";
 
 export type TopicFormState = {
   topic: string;
-  setTopic: (value: string) => void;
+  setTopic: React.Dispatch<React.SetStateAction<string>>;
 };
 export function TopicForm({ topic, setTopic }: TopicFormState) {
   const data = Object.entries(TOPIC_VALUES).map(([key, description]) => ({

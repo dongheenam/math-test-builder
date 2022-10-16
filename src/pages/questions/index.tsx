@@ -4,6 +4,7 @@ import { SearchPanel } from "questions/SearchPanel";
 import { getQuestionsLayout } from "layouts";
 
 import styles from "./index.module.scss";
+import { ListPanel } from "../../questions/ListPanel";
 
 Questions.getLayout = getQuestionsLayout;
 export default function Questions() {
@@ -14,8 +15,4 @@ export default function Questions() {
       <ListPanel />
     </div>
   );
-}
-
-function ListPanel() {
-  return <></>;
 }
