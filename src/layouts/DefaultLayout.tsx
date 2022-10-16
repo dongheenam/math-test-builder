@@ -3,6 +3,8 @@ import { useRouter } from "next/router";
 import Link from "next/link";
 import * as NavigationMenu from "@radix-ui/react-navigation-menu";
 
+import { Anchor } from "common/components";
+
 import styles from "./DefaultLayout.module.scss";
 
 /* Main */
@@ -85,13 +87,13 @@ function Footer() {
   return (
     <footer className={styles.footer}>
       <span>2022 Donghee Nam | </span>
-      <a href="https://github.com/dongheenam/math-test-builder" target="_blank">
+      <Anchor href="https://github.com/dongheenam/math-test-builder" blank>
         Source
-      </a>
+      </Anchor>
       <span> | </span>
-      <a href="https://twitter.com/codeforteaching" target="_blank">
+      <Anchor href="https://twitter.com/codeforteaching" blank>
         Twitter
-      </a>
+      </Anchor>
     </footer>
   );
 }
