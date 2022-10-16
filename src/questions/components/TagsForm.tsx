@@ -16,7 +16,6 @@ const formLabel = "Tags";
 export function TagsForm({ tags, setTags }: TagsFormStates) {
   const [tagsData, setTagsData] = useState<string[]>(tags);
   const [query, setQuery] = useState("");
-  const [open, setOpen] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
 
   // items shown in the dropdown menu
@@ -77,20 +76,26 @@ export function TagsForm({ tags, setTags }: TagsFormStates) {
                 onChange={(e) => setQuery(e.target.value)}
                 className={styles.input}
               />
-              {emptyButton}
-              <IconSelector
-                size="1em"
-                stroke={1.5}
-                className={styles.selectIcon}
-              />
             </Combobox.Button>
+            {emptyButton}
+            <IconSelector
+              size="1em"
+              stroke={1.5}
+              className={styles.selectIcon}
+            />
           </div>
           <Combobox.Options className={styles.options}>
-            {optionItems.map((tag, idx) => (
-              <Option key={idx} value={tag}>
-                {tag}
-              </Option>
-            ))}
+            {optionItems.length === 0 ? (
+              <li className={styles.itemEmpty}>
+                Type a new tag and press enter...
+              </li>
+            ) : (
+              optionItems.map((tag, idx) => (
+                <Option key={idx} value={tag}>
+                  {tag}
+                </Option>
+              ))
+            )}
           </Combobox.Options>
         </div>
       </Combobox>

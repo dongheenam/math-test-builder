@@ -1,3 +1,4 @@
 export * from "./YearForm";
-export * from "./TopicForm";
 export * from "./TagsForm";
+export * from "./TextForm";
+export * from "./TopicForm";

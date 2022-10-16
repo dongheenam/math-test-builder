@@ -14,8 +14,8 @@ export const TOPIC_COLORS: Record<Topic, string> = {
   ALG: "pink",
   MEAS: "indigo",
   GEO: "blue",
-  STAT: "green",
-  PROB: "teal",
+  STAT: "cyan",
+  PROB: "green",
   CALC: "red",
 };
 export const SORT_DATA = [

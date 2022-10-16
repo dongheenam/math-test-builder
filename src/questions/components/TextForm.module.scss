@@ -1,0 +1,61 @@
+@use "styles/variables" as *;
+
+$border-radius: 8px;
+
+.root {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.label {
+  font-size: $size-sm;
+  font-weight: 600;
+}
+.inputWrapper {
+  width: 100%;
+  height: 2.25rem;
+  padding: 0 16px;
+
+  border: 1px solid var(--gray7);
+  border-radius: $border-radius;
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 4px;
+  background-color: var(--bg);
+
+  &:focus-within {
+    outline: 3px solid var(--primary8);
+  }
+}
+.input {
+  display: block;
+  flex: 1;
+  padding: 4px 0;
+  line-height: 1em;
+  text-align: left;
+
+  border: none;
+  &:focus {
+    outline: none;
+  }
+}
+.clearIcon {
+  translate: 8px;
+
+  border: none;
+  border-radius: 4px;
+  color: var(--gray11);
+  background-color: transparent;
+
+  &:hover,
+  &:focus {
+    outline: none;
+    color: var(--text);
+    background-color: var(--gray4);
+  }
+  &:active {
+    background-color: var(--gray5);
+  }
+}

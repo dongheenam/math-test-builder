@@ -81,11 +81,13 @@ $border-radius: 8px;
 }
 .emptyIcon {
   background-color: transparent;
+  color: var(--gray11);
   border: none;
 
   &:hover,
   &:focus {
     outline: none;
+    color: var(--text);
     background-color: var(--gray4);
   }
   &:active {
@@ -100,6 +102,7 @@ $border-radius: 8px;
 // content list
 .options {
   position: absolute;
+  z-index: 1;
   width: 100%;
   margin-top: 8px;
   margin-bottom: 0;
@@ -109,27 +112,21 @@ $border-radius: 8px;
   border-radius: 8px;
   box-shadow: $shadow-sm;
 }
-.divider {
-  font-size: $size-sm;
-
-  border-top: 1px solid var(--gray7);
-  color: var(--gray9);
-}
-.item {
+.item,
+.itemEmpty {
   height: 2rem;
   padding: 8px 1rem;
-  position: relative;
-
   display: flex;
-  justify-content: space-between;
   align-items: center;
-
+}
+.item {
   &:hover,
   &:focus {
     outline: none;
     background-color: var(--primary4);
   }
 }
-.checkedIcon {
-  translate: 8px;
+.itemEmpty {
+  font-style: italic;
+  color: var(--gray10);
 }

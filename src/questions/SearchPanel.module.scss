@@ -1,15 +1,84 @@
 @use "styles/variables" as *;
 
-// search
-.search {
+.root {
   width: 100%;
-  padding: 12px;
+  padding: 16px;
+  padding-top: 24px;
 
   background-color: var(--bg);
-  border-radius: 8px;
+  border-radius: 12px;
   box-shadow: $shadow-xs;
 
   display: flex;
   flex-direction: column;
-  gap: 1rem;
+  gap: 32px;
+}
+
+// inputs
+.form {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+.yearBox {
+  min-width: 5rem;
+}
+.topicBox {
+  min-width: 10rem;
+}
+.tagsBox {
+  flex: 1;
+}
+.textBox {
+  width: 100%;
+}
+
+// button controls
+.buttons {
+  display: flex;
+  gap: 12px;
+}
+.btnSearch,
+.btnReset,
+.btnNew {
+  padding: 0.6rem 1rem;
+  border-radius: 0.5rem;
+  font-weight: 600;
+
+  display: flex;
+  gap: 0.6rem;
+  align-items: center;
+
+  & svg {
+    scale: 1.5;
+  }
+}
+.btnSearch {
+  color: var(--bg);
+  background-color: var(--primary9);
+
+  &:hover {
+    background-color: var(--primary10);
+  }
+  &:active {
+    background-color: var(--primary11);
+  }
+}
+.btnReset {
+  composes: btn from global;
+}
+.btnNew {
+  margin-left: auto;
+
+  color: var(--green11);
+  border: 1px solid var(--green7);
+  background-color: var(--green3);
+
+  &:hover {
+    border-color: var(--green8);
+    background-color: var(--green4);
+  }
+  &:active {
+    background-color: var(--green5);
+  }
 }
