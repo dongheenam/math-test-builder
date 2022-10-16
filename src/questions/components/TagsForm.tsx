@@ -16,14 +16,17 @@ const formLabel = "Tags";
 export function TagsForm({ tags, setTags }: TagsFormStates) {
   const [tagsData, setTagsData] = useState<string[]>(tags);
   const [query, setQuery] = useState("");
+  const [open, setOpen] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
 
-  const filteredTags = !query
-    ? tagsData
-    : tagsData.filter((tag) => tag.toLowerCase().includes(query.toLowerCase()));
-  const optionItems = !query
-    ? filteredTags
-    : [...new Set([query, ...filteredTags])];
+  // items shown in the dropdown menu
+  let optionItems: string[] = tagsData.filter((tag) => !tags.includes(tag));
+  if (query !== "") {
+    const filteredTags = optionItems.filter((tag) =>
+      tag.toLowerCase().includes(query.toLowerCase())
+    );
+    optionItems = [...new Set([query, ...filteredTags])];
+  }
 
   const handleChange = (tags: string[]) => {
     // update selected state
@@ -40,7 +43,7 @@ export function TagsForm({ tags, setTags }: TagsFormStates) {
 
   const removeAll = useCallback(() => {
     setTags([]);
-  }, []);
+  }, [setTags]);
 
   /* COMPONENTS */
   const emptyButton = tags.length > 0 && (
@@ -63,25 +66,24 @@ export function TagsForm({ tags, setTags }: TagsFormStates) {
   /* MAIN JSX */
   return (
     <div role="label" className={styles.root}>
-      {JSON.stringify({ query })}
       <Combobox value={tags} onChange={handleChange} multiple>
         <span className={styles.label}>{formLabel}</span>
         <div className={styles.comboboxWrapper}>
           <div className={styles.trigger}>
-            <div className={styles.inputWrapper}>
+            <Combobox.Button as="div" className={styles.inputWrapper}>
               {selectedItems}
               <Combobox.Input
                 ref={inputRef}
                 onChange={(e) => setQuery(e.target.value)}
                 className={styles.input}
               />
-            </div>
-            {emptyButton}
-            <IconSelector
-              size="1em"
-              stroke={1.5}
-              className={styles.selectIcon}
-            />
+              {emptyButton}
+              <IconSelector
+                size="1em"
+                stroke={1.5}
+                className={styles.selectIcon}
+              />
+            </Combobox.Button>
           </div>
           <Combobox.Options className={styles.options}>
             {optionItems.map((tag, idx) => (
@@ -104,13 +106,8 @@ function Option({
   children: React.ReactNode;
 }) {
   return (
-    <Combobox.Option value={value} as={React.Fragment}>
-      {({ selected }) => (
-        <li className={styles.item}>
-          {children}
-          {selected && <IconCheck />}
-        </li>
-      )}
+    <Combobox.Option value={value} className={styles.item}>
+      {children}
     </Combobox.Option>
   );
 }

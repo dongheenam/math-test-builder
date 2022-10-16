@@ -124,11 +124,6 @@ $border-radius: 8px;
   justify-content: space-between;
   align-items: center;
 
-  &[aria-selected="true"] {
-    color: var(--primary11);
-    font-weight: 600;
-  }
-
   &:hover,
   &:focus {
     outline: none;

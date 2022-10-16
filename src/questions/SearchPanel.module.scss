@@ -1,0 +1,15 @@
+@use "styles/variables" as *;
+
+// search
+.search {
+  width: 100%;
+  padding: 12px;
+
+  background-color: var(--bg);
+  border-radius: 8px;
+  box-shadow: $shadow-xs;
+
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
