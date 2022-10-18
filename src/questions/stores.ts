@@ -18,9 +18,6 @@ type QuestionsState = {
   setQuery: <Key extends keyof QuestionsState["searchQuery"]>(
     field: Key
   ) => (value: QuestionsState["searchQuery"][Key]) => void;
-  getQuery: <Key extends keyof QuestionsState["searchQuery"]>(
-    field: Key
-  ) => QuestionsState["searchQuery"][Key];
 };
 
 const INITIAL_QUERY: Omit<QuestionsState["searchQuery"], "orderBy" | "take"> = {
@@ -42,7 +39,6 @@ const storeBase = create<QuestionsState>()((set, get) => ({
         prev.searchQuery[field] = value;
       })
     ),
-  getQuery: (field) => get().searchQuery[field],
 }));
 
 const useStore = createSelectors(storeBase);
