@@ -8,7 +8,7 @@ import React from "react";
 // TODO: https://github.com/tailwindlabs/headlessui/issues/1394
 export type TagsFormStates = {
   tags: string[];
-  setTags: React.Dispatch<React.SetStateAction<string[]>>;
+  setTags: (value: string[]) => void;
 };
 
 const formLabel = "Tags";

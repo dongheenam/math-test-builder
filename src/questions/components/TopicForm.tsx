@@ -5,8 +5,8 @@ import { Topic } from "questions/types";
 const formLabel = "Topic";
 
 export type TopicFormState = {
-  topic: string;
-  setTopic: React.Dispatch<React.SetStateAction<string>>;
+  topic: Topic | "";
+  setTopic: (value: TopicFormState["topic"]) => void;
 };
 export function TopicForm({ topic, setTopic }: TopicFormState) {
   const data = Object.entries(TOPIC_VALUES).map(([key, description]) => ({

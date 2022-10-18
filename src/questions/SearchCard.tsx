@@ -1,32 +1,29 @@
 import React, { useState } from "react";
-import { TopicForm, YearForm, TagsForm, TextForm } from "questions/components";
 import { IconSearch, IconFilePlus } from "@tabler/icons";
+
+import { TopicForm, YearForm, TagsForm, TextForm } from "questions/components";
+import useStore from "./stores";
+
 import styles from "./SearchCard.module.scss";
 
 export function SearchCard() {
-  const [year, setYear] = useState("");
-  const [topic, setTopic] = useState("");
-  const [tags, setTags] = useState<string[]>(["arithmetic", "add", "subtract"]);
-  const [text, setText] = useState("");
-  const yearControl = { year, setYear };
-  const topicControl = { topic, setTopic };
-  const tagsControl = { tags, setTags };
-  const textControl = { text, setText };
+  const query = useStore.use.searchQuery();
+  const setQuery = useStore.use.setQuery();
 
   return (
     <div className={styles.root}>
       <div className={styles.form}>
         <div className={styles.yearBox}>
-          <YearForm {...yearControl} />
+          <YearForm year={query.year} setYear={setQuery("year")} />
         </div>
         <div className={styles.topicBox}>
-          <TopicForm {...topicControl} />
+          <TopicForm topic={query.topic} setTopic={setQuery("topic")} />
         </div>
         <div className={styles.tagsBox}>
-          <TagsForm {...tagsControl} />
+          <TagsForm tags={query.tags} setTags={setQuery("tags")} />
         </div>
         <div className={styles.textBox}>
-          <TextForm {...textControl} />
+          <TextForm text={query.content} setText={setQuery("content")} />
         </div>
       </div>
       <div className={styles.buttons}>

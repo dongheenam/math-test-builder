@@ -4,8 +4,8 @@ import { YEAR_LEVELS } from "questions/constants";
 const formLabel = "Year";
 
 export type YearFormStates = {
-  year: string;
-  setYear: React.Dispatch<React.SetStateAction<string>>;
+  year: typeof YEAR_LEVELS[number] | "";
+  setYear: (value: YearFormStates["year"]) => void;
 };
 export function YearForm({ year, setYear }: YearFormStates) {
   return (

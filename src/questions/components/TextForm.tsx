@@ -4,7 +4,7 @@ import styles from "./TextForm.module.scss";
 
 export type TextFormState = {
   text: string;
-  setText: React.Dispatch<React.SetStateAction<string>>;
+  setText: (value: string) => void;
 };
 
 const formLabel = "Text";

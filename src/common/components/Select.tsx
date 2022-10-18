@@ -5,23 +5,35 @@ import { IconSelector, IconCheck } from "@tabler/icons";
 
 import styles from "./Select.module.scss";
 
-export type SelectProps = React.ComponentProps<typeof PrimSelect.Root> & {
-  value: string;
-  setValue: React.Dispatch<React.SetStateAction<string>>;
+// Redecalare forwardRef
+// ref: https://fettblog.eu/typescript-react-generic-forward-refs/
+declare module "react" {
+  function forwardRef<T, P = {}>(
+    render: (props: P, ref: React.Ref<T>) => React.ReactElement | null
+  ): (props: P & React.RefAttributes<T>) => React.ReactElement | null;
+}
+
+export type SelectProps<T extends string> = React.ComponentProps<
+  typeof PrimSelect.Root
+> & {
+  value: T;
+  setValue: (value: T) => void;
   label?: string;
 };
-export const Select = React.forwardRef<
-  React.ElementRef<typeof PrimSelect.Trigger>,
-  SelectProps
->(function Select(
-  { value, setValue, label, children, ...props },
-  forwardedRef
+
+function renderSelect<T extends string>(
+  { value, setValue, label, children, ...props }: SelectProps<T>,
+  forwardedRef: React.ForwardedRef<HTMLButtonElement>
 ) {
   return (
     <Label asChild>
       <div className={styles.root}>
-        {label && <span className={styles.label}>{label}</span>}
-        <PrimSelect.Root value={value} onValueChange={setValue} {...props}>
+        <span className={styles.label}>{label}</span>
+        <PrimSelect.Root
+          value={value}
+          onValueChange={(value) => setValue(value as T)}
+          {...props}
+        >
           <PrimSelect.Trigger className={styles.trigger} ref={forwardedRef}>
             <PrimSelect.Value />
             <PrimSelect.Icon>
@@ -41,12 +53,12 @@ export const Select = React.forwardRef<
       </div>
     </Label>
   );
-});
+}
 
-export const SelectItem = React.forwardRef<
-  React.ElementRef<typeof PrimSelect.Item>,
-  React.ComponentProps<typeof PrimSelect.Item>
->(function SelectItem({ children, ...props }, forwardedRef) {
+function renderSelectItem(
+  { children, ...props }: React.ComponentProps<typeof PrimSelect.Item>,
+  forwardedRef: React.ForwardedRef<HTMLDivElement>
+) {
   return (
     <PrimSelect.Item {...props} ref={forwardedRef} className={styles.item}>
       <PrimSelect.ItemText>{children}</PrimSelect.ItemText>
@@ -55,4 +67,7 @@ export const SelectItem = React.forwardRef<
       </PrimSelect.ItemIndicator>
     </PrimSelect.Item>
   );
-});
+}
+
+export const Select = React.forwardRef(renderSelect);
+export const SelectItem = React.forwardRef(renderSelectItem);

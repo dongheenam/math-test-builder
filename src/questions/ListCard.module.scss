@@ -92,19 +92,18 @@
 .yearBadge,
 .topicBadge,
 .tagBadge {
-  padding: 4px;
+  padding: 4px 8px;
   font-weight: 700;
   font-size: $size-xs;
 }
 .yearBadge {
+  padding: 4px;
   background-color: var(--gray8);
 }
 .topicBadge {
   text-transform: uppercase;
-  letter-spacing: 0.05em;
 }
 .tagBadge {
-  padding: 4px 8px;
   border-radius: 1em;
 
   background-color: var(--gray3);
