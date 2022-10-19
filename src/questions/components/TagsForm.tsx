@@ -1,6 +1,6 @@
-import { useCallback, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import { Combobox } from "@headlessui/react";
-import { IconSelector, IconCheck, IconX } from "@tabler/icons";
+import { IconSelector, IconX } from "@tabler/icons";
 
 import styles from "./TagsForm.module.scss";
 import React from "react";
@@ -88,7 +88,7 @@ function SelectedItems({
   setTags,
 }: {
   tags: string[];
-  setTags: React.Dispatch<React.SetStateAction<string[]>>;
+  setTags: (value: string[]) => void;
 }) {
   return (
     <>
@@ -96,7 +96,7 @@ function SelectedItems({
         <button
           key={tag}
           className={styles.selectedItem}
-          onClick={() => setTags((prev) => prev.filter((item) => item !== tag))}
+          onClick={() => setTags(tags.filter((item) => item !== tag))}
         >
           <span>{tag}</span>
           <IconX size="1em" stroke={1.5} />
@@ -106,13 +106,9 @@ function SelectedItems({
   );
 }
 
-function EmptyIcon({
-  setTags,
-}: {
-  setTags: React.Dispatch<React.SetStateAction<string[]>>;
-}) {
+function EmptyIcon({ setTags }: { setTags: (value: string[]) => void }) {
   return (
-    <button onClick={() => setTags((prev) => [])} className={styles.emptyIcon}>
+    <button onClick={() => setTags([])} className={styles.emptyIcon}>
       <IconX size="1em" stroke={1.5} />
     </button>
   );

@@ -5,7 +5,7 @@ import { createSelectors } from "common/utils";
 import { YEAR_LEVELS } from "./constants";
 import { Topic } from "./types";
 
-type QuestionsState = {
+export type QuestionsState = {
   searchQuery: {
     year: typeof YEAR_LEVELS[number] | "";
     topic: Topic | "";
