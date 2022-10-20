@@ -30,7 +30,7 @@ export function ListCard() {
   );
 }
 
-function ListPanel({ count }: { count: number }) {
+function ListPanel({ count }: { count?: number }) {
   const [sortBy, setSortBy] = useState("-updatedAt");
 
   return (
@@ -43,7 +43,11 @@ function ListPanel({ count }: { count: number }) {
         <button>(add to bucket)</button>
       </div>
 
-      <div className={styles.count}>showing {count} results</div>
+      {count ? (
+        <div className={styles.count}>showing {count} results</div>
+      ) : (
+        <div></div>
+      )}
       <div className={styles.controlSort}>
         <SortInput sortBy={sortBy} setSortBy={setSortBy} />
       </div>

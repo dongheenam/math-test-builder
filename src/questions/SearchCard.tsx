@@ -5,15 +5,21 @@ import {
   TopicInput,
   YearInput,
   TagsInput,
-  TextInput,
+  ContentInput,
 } from "questions/components";
 import useSearchForms from "questions/libs/useSearchForm";
 
 import styles from "./SearchCard.module.scss";
 
 export function SearchCard() {
-  const { yearControl, topicControl, tagsControl, textControl, submit, reset } =
-    useSearchForms();
+  const {
+    yearControl,
+    topicControl,
+    tagsControl,
+    contentControl,
+    submitForm,
+    resetForm,
+  } = useSearchForms();
 
   return (
     <div className={styles.root}>
@@ -28,15 +34,15 @@ export function SearchCard() {
           <TagsInput {...tagsControl} />
         </div>
         <div className={styles.textBox}>
-          <TextInput {...textControl} />
+          <ContentInput {...contentControl} />
         </div>
       </div>
       <div className={styles.buttons}>
-        <button className={styles.btnSearch} onClick={() => submit()}>
+        <button className={styles.btnSearch} onClick={() => submitForm()}>
           <IconSearch stroke={2} size="1em" />
           <span>Search questions</span>
         </button>
-        <button className={styles.btnReset} onClick={() => reset()}>
+        <button className={styles.btnReset} onClick={() => resetForm()}>
           Reset form
         </button>
         <button className={styles.btnNew}>
