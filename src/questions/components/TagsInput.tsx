@@ -2,18 +2,18 @@ import { useRef, useState } from "react";
 import { Combobox } from "@headlessui/react";
 import { IconSelector, IconX } from "@tabler/icons";
 
-import styles from "./TagsForm.module.scss";
+import styles from "./TagsInput.module.scss";
 import React from "react";
 
 // TODO: https://github.com/tailwindlabs/headlessui/issues/1394
-export type TagsFormStates = {
+export type TagsInputStates = {
   tags: string[];
   setTags: (value: string[]) => void;
 };
 
-const formLabel = "Tags";
+const inputLabel = "Tags";
 
-export function TagsForm({ tags, setTags }: TagsFormStates) {
+export function TagsInput({ tags, setTags }: TagsInputStates) {
   const [tagsData, setTagsData] = useState<string[]>(tags);
   const [query, setQuery] = useState("");
   const inputRef = useRef<HTMLInputElement>(null);
@@ -44,7 +44,7 @@ export function TagsForm({ tags, setTags }: TagsFormStates) {
   return (
     <div role="label" className={styles.root}>
       <Combobox value={tags} onChange={handleChange} multiple>
-        <span className={styles.label}>{formLabel}</span>
+        <span className={styles.label}>{inputLabel}</span>
         <div className={styles.comboboxWrapper}>
           <div className={styles.trigger}>
             <div className={styles.inputWrapper}>

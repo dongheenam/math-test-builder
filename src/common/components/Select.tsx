@@ -1,7 +1,7 @@
 import React from "react";
 import * as PrimSelect from "@radix-ui/react-select";
 import { Label } from "@radix-ui/react-label";
-import { IconSelector, IconCheck } from "@tabler/icons";
+import { IconSelector, IconCheck, IconX } from "@tabler/icons";
 
 import styles from "./Select.module.scss";
 

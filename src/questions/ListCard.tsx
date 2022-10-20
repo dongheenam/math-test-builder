@@ -2,50 +2,60 @@ import React, { useState } from "react";
 import { IconPlus, IconEdit } from "@tabler/icons";
 
 import { Checkbox } from "common/components";
-import { SortForm } from "./components";
+import { SortInput } from "./components";
+import useFetchQuestions from "questions/libs/useFetchQuestions";
+import { TOPIC_COLORS, TOPIC_VALUES } from "./constants";
 import { QuestionFetched } from "./types";
 
 import styles from "./ListCard.module.scss";
-import { TOPIC_COLORS, TOPIC_VALUES } from "./constants";
-
-const questions: QuestionFetched[] = [];
 
 export function ListCard() {
+  const { data, isSuccess, isLoading, isError, error } = useFetchQuestions();
+  if (isLoading) {
+    return <span>Loading questions...</span>;
+  }
+  if (isError && error instanceof Error) {
+    return <span>Error: {error.message}</span>;
+  }
+  if (!isSuccess) {
+    return <span>Loading failed for unknown reason...</span>;
+  }
+
+  const { questions, count } = data;
   return (
     <div className={styles.root}>
-      <ListPanel />
-      <QuestionsList />
+      <ListPanel count={count} />
+      {questions && <QuestionsList questions={questions} />}
     </div>
   );
 }
 
-function ListPanel() {
-  const [checked, setChecked] = useState(false);
+function ListPanel({ count }: { count: number }) {
   const [sortBy, setSortBy] = useState("-updatedAt");
 
   return (
     <div className={styles.panel}>
       <div className={styles.select}>
-        <Checkbox checked={checked} setChecked={setChecked} />
+        <Checkbox />
       </div>
       <div className={styles.controlSelected}>
         <span>0 selected</span>
         <button>(add to bucket)</button>
       </div>
 
-      <div className={styles.count}>showing 3 of 3 results</div>
+      <div className={styles.count}>showing {count} results</div>
       <div className={styles.controlSort}>
-        <SortForm sortBy={sortBy} setSortBy={setSortBy} />
+        <SortInput sortBy={sortBy} setSortBy={setSortBy} />
       </div>
     </div>
   );
 }
 
-function QuestionsList() {
+function QuestionsList({ questions }: { questions: QuestionFetched[] }) {
   return (
     <div className={styles.questions}>
       {questions.map((q) => (
-        <Question question={q} />
+        <Question question={q} key={q.id} />
       ))}
     </div>
   );

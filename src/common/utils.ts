@@ -7,7 +7,9 @@ export function toSearchParams<
 >(options: Record<K, V>) {
   let params = new URLSearchParams();
   for (const [key, value] of Object.entries(options)) {
-    if (Array.isArray(value)) {
+    if (!value) {
+      continue;
+    } else if (Array.isArray(value)) {
       value.forEach((item) => params.append(key, item));
     } else {
       params.append(key, (value as any).toString());

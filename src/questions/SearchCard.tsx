@@ -1,37 +1,44 @@
-import React from "react";
+import React, { useState } from "react";
 import { IconSearch, IconFilePlus } from "@tabler/icons";
 
-import { TopicForm, YearForm, TagsForm, TextForm } from "questions/components";
-import useStore from "./stores";
+import {
+  TopicInput,
+  YearInput,
+  TagsInput,
+  TextInput,
+} from "questions/components";
+import useSearchForms from "questions/libs/useSearchForm";
 
 import styles from "./SearchCard.module.scss";
 
 export function SearchCard() {
-  const query = useStore.use.searchQuery();
-  const setQuery = useStore.use.setQuery();
+  const { yearControl, topicControl, tagsControl, textControl, submit, reset } =
+    useSearchForms();
 
   return (
     <div className={styles.root}>
       <div className={styles.form}>
         <div className={styles.yearBox}>
-          <YearForm year={query.year} setYear={setQuery("year")} />
+          <YearInput {...yearControl} />
         </div>
         <div className={styles.topicBox}>
-          <TopicForm topic={query.topic} setTopic={setQuery("topic")} />
+          <TopicInput {...topicControl} />
         </div>
         <div className={styles.tagsBox}>
-          <TagsForm tags={query.tags} setTags={setQuery("tags")} />
+          <TagsInput {...tagsControl} />
         </div>
         <div className={styles.textBox}>
-          <TextForm text={query.content} setText={setQuery("content")} />
+          <TextInput {...textControl} />
         </div>
       </div>
       <div className={styles.buttons}>
-        <button className={styles.btnSearch}>
+        <button className={styles.btnSearch} onClick={() => submit()}>
           <IconSearch stroke={2} size="1em" />
           <span>Search questions</span>
         </button>
-        <button className={styles.btnReset}>Reset form</button>
+        <button className={styles.btnReset} onClick={() => reset()}>
+          Reset form
+        </button>
         <button className={styles.btnNew}>
           <IconFilePlus stroke={2} size="1em" />
           <span>New question</span>

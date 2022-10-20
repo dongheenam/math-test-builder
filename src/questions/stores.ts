@@ -15,6 +15,9 @@ export type QuestionsState = {
     take: number;
   };
 
+  submitQueryForm: (
+    formValues: Omit<QuestionsState["searchQuery"], "orderBy" | "take">
+  ) => void;
   setQuery: <Key extends keyof QuestionsState["searchQuery"]>(
     field: Key
   ) => (value: QuestionsState["searchQuery"][Key]) => void;
@@ -33,6 +36,8 @@ const storeBase = create<QuestionsState>()((set, get) => ({
     orderBy: "-updatedAt",
     take: 10,
   },
+  submitQueryForm: (formValues) =>
+    set((prev) => ({ searchQuery: { ...prev.searchQuery, ...formValues } })),
   setQuery: (field) => (value) =>
     set(
       produce((prev) => {

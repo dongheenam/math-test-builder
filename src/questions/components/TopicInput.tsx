@@ -2,24 +2,29 @@ import { Select, SelectItem } from "common/components";
 import { TOPIC_VALUES, TOPIC_COLORS } from "questions/constants";
 import { Topic } from "questions/types";
 
-const formLabel = "Topic";
+const inputLabel = "Topic";
 
-export type TopicFormState = {
+export type TopicInputState = {
   topic: Topic | "";
-  setTopic: (value: TopicFormState["topic"]) => void;
+  setTopic: (value: TopicInputState["topic"]) => void;
 };
-export function TopicForm({ topic, setTopic }: TopicFormState) {
+export function TopicInput({ topic, setTopic }: TopicInputState) {
   const data = Object.entries(TOPIC_VALUES).map(([key, description]) => ({
     label: description,
     value: key,
   }));
+  data.unshift({ label: "", value: "" });
   return (
-    <Select value={topic} setValue={setTopic} label={formLabel}>
+    <Select value={topic} setValue={setTopic} label={inputLabel}>
       {data.map((item, idx) => (
         <SelectItem
           key={idx}
           value={item.value}
-          style={{ color: `var(--${TOPIC_COLORS[item.value as Topic]}11)` }}
+          style={
+            item.label !== ""
+              ? { color: `var(--${TOPIC_COLORS[item.value as Topic]}11)` }
+              : { color: "var(--text)" }
+          }
         >
           {item.label}
         </SelectItem>

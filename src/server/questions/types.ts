@@ -19,8 +19,8 @@ export type GetQuestionsQuery = Partial<
   count?: boolean;
 };
 export type GetQuestionsData = {
-  questions?: QuestionFetched[];
-  count?: number;
+  questions: QuestionFetched[];
+  count: number;
 };
 
 /** PUT /api/questions/[id] */

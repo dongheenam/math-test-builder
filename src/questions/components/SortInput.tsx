@@ -1,12 +1,12 @@
 import { Select, SelectItem } from "common/components";
 import { SORT_DATA } from "questions/constants";
 
-export type SortFormState = {
+export type SortInputState = {
   sortBy: string;
   setSortBy: React.Dispatch<React.SetStateAction<string>>;
 };
 
-export function SortForm({ sortBy, setSortBy }: SortFormState) {
+export function SortInput({ sortBy, setSortBy }: SortInputState) {
   const data = SORT_DATA;
 
   return (
