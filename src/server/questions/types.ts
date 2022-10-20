@@ -20,7 +20,7 @@ export type GetQuestionsQuery = Partial<
 };
 export type GetQuestionsData = {
   questions: QuestionFetched[];
-  count: number;
+  count?: number;
 };
 
 /** PUT /api/questions/[id] */

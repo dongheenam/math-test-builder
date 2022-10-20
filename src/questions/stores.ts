@@ -15,15 +15,13 @@ export type QuestionsState = {
     take: number;
   };
 
-  submitQueryForm: (
-    formValues: Omit<QuestionsState["searchQuery"], "orderBy" | "take">
-  ) => void;
-  setQuery: <Key extends keyof QuestionsState["searchQuery"]>(
-    field: Key
-  ) => (value: QuestionsState["searchQuery"][Key]) => void;
+  setSearchQuery: (next: Partial<QuestionsState["searchQuery"]>) => void;
 };
 
-const INITIAL_QUERY: Omit<QuestionsState["searchQuery"], "orderBy" | "take"> = {
+export const INITIAL_QUERY: Omit<
+  QuestionsState["searchQuery"],
+  "orderBy" | "take"
+> = {
   year: "",
   topic: "",
   tags: [],
@@ -36,14 +34,8 @@ const storeBase = create<QuestionsState>()((set, get) => ({
     orderBy: "-updatedAt",
     take: 10,
   },
-  submitQueryForm: (formValues) =>
-    set((prev) => ({ searchQuery: { ...prev.searchQuery, ...formValues } })),
-  setQuery: (field) => (value) =>
-    set(
-      produce((prev) => {
-        prev.searchQuery[field] = value;
-      })
-    ),
+  setSearchQuery: (next) =>
+    set((prev) => ({ searchQuery: { ...prev.searchQuery, ...next } })),
 }));
 
 const useStore = createSelectors(storeBase);

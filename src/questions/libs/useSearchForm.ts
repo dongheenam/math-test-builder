@@ -1,33 +1,16 @@
-import { QuestionsState } from "questions/stores";
+import { INITIAL_QUERY, QuestionsState } from "questions/stores";
 import { useState } from "react";
 import useStore from "questions/stores";
 
-type YearField = QuestionsState["searchQuery"]["year"];
-type TopicField = QuestionsState["searchQuery"]["topic"];
-type TagsField = QuestionsState["searchQuery"]["tags"];
-type ContentField = QuestionsState["searchQuery"]["content"];
-
-const INITIAL_VALUES: {
-  year: YearField;
-  topic: TopicField;
-  tags: TagsField;
-  text: ContentField;
-} = {
-  year: "",
-  topic: "",
-  tags: [],
-  text: "",
-};
-
 export default function useSearchForms() {
-  const [year, setYear] = useState<YearField>(INITIAL_VALUES.year);
-  const [topic, setTopic] = useState<TopicField>(INITIAL_VALUES.topic);
-  const [tags, setTags] = useState<TagsField>(INITIAL_VALUES.tags);
-  const [text, setText] = useState<ContentField>(INITIAL_VALUES.text);
+  const [year, setYear] = useState(INITIAL_QUERY.year);
+  const [topic, setTopic] = useState(INITIAL_QUERY.topic);
+  const [tags, setTags] = useState(INITIAL_QUERY.tags);
+  const [text, setText] = useState(INITIAL_QUERY.content);
 
-  const submitForm = useStore.use.submitQueryForm();
+  const setQuery = useStore.use.setSearchQuery();
   const submit = () => {
-    submitForm({
+    setQuery({
       year,
       topic,
       tags,
@@ -36,10 +19,10 @@ export default function useSearchForms() {
   };
 
   const reset = () => {
-    setYear(INITIAL_VALUES.year);
-    setTopic(INITIAL_VALUES.topic);
-    setTags(INITIAL_VALUES.tags);
-    setText(INITIAL_VALUES.text);
+    setYear(INITIAL_QUERY.year);
+    setTopic(INITIAL_QUERY.topic);
+    setTags(INITIAL_QUERY.tags);
+    setText(INITIAL_QUERY.content);
   };
 
   return {

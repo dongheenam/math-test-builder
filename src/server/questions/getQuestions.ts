@@ -74,7 +74,7 @@ export default async function getQuestions(
         tags: { select: { name: true } },
       },
     });
-    let result: GetQuestionsData = {};
+    let result: GetQuestionsData = { questions: [] };
     if (count) {
       const countPromise = prisma.question.count({ where: where });
       const [questions, countResult] = await prisma.$transaction([
