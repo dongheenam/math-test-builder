@@ -1,7 +1,7 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import { Prisma } from "@prisma/client";
 
-import connectPrisma from "server/connectPrisma";
+import prisma from "server/connectPrisma";
 import {
   parseFloatIfDefined,
   handleTagsQuery,
@@ -67,7 +67,6 @@ export default async function getQuestions(
     }
 
     // fetch documents
-    prisma = connectPrisma();
     const questionsPromise = prisma.question.findMany({
       ...args,
       include: {

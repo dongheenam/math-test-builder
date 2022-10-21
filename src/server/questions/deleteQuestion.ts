@@ -1,5 +1,5 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import connectPrisma from "server/connectPrisma";
+import prisma from "server/connectPrisma";
 import { handleApiError } from "./handleApiError";
 
 /* DELETE: delete the question */
@@ -9,7 +9,6 @@ export default async function deleteQuestion(
   id: string
 ) {
   try {
-    prisma = connectPrisma();
     const question = await prisma.question.delete({
       where: { id: id },
       include: {

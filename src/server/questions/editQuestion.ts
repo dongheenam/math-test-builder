@@ -1,6 +1,6 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import { Prisma } from "@prisma/client";
-import connectPrisma from "server/connectPrisma";
+import prisma from "server/connectPrisma";
 import {
   parseFloatIfDefined,
   handleTagsQuery,
@@ -51,7 +51,6 @@ export default async function editQuestion(
       };
     }
 
-    prisma = connectPrisma();
     let disconnectTagsPromise;
     if (tags) {
       disconnectTagsPromise = prisma.question.update({

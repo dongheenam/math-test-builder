@@ -1,5 +1,5 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import connectPrisma from "server/connectPrisma";
+import prisma from "server/connectPrisma";
 import { rawToFetched } from "server/utils";
 import { handleApiError } from "./handleApiError";
 
@@ -10,7 +10,6 @@ export default async function getQuestion(
   id: string
 ) {
   try {
-    prisma = connectPrisma();
     const question = await prisma.question.findFirstOrThrow({
       where: { id: id },
       include: {

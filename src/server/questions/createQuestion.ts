@@ -1,6 +1,6 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import { Prisma } from "@prisma/client";
-import connectPrisma from "server/connectPrisma";
+import prisma from "server/connectPrisma";
 import {
   parseFloatIfDefined,
   handleTagsQuery,
@@ -45,7 +45,6 @@ export default async function createQuestion(
     };
 
     // send query and return the result
-    prisma = connectPrisma();
     const question = await prisma.question.create({
       data: questionData as Prisma.QuestionCreateInput,
       include: {
