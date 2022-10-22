@@ -24,6 +24,7 @@ export default function App(
           queries: {
             staleTime: 60 * 1000, // 1 minute
             cacheTime: 60 * 1000 * 60, // 60 minutes
+            refetchOnWindowFocus: false,
           },
         },
       })

@@ -1,5 +1,7 @@
 import Link from "next/link";
 import { useRouter } from "next/router";
+import Bucket from "questions/Bucket";
+
 import styles from "./QuestionsLayout.module.scss";
 
 /* Main */
@@ -27,7 +29,7 @@ function NavBar() {
           <NavItem label="My Questions" href="/user/questions" />
         </ul>
         <NavTitle title="bucket" />
-        {/* <Bucket /> */}
+        <Bucket />
       </nav>
     </aside>
   );

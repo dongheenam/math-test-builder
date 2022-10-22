@@ -6,6 +6,7 @@ import { YEAR_LEVELS } from "./constants";
 import { Topic } from "./types";
 
 export type QuestionsState = {
+  // search questions
   searchQuery: {
     year: typeof YEAR_LEVELS[number] | "";
     topic: Topic | "";
@@ -14,8 +15,13 @@ export type QuestionsState = {
     orderBy: string;
     take: number;
   };
-
   setSearchQuery: (next: Partial<QuestionsState["searchQuery"]>) => void;
+
+  // question bucket
+  bucket: string[];
+  setBucket: (next: string[]) => void;
+  addToBucket: (items: string[]) => void;
+  emptyBucket: () => void;
 };
 
 export const INITIAL_QUERY: Omit<
@@ -28,7 +34,7 @@ export const INITIAL_QUERY: Omit<
   content: "",
 };
 
-const storeBase = create<QuestionsState>()((set, get) => ({
+const storeBase = create<QuestionsState>()((set) => ({
   searchQuery: {
     ...INITIAL_QUERY,
     orderBy: "-updatedAt",
@@ -36,6 +42,12 @@ const storeBase = create<QuestionsState>()((set, get) => ({
   },
   setSearchQuery: (next) =>
     set((prev) => ({ searchQuery: { ...prev.searchQuery, ...next } })),
+
+  bucket: [],
+  setBucket: (next) => set({ bucket: next }),
+  addToBucket: (items) =>
+    set((prev) => ({ bucket: [...new Set([...prev.bucket, ...items])] })),
+  emptyBucket: () => set({ bucket: [] }),
 }));
 
 const useStore = createSelectors(storeBase);

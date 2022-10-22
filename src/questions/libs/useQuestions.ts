@@ -24,7 +24,7 @@ export function fetchQuestions(searchQuery: SearchQuery) {
   }) as Promise<GetQuestionsData>;
 }
 
-export default function useFetchQuestions() {
+export default function useQuestions() {
   const searchQuery = useStore.use.searchQuery();
 
   return useQuery(["questions", searchQuery], () =>

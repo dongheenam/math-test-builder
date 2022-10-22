@@ -1,0 +1,43 @@
+.root {
+  max-width: 250px;
+  padding-right: 12px;
+
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.q {
+  display: flex;
+  align-items: center;
+}
+.qContent {
+  margin: 0 8px;
+  flex: 1;
+
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.btn {
+  flex-shrink: 0;
+  border: none;
+  border-radius: 4px;
+  width: 1.25em;
+  color: var(--gray11);
+  background-color: transparent;
+
+  &:hover {
+    color: var(--text);
+    background-color: var(--gray4);
+  }
+  &:active {
+    background-color: var(--gray5);
+  }
+  &:focus {
+    outline: none;
+  }
+}
+.dragBtn {
+  cursor: grab;
+}
