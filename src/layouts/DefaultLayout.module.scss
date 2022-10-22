@@ -62,34 +62,28 @@
   margin-top: 0.5rem;
   display: flex;
   flex-direction: column;
+  align-items: flex-end;
   gap: 0.5rem;
 }
-.headerMenuTop {
-  display: flex;
-  flex-direction: row;
-  justify-content: flex-end;
-}
-.TopBtn {
+.headerUserStatus {
+  text-align: right;
+
   padding: 0.5rem 1rem;
-  border-radius: 0.5rem;
-
-  font-weight: 300;
-  text-transform: uppercase;
   color: var(--gray11);
-  background-color: transparent;
-  border: none;
+  font-weight: 300;
 
-  &:not([data-disabled]):hover {
+  a:hover {
     color: var(--text);
+    text-decoration: underline;
   }
 }
 
-.headerMenuBottom {
+.headerNav {
   margin: 0;
   display: flex;
   flex-direction: row;
 }
-.BottomLink {
+.headerNavLink {
   display: block;
 
   font-weight: 600;
