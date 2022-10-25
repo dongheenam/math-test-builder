@@ -1,6 +1,11 @@
+import dynamic from "next/dynamic";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import Bucket from "questions/Bucket";
+
+// Bucket is persisted in local storage
+const Bucket = dynamic(() => import("questions/Bucket"), {
+  ssr: false,
+});
 
 import styles from "./QuestionsLayout.module.scss";
 

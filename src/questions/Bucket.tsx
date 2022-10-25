@@ -1,24 +1,25 @@
-import { useRef, useState } from "react";
+import { useRef } from "react";
+import classNames from "classnames";
 import { IconEdit, IconMenu, IconMinus } from "@tabler/icons";
 
-import styles from "./Bucket.module.scss";
-import classNames from "classnames";
 import useDrag, { DragHandlers } from "common/hooks/useDrag";
 import useStore from "./stores";
 
-export default function Bucket() {
-  const bucket = useStore.use.bucket();
-  const setBucket = useStore.use.setBucket();
-  const dragHandlers = useDrag(bucket, setBucket);
+import styles from "./Bucket.module.scss";
 
-  if (!bucket.length) {
-    return <span>Bucket is empty...</span>;
+export default function Bucket() {
+  const bucketIds = useStore.use.bucketIds();
+  const setBucketIds = useStore.use.setBucketIds();
+  const dragHandlers = useDrag(bucketIds, setBucketIds);
+
+  if (!bucketIds.length) {
+    return <span className={styles.empty}>Bucket is empty...</span>;
   }
 
   return (
     <div className={styles.root} onDragOver={(e) => e.preventDefault()}>
-      {bucket.map((qid) => (
-        <BucketQuestion key={qid} id={qid} dragHandlers={dragHandlers} />
+      {bucketIds.map((id) => (
+        <BucketQuestion key={id} id={id} dragHandlers={dragHandlers} />
       ))}
     </div>
   );
@@ -32,18 +33,19 @@ function BucketQuestion({
   dragHandlers: DragHandlers;
 }) {
   const ref = useRef(null);
+  const bucket = useStore.use.bucket();
+  const removeFromBucket = useStore.use.removeFromBucket();
 
   return (
     <div className={styles.q} ref={ref} onDragOver={(e) => e.preventDefault()}>
       <DragButton id={id} dragHandlers={dragHandlers} parentRef={ref} />
-      <span className={styles.qContent}>
-        {id}
-        {id}
-      </span>
+
+      <span className={styles.qContent}>{bucket[id].content}</span>
+
       <button className={styles.btn}>
         <IconEdit stroke={1} />
       </button>
-      <button className={styles.btn}>
+      <button className={styles.btn} onClick={() => removeFromBucket(id)}>
         <IconMinus stroke={1} />
       </button>
     </div>

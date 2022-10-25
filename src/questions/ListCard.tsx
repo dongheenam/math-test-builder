@@ -24,7 +24,7 @@ export function ListCard() {
     );
   const isSelected = (id: string) => selected.includes(id);
   const addSelectedToBucket = () => {
-    addToBucket(selected);
+    addToBucket(questions.filter((question) => selected.includes(question.id)));
     setSelected([]);
   };
 

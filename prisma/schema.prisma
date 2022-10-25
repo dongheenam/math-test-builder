@@ -22,8 +22,6 @@ model Question {
   isDraft   Boolean  @default(false)
   author    User?    @relation(fields: [authorId], references: [id])
   authorId  String?  @db.ObjectId
-  bucket    Bucket[] @relation(fields: [bucketIds], references: [id])
-  bucketIds String[] @db.ObjectId
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now())
 
@@ -47,15 +45,6 @@ model User {
   sessions      Session[]
   role          UserRole   @default(USER)
   questions     Question[]
-  bucket        Bucket?
-}
-
-model Bucket {
-  id          String     @id @default(auto()) @map("_id") @db.ObjectId
-  user        User       @relation(fields: [userId], references: [id])
-  userId      String     @unique @db.ObjectId
-  questions   Question[] @relation(fields: [questionIds], references: [id])
-  questionIds String[]   @db.ObjectId
 }
 
 // NEXT-AUTH 
