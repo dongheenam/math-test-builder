@@ -1,6 +1,9 @@
 import type { NextApiRequest, NextApiResponse } from "next";
+import { unstable_getServerSession } from "next-auth";
+import { authOptions } from "../auth/[...nextauth]";
 
 import {
+  AuthError,
   DocumentIdError,
   handleApiError,
 } from "server/questions/handleApiError";
@@ -12,6 +15,11 @@ import { handleTagsQuery, myParseFloat } from "server/utils";
 /* main API handler */
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   try {
+    const session = await unstable_getServerSession(req, res, authOptions);
+    if (!session) {
+      throw new AuthError();
+    }
+
     const method = req.method;
     const query = req.query;
     const body = req.body;
@@ -33,6 +41,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
         /* PUT/PATCH: edit the question */
         const editedQuestion = await editQuestion(id, {
           ...req.body,
+          authorId: session.user?.id,
           yearLevel: myParseFloat(body.yearLevel),
           tags: handleTagsQuery(body.tags),
         });

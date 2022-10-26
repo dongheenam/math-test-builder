@@ -15,6 +15,11 @@ export default async function createQuestion(
         create: { name: tag },
       })),
     },
+    author: {
+      connect: {
+        id: query.authorId,
+      },
+    },
   };
 
   // send query and return the result

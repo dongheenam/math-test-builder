@@ -1,17 +1,9 @@
 import React from "react";
 import * as PrimSelect from "@radix-ui/react-select";
 import { Label } from "@radix-ui/react-label";
-import { IconSelector, IconCheck, IconX } from "@tabler/icons";
+import { IconSelector, IconCheck } from "@tabler/icons";
 
 import styles from "./Select.module.scss";
-
-// Redecalare forwardRef
-// ref: https://fettblog.eu/typescript-react-generic-forward-refs/
-declare module "react" {
-  function forwardRef<T, P = {}>(
-    render: (props: P, ref: React.Ref<T>) => React.ReactElement | null
-  ): (props: P & React.RefAttributes<T>) => React.ReactElement | null;
-}
 
 export type SelectProps<T extends string> = React.ComponentProps<
   typeof PrimSelect.Root

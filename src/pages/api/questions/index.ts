@@ -1,13 +1,21 @@
 import type { NextApiRequest, NextApiResponse } from "next";
+import { unstable_getServerSession } from "next-auth/next";
+
+import { apiAuthOptions } from "pages/api/auth/[...nextauth]";
 
 import createQuestion from "server/questions/createQuestion";
 import getQuestions from "server/questions/getQuestions";
-import { handleApiError } from "server/questions/handleApiError";
+import { AuthError, handleApiError } from "server/questions/handleApiError";
 import { myParseFloat, handleTagsQuery } from "server/utils";
 
 /* main API handler */
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   try {
+    const session = await unstable_getServerSession(req, res, apiAuthOptions);
+    if (!session || !session.user?.id) {
+      throw new AuthError();
+    }
+
     const method = req.method;
     const query = req.query;
     const body = req.body;
@@ -22,6 +30,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
         /* POST: create a new question */
         const newQuestion = await createQuestion({
           ...body,
+          authorId: session.user.id,
           yearLevel: myParseFloat(body.yearLevel),
           tags: handleTagsQuery(req.body.tags),
         });
