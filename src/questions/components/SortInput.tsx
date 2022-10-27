@@ -3,7 +3,7 @@ import { SORT_DATA } from "questions/constants";
 
 export type SortInputState = {
   sortBy: string;
-  setSortBy: React.Dispatch<React.SetStateAction<string>>;
+  setSortBy: (value: string) => void;
 };
 
 export function SortInput({ sortBy, setSortBy }: SortInputState) {

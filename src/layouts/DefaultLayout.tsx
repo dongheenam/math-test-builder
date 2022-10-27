@@ -3,6 +3,7 @@ import { useRouter } from "next/router";
 import Link from "next/link";
 import * as NavigationMenu from "@radix-ui/react-navigation-menu";
 
+import useSession from "common/hooks/useSession";
 import { Anchor } from "common/components";
 
 import styles from "./DefaultLayout.module.scss";
@@ -31,21 +32,50 @@ function Header() {
         <span className={styles.headerVersion}>v0.1.beta</span>
       </div>
       <div className={styles.headerMenu}>
-        <div className={styles.headerMenuTop}>
-          <button className={styles.TopBtn} data-disabled="true">
-            log in
-          </button>
+        <div className={styles.headerUserStatus}>
+          <HeaderUserStatus />
         </div>
-        <HeaderMenuBottom />
+        <HeaderNav />
       </div>
     </div>
   );
 }
 
-function HeaderMenuBottom() {
+function HeaderUserStatus() {
+  const { data: session, status } = useSession();
+
+  if (status === "loading") {
+    return <span>Loading...</span>;
+  }
+
+  if (status === "error") {
+    return <span>Error fetching user info!</span>;
+  }
+
+  if (session) {
+    return (
+      <>
+        <Link href="/user" passHref>
+          <a>{session.user?.name}</a>
+        </Link>{" "}
+        <Link href="/api/auth/signout" passHref>
+          <a>(log out)</a>
+        </Link>
+      </>
+    );
+  } else {
+    return (
+      <Link href="/api/auth/signin" passHref>
+        <a>log in</a>
+      </Link>
+    );
+  }
+}
+
+function HeaderNav() {
   return (
     <NavigationMenu.Root>
-      <NavigationMenu.List className={styles.headerMenuBottom}>
+      <NavigationMenu.List className={styles.headerNav}>
         <NavItem href="/">Home</NavItem>
         <NavItem href="/questions">Questions</NavItem>
         <NavItem href="/tests" disabled>
@@ -68,10 +98,10 @@ function NavItem({
   const router = useRouter();
 
   return (
-    <NavigationMenu.Item className={styles.BottomBtn}>
+    <NavigationMenu.Item>
       <Link href={href} passHref>
         <NavigationMenu.Link
-          className={styles.BottomLink}
+          className={styles.headerNavLink}
           active={!disabled && href === router.asPath}
           data-disabled={disabled}
         >

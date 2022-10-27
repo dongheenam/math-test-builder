@@ -1,0 +1,43 @@
+@use "styles/variables" as *;
+
+// EditorContainer
+.overlay {
+  background: rgba(0 0 0 / 0.5);
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: grid;
+  place-items: center;
+  overflow-y: auto;
+}
+.content {
+  background: var(--bg);
+  width: min(90vw, 800px);
+  padding: 16px;
+  border-radius: 8px;
+
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+// Editor
+.titleRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.title {
+  margin-top: 0;
+}
+.closeIcon {
+  font-size: 20px;
+  color: var(--gray10);
+  border: none;
+
+  &:hover {
+    color: var(--text);
+  }
+}

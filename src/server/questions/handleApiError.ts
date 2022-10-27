@@ -6,7 +6,13 @@ export function handleApiError(err: unknown, res: NextApiResponse): void {
   let message = "unknown problem occurred";
   console.log(err);
 
-  if (err instanceof Prisma.PrismaClientValidationError) {
+  if (err instanceof AuthError) {
+    status = 403;
+    message = "api requested while not logged in";
+  } else if (err instanceof QueryError) {
+    status = 400;
+    message = "invalid request query, body or route";
+  } else if (err instanceof Prisma.PrismaClientValidationError) {
     status = 400;
     message = `db validation failed: ${err}`;
   } else if (
@@ -15,9 +21,6 @@ export function handleApiError(err: unknown, res: NextApiResponse): void {
   ) {
     status = 404;
     message = "id does not exist in the db or has wrong type";
-  } else if (err instanceof QueryError) {
-    status = 400;
-    message = "invalid request query, body or route";
   } else if (err instanceof Error) {
     message = `unknown error occurred`;
   }
@@ -37,5 +40,12 @@ export class DocumentIdError extends Error {
   constructor(message?: string) {
     super(message);
     this.name = "DocumentIdError";
+  }
+}
+
+export class AuthError extends Error {
+  constructor(message?: string) {
+    super(message);
+    this.name = "AuthError";
   }
 }

@@ -1,9 +1,8 @@
 import pluralize from "pluralize";
 import { QuestionFetched, QuestionRaw } from "questions/types";
 
-/** parseFloat the input if defined */
-export function parseFloatIfDefined(input: any) {
-  if (input === undefined) return;
+/** slightly better version of parseFloat */
+export function myParseFloat(input: any) {
   const parsed = Number(input);
   if (!isNaN(parsed)) return parsed;
 }

@@ -1,10 +1,7 @@
-import { PrismaClient } from "@prisma/client";
-import connectPrisma from "server/connectPrisma";
+import prisma from "server/connectPrisma";
 import { NextApiRequest, NextApiResponse } from "next";
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
-  const prisma = connectPrisma();
-
   switch (req.method) {
     case "POST":
       break;

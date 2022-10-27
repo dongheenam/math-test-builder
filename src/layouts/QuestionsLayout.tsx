@@ -1,5 +1,12 @@
+import dynamic from "next/dynamic";
 import Link from "next/link";
 import { useRouter } from "next/router";
+
+// Bucket is persisted in local storage
+const Bucket = dynamic(() => import("questions/Bucket"), {
+  ssr: false,
+});
+
 import styles from "./QuestionsLayout.module.scss";
 
 /* Main */
@@ -27,7 +34,7 @@ function NavBar() {
           <NavItem label="My Questions" href="/user/questions" />
         </ul>
         <NavTitle title="bucket" />
-        {/* <Bucket /> */}
+        <Bucket />
       </nav>
     </aside>
   );
