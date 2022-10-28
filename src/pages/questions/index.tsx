@@ -1,5 +1,6 @@
 import React from "react";
 import dynamic from "next/dynamic";
+import { useSession } from "next-auth/react";
 
 import { getQuestionsLayout } from "layouts";
 import { SearchCard } from "questions/SearchCard";
@@ -13,6 +14,8 @@ const EditorContainer = dynamic(() => import("questions/EditorContainer"), {
 
 Questions.getLayout = getQuestionsLayout;
 export default function Questions() {
+  useSession({ required: true });
+
   return (
     <div className={styles.root}>
       <h2>Search Questions</h2>

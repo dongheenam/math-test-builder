@@ -10,6 +10,7 @@ import {
 import useSearchForms from "questions/libs/useSearchForm";
 
 import styles from "./SearchCard.module.scss";
+import useStore from "./libs/stores";
 
 export function SearchCard() {
   const {
@@ -20,6 +21,7 @@ export function SearchCard() {
     submitForm,
     resetForm,
   } = useSearchForms();
+  const openEditor = useStore.use.openEditor();
 
   return (
     <div className={styles.root}>
@@ -45,7 +47,7 @@ export function SearchCard() {
         <button className={styles.btnReset} onClick={() => resetForm()}>
           Reset form
         </button>
-        <button className={styles.btnNew}>
+        <button className={styles.btnNew} onClick={() => openEditor()}>
           <IconFilePlus stroke={2} size="1em" />
           <span>New question</span>
         </button>

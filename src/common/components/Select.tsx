@@ -20,7 +20,7 @@ function renderSelect<T extends string>(
   return (
     <Label asChild>
       <div className={styles.root}>
-        <span className={styles.label}>{label}</span>
+        {label && <span className={styles.label}>{label}</span>}
         <PrimSelect.Root
           value={value}
           onValueChange={(value) => setValue(value as T)}

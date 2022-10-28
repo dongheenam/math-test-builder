@@ -1,5 +1,5 @@
 import pluralize from "pluralize";
-import { QuestionFetched, QuestionRaw } from "questions/types";
+import { QuestionFetched, QuestionRaw } from "questions/libs/types";
 
 /** slightly better version of parseFloat */
 export function myParseFloat(input: any) {

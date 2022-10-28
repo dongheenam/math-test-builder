@@ -3,7 +3,7 @@ import classNames from "classnames";
 import { IconEdit, IconMenu, IconMinus } from "@tabler/icons";
 
 import useDrag, { DragHandlers } from "common/hooks/useDrag";
-import useStore from "./stores";
+import useStore from "./libs/stores";
 
 import styles from "./Bucket.module.scss";
 

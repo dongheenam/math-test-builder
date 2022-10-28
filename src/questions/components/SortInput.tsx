@@ -1,5 +1,5 @@
 import { Select, SelectItem } from "common/components";
-import { SORT_DATA } from "questions/constants";
+import { SORT_DATA } from "questions/libs/constants";
 
 export type SortInputState = {
   sortBy: string;

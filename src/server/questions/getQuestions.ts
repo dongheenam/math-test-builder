@@ -3,7 +3,7 @@ import { Prisma } from "@prisma/client";
 import prisma from "server/connectPrisma";
 import { parseOrderBy, rawToFetched } from "server/utils";
 import { GetQuestionsData, GetQuestionsQuery } from "./types";
-import { QuestionRaw } from "questions/types";
+import { QuestionRaw } from "questions/libs/types";
 
 export default async function getQuestions({
   topic,

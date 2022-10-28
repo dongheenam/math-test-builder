@@ -4,11 +4,11 @@ import { IconPlus, IconEdit } from "@tabler/icons";
 import { Checkbox } from "common/components";
 import { SortInput } from "./components";
 import useQuestions from "questions/libs/useQuestions";
-import { TOPIC_COLORS, TOPIC_VALUES } from "./constants";
-import { QuestionFetched } from "./types";
+import { TOPIC_COLORS, TOPIC_VALUES } from "./libs/constants";
+import { QuestionFetched } from "./libs/types";
 
 import styles from "./ListCard.module.scss";
-import useStore from "./stores";
+import useStore from "./libs/stores";
 
 export function ListCard() {
   // questions
@@ -83,11 +83,10 @@ function ListPanel({
         )}
       </div>
 
-      {count ? (
-        <div className={styles.count}>showing {count} results</div>
-      ) : (
-        <div></div>
-      )}
+      <div className={styles.count}>
+        {count ? <>showing {count} results</> : <>no results</>}
+      </div>
+
       <div className={styles.controlSort}>
         <SortInput sortBy={orderBy} setSortBy={setOrderBy} />
       </div>

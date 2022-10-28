@@ -1,4 +1,4 @@
-import { Question, QuestionFetched } from "questions/types";
+import { Question, QuestionFetched } from "questions/libs/types";
 
 /** POST /api/questions */
 export type CreateQuestionQuery = Pick<

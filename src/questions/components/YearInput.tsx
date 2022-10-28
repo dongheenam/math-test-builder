@@ -1,5 +1,5 @@
 import { Select, SelectItem } from "common/components";
-import { YEAR_LEVELS } from "questions/constants";
+import { YEAR_LEVELS } from "questions/libs/constants";
 
 const inputLabel = "Year";
 

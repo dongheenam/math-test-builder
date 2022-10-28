@@ -25,6 +25,8 @@
 
 // Editor
 .titleRow {
+  margin-bottom: 1rem;
+
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -40,4 +42,19 @@
   &:hover {
     color: var(--text);
   }
+}
+
+.metaFields {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+.yearBox {
+  min-width: 4rem;
+}
+.topicBox {
+  min-width: 9rem;
+}
+.tagsBox {
+  flex: 1;
 }

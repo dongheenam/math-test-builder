@@ -16,10 +16,9 @@ export type QuestionFetched = Question & {
 };
 // questions in forms
 export type QuestionDraft = {
-  id: string;
   topic: Question["topic"] | "";
   yearLevel: typeof YEAR_LEVELS[number] | "";
-  tags: Set<string>;
+  tags: string[];
   content: Question["content"];
   solution: Question["solution"];
 };

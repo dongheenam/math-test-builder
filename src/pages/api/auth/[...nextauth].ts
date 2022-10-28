@@ -1,4 +1,4 @@
-import NextAuth, { DefaultUser, NextAuthOptions } from "next-auth";
+import NextAuth, { NextAuthOptions } from "next-auth";
 import { PrismaAdapter } from "@next-auth/prisma-adapter";
 import AzureADProvider from "next-auth/providers/azure-ad";
 

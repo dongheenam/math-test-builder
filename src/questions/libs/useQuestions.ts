@@ -1,13 +1,13 @@
 import { useQuery } from "@tanstack/react-query";
 
-import useStore from "questions/stores";
+import useStore from "questions/libs/stores";
 import { toSearchParams, callApi } from "common/utils";
 import type { GetQuestionsData } from "server/questions/types";
 import { Topic } from "@prisma/client";
-import { YEAR_LEVELS } from "questions/constants";
+import { YEAR_LEVELS } from "questions/libs/constants";
 
 export type SearchQuery = {
-  year: typeof YEAR_LEVELS[number] | "";
+  yearLevel: typeof YEAR_LEVELS[number] | "";
   topic: Topic | "";
   tags: string[];
   content: string;

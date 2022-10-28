@@ -1,6 +1,6 @@
 import { Select, SelectItem } from "common/components";
-import { TOPIC_VALUES, TOPIC_COLORS } from "questions/constants";
-import { Topic } from "questions/types";
+import { TOPIC_VALUES, TOPIC_COLORS } from "questions/libs/constants";
+import { Topic } from "questions/libs/types";
 
 const inputLabel = "Topic";
 

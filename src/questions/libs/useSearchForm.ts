@@ -1,34 +1,34 @@
-import { INITIAL_QUERY } from "questions/stores";
+import { INITIAL_QUERY } from "questions/libs/stores";
 import { useState } from "react";
-import useStore from "questions/stores";
+import useStore from "questions/libs/stores";
 
 export default function useSearchForm() {
-  const [formValues, setFormValues] = useState(INITIAL_QUERY);
+  const [formFields, setFormFields] = useState(INITIAL_QUERY);
 
   const updateForm =
     <Key extends keyof typeof INITIAL_QUERY>(field: Key) =>
     (value: typeof INITIAL_QUERY[Key]) =>
-      setFormValues((prev) => ({ ...prev, [field]: value }));
+      setFormFields((prev) => ({ ...prev, [field]: value }));
 
   const setQuery = useStore.use.setSearchQuery();
-  const submitForm = () => setQuery(formValues);
-  const resetForm = () => setFormValues(INITIAL_QUERY);
+  const submitForm = () => setQuery(formFields);
+  const resetForm = () => setFormFields(INITIAL_QUERY);
 
   return {
     yearControl: {
-      year: formValues.year,
-      setYear: updateForm("year"),
+      year: formFields.yearLevel,
+      setYear: updateForm("yearLevel"),
     },
     topicControl: {
-      topic: formValues.topic,
+      topic: formFields.topic,
       setTopic: updateForm("topic"),
     },
     tagsControl: {
-      tags: formValues.tags,
+      tags: formFields.tags,
       setTags: updateForm("tags"),
     },
     contentControl: {
-      content: formValues.content,
+      content: formFields.content,
       setContent: updateForm("content"),
     },
     submitForm,

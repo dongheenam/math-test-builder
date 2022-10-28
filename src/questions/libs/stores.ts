@@ -3,12 +3,12 @@ import { persist } from "zustand/middleware";
 
 import { createSelectors } from "common/utils";
 import { YEAR_LEVELS } from "./constants";
-import { QuestionFetched, Topic } from "./types";
+import { QuestionDraft, QuestionFetched, Topic } from "./types";
 
 export type QuestionsState = {
   // search questions
   searchQuery: {
-    year: typeof YEAR_LEVELS[number] | "";
+    yearLevel: typeof YEAR_LEVELS[number] | "";
     topic: Topic | "";
     tags: string[];
     content: string;
@@ -24,16 +24,31 @@ export type QuestionsState = {
   addToBucket: (questions: QuestionFetched[]) => void;
   removeFromBucket: (id: string) => void;
   emptyBucket: () => void;
+
+  // question editor
+  isEditorOpen: boolean;
+  questionEdited: QuestionDraft;
+  editQuestion: (next: Partial<QuestionDraft>) => void;
+  openEditor: (question?: QuestionFetched) => void;
+  closeEditor: () => void;
 };
 
 export const INITIAL_QUERY: Omit<
   QuestionsState["searchQuery"],
   "orderBy" | "take"
 > = {
-  year: "",
   topic: "",
+  yearLevel: "",
   tags: [],
   content: "",
+};
+
+export const EMPTY_QUESTION: QuestionDraft = {
+  topic: "",
+  yearLevel: "",
+  tags: [],
+  content: "",
+  solution: "",
 };
 
 const storeBase = create<QuestionsState>()(
@@ -67,6 +82,33 @@ const storeBase = create<QuestionsState>()(
           bucketIds: prev.bucketIds.filter((item) => item !== id),
         })),
       emptyBucket: () => set({ bucketIds: [], bucket: {} }),
+
+      isEditorOpen: false,
+      questionEdited: EMPTY_QUESTION,
+      editQuestion: (next) =>
+        set((prev) => ({
+          questionEdited: { ...prev.questionEdited, ...next },
+        })),
+      openEditor: (question) => {
+        let questionEdited: QuestionDraft = EMPTY_QUESTION;
+        if (question) {
+          questionEdited = {
+            ...questionEdited,
+            topic: question.topic,
+            yearLevel:
+              question.yearLevel.toString() as QuestionDraft["yearLevel"],
+            tags: question.tags,
+            content: question.content,
+            solution: question.solution,
+          };
+        }
+        set({ isEditorOpen: true, questionEdited: questionEdited });
+      },
+      closeEditor: () =>
+        set((prev) => ({
+          isEditorOpen: false,
+          questionEdited: EMPTY_QUESTION,
+        })),
     }),
 
     // persist options
