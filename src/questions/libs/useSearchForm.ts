@@ -15,19 +15,19 @@ export default function useSearchForm() {
   const resetForm = () => setFormFields(INITIAL_QUERY);
 
   return {
-    yearControl: {
+    yearState: {
       year: formFields.yearLevel,
       setYear: updateForm("yearLevel"),
     },
-    topicControl: {
+    topicState: {
       topic: formFields.topic,
       setTopic: updateForm("topic"),
     },
-    tagsControl: {
+    tagsState: {
       tags: formFields.tags,
       setTags: updateForm("tags"),
     },
-    contentControl: {
+    contentState: {
       content: formFields.content,
       setContent: updateForm("content"),
     },

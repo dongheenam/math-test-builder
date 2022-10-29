@@ -38,12 +38,14 @@ select {
   background-color: var(--bg);
   border: 1px solid var(--gray7);
   text-decoration: none;
-  text-align: center;
-  cursor: pointer;
 
   &:focus {
     outline: 3px solid var(--primary8);
   }
+}
+button {
+  border: none;
+  cursor: pointer;
 }
 
 a {

@@ -55,3 +55,39 @@
 .tagsBox {
   flex: 1;
 }
+.label {
+  @include mixins.label;
+}
+
+.contentField,
+.solutionField {
+  display: flex;
+  flex-direction: column;
+}
+
+// controls
+.control {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+}
+.btnEmpty,
+.btnSave {
+  padding: 0.6rem 1rem;
+  border-radius: $radius-item;
+  font-weight: 600;
+}
+.btnEmpty {
+  @include mixins.button;
+}
+.btnSave {
+  @include mixins.button-fill("primary");
+
+  display: flex;
+  gap: 0.6rem;
+  align-items: center;
+
+  & svg {
+    scale: 1.5;
+  }
+}

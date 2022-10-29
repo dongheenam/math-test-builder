@@ -15,23 +15,23 @@ export default function useEditQuestions() {
   const resetEditor = () => setEditorFields(EMPTY_QUESTION);
 
   return {
-    yearControl: {
+    yearState: {
       year: editorFields.yearLevel,
       setYear: updateForm("yearLevel"),
     },
-    topicControl: {
+    topicState: {
       topic: editorFields.topic,
       setTopic: updateForm("topic"),
     },
-    tagsControl: {
+    tagsState: {
       tags: editorFields.tags,
       setTags: updateForm("tags"),
     },
-    contentControl: {
+    contentState: {
       content: editorFields.content,
       setContent: updateForm("content"),
     },
-    solutionControl: {
+    solutionState: {
       solution: editorFields.solution,
       setSolution: updateForm("solution"),
     },

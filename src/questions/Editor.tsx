@@ -1,6 +1,6 @@
 import React from "react";
 import * as Dialog from "@radix-ui/react-dialog";
-import { IconX } from "@tabler/icons";
+import { IconX, IconDeviceFloppy } from "@tabler/icons";
 
 import { YearInput, TopicInput, TagsInput, MarkdownEditor } from "./components";
 import useEditQuestions from "./libs/useEditQuestions";
@@ -8,11 +8,11 @@ import styles from "./Editor.module.scss";
 
 export default function Editor({ closeEditor }: { closeEditor: () => void }) {
   const {
-    yearControl,
-    topicControl,
-    tagsControl,
-    contentControl,
-    solutionControl,
+    yearState,
+    topicState,
+    tagsState,
+    contentState,
+    solutionState,
     submitQuestion,
     resetEditor,
   } = useEditQuestions();
@@ -30,30 +30,36 @@ export default function Editor({ closeEditor }: { closeEditor: () => void }) {
       </div>
       <div className={styles.metaFields}>
         <div className={styles.yearBox}>
-          <YearInput {...yearControl} />
+          <YearInput {...yearState} />
         </div>
         <div className={styles.topicBox}>
-          <TopicInput {...topicControl} />
+          <TopicInput {...topicState} />
         </div>
         <div className={styles.tagsBox}>
-          <TagsInput {...tagsControl} />
+          <TagsInput {...tagsState} />
         </div>
       </div>
       <div className={styles.contentField}>
-        <span>Content</span>
+        <span className={styles.label}>Content</span>
         <MarkdownEditor
-          text={contentControl.content}
-          setText={contentControl.setContent}
+          text={contentState.content}
+          setText={contentState.setContent}
         />
       </div>
       <div className={styles.solutionField}>
-        <span>Solution</span>
+        <span className={styles.label}>Solution</span>
         <MarkdownEditor
-          text={solutionControl.solution}
-          setText={solutionControl.setSolution}
+          text={solutionState.solution}
+          setText={solutionState.setSolution}
         />
       </div>
-      <div className={styles.buttons}>save</div>
+      <div className={styles.control}>
+        <button className={styles.btnEmpty}>Empty all</button>
+        <button className={styles.btnSave}>
+          <IconDeviceFloppy stroke={2} size="1em" />
+          <span>Save question</span>
+        </button>
+      </div>
     </>
   );
 }

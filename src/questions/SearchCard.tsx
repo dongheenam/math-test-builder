@@ -14,10 +14,10 @@ import useStore from "./libs/stores";
 
 export function SearchCard() {
   const {
-    yearControl,
-    topicControl,
-    tagsControl,
-    contentControl,
+    yearState,
+    topicState,
+    tagsState,
+    contentState,
     submitForm,
     resetForm,
   } = useSearchForms();
@@ -27,16 +27,16 @@ export function SearchCard() {
     <div className={styles.root}>
       <div className={styles.form}>
         <div className={styles.yearBox}>
-          <YearInput {...yearControl} />
+          <YearInput {...yearState} />
         </div>
         <div className={styles.topicBox}>
-          <TopicInput {...topicControl} />
+          <TopicInput {...topicState} />
         </div>
         <div className={styles.tagsBox}>
-          <TagsInput {...tagsControl} />
+          <TagsInput {...tagsState} />
         </div>
         <div className={styles.textBox}>
-          <ContentInput {...contentControl} />
+          <ContentInput {...contentState} />
         </div>
       </div>
       <div className={styles.buttons}>

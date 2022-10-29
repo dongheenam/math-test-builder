@@ -33,7 +33,6 @@
   button {
     display: inline;
     background-color: transparent;
-    border: none;
 
     @include mixins.text("primary");
     @include mixins.text-ia("primary");
@@ -119,9 +118,7 @@
   gap: 4px;
 
   button {
-    border: none;
     border-radius: 4px;
-
     @include mixins.button("gray");
   }
 }

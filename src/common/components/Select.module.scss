@@ -12,6 +12,7 @@
 .trigger {
   width: 100%;
   padding: 9px 16px;
+  @include mixins.border;
   border-radius: $radius-item;
 
   display: flex;

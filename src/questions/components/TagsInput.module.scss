@@ -72,10 +72,8 @@
   cursor: pointer;
 }
 .emptyIcon {
-  background-color: transparent;
-  border: none;
-
   @include mixins.button;
+  background-color: transparent;
   @include mixins.no-focus;
 }
 .selectIcon,

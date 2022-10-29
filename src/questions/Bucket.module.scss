@@ -28,13 +28,11 @@
 }
 .btn {
   flex-shrink: 0;
-  border: none;
   border-radius: 4px;
   width: 1.25em;
-  color: var(--gray11);
-  background-color: transparent;
 
   @include mixins.button;
+  background-color: transparent;
   @include mixins.no-focus;
 }
 .dragBtn {
