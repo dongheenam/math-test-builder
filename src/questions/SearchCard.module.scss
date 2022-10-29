@@ -1,4 +1,5 @@
 @use "styles/variables" as *;
+@use "styles/mixins";
 
 .root {
   width: 100%;
@@ -6,7 +7,7 @@
   padding-top: 24px;
 
   background-color: var(--bg);
-  border-radius: 8px;
+  border-radius: $radius-card;
   box-shadow: $shadow-xs;
 
   display: flex;
@@ -54,33 +55,15 @@
   }
 }
 .btnSearch {
-  color: var(--bg);
-  background-color: var(--primary9);
-
-  &:hover {
-    background-color: var(--primary10);
-  }
-  &:active {
-    background-color: var(--primary11);
-  }
+  @include mixins.button-fill("primary");
 }
 .btnReset {
-  composes: btn from global;
-
-  color: var(--gray11);
+  @include mixins.button("gray");
 }
 .btnNew {
   margin-left: auto;
 
-  color: var(--green11);
-  border: 1px solid var(--green7);
-  background-color: var(--green3);
-
-  &:hover {
-    border-color: var(--green8);
-    background-color: var(--green4);
-  }
-  &:active {
-    background-color: var(--green5);
-  }
+  @include mixins.border("green");
+  @include mixins.border-ia("green");
+  @include mixins.button("green");
 }

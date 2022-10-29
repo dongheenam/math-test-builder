@@ -1,0 +1,102 @@
+@use "styles/variables" as *;
+
+/* UTILITIES */
+// text color
+@mixin text($color: gray) {
+  color: var(--#{$color}11);
+}
+@mixin text-ia($color: gray) {
+  &:hover,
+  &:active,
+  &:focus {
+    color: var(--#{$color}12);
+  }
+}
+
+// backgrounds
+@mixin bg($color: gray) {
+  background-color: var(--#{$color}3);
+}
+@mixin bg-ia($color: gray) {
+  &:hover {
+    background-color: var(--#{$color}4);
+  }
+  &:active {
+    background-color: var(--#{$color}5);
+  }
+}
+
+// subtle backgrounds
+@mixin bg-subtle($color: gray) {
+  background-color: var(--#{$color}2);
+}
+
+// filled backgrounds
+@mixin bg-fill($color: gray) {
+  color: var(--bg);
+  background-color: var(--#{$color}9);
+}
+@mixin bg-fill-ia($color: gray) {
+  &:hover {
+    background-color: var(--#{$color}10);
+  }
+  &:active {
+    background-color: var(--#{$color}11);
+  }
+}
+
+// focus rings
+@mixin focus($color: primary) {
+  position: relative;
+  &:focus {
+    outline: 3px solid var(--#{$color}8);
+    z-index: 10;
+  }
+}
+@mixin focus-within($color: primary) {
+  &:focus-within {
+    outline: 3px solid var(--#{$color}8);
+  }
+}
+@mixin no-focus {
+  &:focus {
+    outline: none;
+  }
+}
+
+// borders
+@mixin border($color: gray) {
+  border: 1px solid var(--#{$color}7);
+}
+@mixin border-ia($color: gray) {
+  &:focus {
+    border-color: var(--#{$color}8);
+  }
+}
+
+@mixin border-subtle($color: gray, $loc: "all") {
+  @if ($loc == "all") {
+    border: 1px solid var(--#{$color}6);
+  } @else {
+    border-#{$loc}: 1px solid var(--#{$color}6);
+  }
+}
+
+/* PRE-DEFINED STYLES */
+// form label default
+@mixin label {
+  font-size: $size-sm;
+  font-weight: 600;
+  margin-bottom: 6px;
+}
+
+// buttons
+@mixin button($color: gray) {
+  @include text($color);
+  @include bg($color);
+  @include bg-ia($color);
+}
+@mixin button-fill($color: gray) {
+  @include bg-fill($color);
+  @include bg-fill-ia($color);
+}

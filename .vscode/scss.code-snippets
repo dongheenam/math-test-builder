@@ -20,5 +20,17 @@
     "prefix": "useVar",
     "body": ["@use 'styles/variables' as *;", "$0"],
     "description": "Import variables with a @use statement"
+  },
+  "Import Mixins": {
+    "scope": "sass,scss",
+    "prefix": "useMixin",
+    "body": ["@use 'styles/mixins';", "$0"],
+    "description": "Import mixins with a @use statement"
+  },
+  "Include Mixin Statement": {
+    "scope": "sass,scss",
+    "prefix": "incMixin",
+    "body": ["@include mixins.$1;", "$0"],
+    "description": "Use mixins"
   }
 }

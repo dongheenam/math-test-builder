@@ -1,21 +1,18 @@
 @use "styles/variables" as *;
-
-$border-radius: 4px;
+@use "styles/mixins";
 
 // visible components
 .root {
   display: flex;
   flex-direction: column;
-  gap: 6px;
 }
 .label {
-  font-size: $size-sm;
-  font-weight: 600;
+  @include mixins.label;
 }
 .trigger {
   width: 100%;
   padding: 9px 16px;
-  border-radius: $border-radius;
+  border-radius: $radius-item;
 
   display: flex;
   justify-content: space-between;
@@ -28,8 +25,9 @@ $border-radius: 4px;
 // content list
 .options {
   background-color: var(--bg);
-  border: 1px solid var(--gray8);
-  border-radius: $border-radius;
+
+  @include mixins.border();
+  border-radius: $radius-item;
   box-shadow: $shadow-md;
 }
 .item {

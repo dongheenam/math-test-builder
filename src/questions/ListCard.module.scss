@@ -1,11 +1,12 @@
 @use "styles/variables" as *;
+@use "styles/mixins";
 
 // root
 .root {
   width: 100%;
 
   background-color: var(--bg);
-  border-radius: 8px;
+  border-radius: $radius-card;
   box-shadow: $shadow-xs;
 
   display: flex;
@@ -19,7 +20,7 @@
   align-items: center;
   gap: 12px;
 
-  border-bottom: 1px solid var(--gray6);
+  @include mixins.border-subtle($loc: "bottom");
 }
 
 .controlSelected {
@@ -27,25 +28,23 @@
   gap: 4px;
   align-items: baseline;
   span {
-    color: var(--gray11);
+    @include mixins.text("gray");
   }
   button {
     display: inline;
     background-color: transparent;
     border: none;
-    color: var(--primary11);
 
+    @include mixins.text("primary");
+    @include mixins.text-ia("primary");
     &:hover {
       text-decoration: underline;
-    }
-    &:active {
-      color: var(--primary12);
     }
   }
 }
 .count {
   margin-left: auto;
-  color: var(--gray11);
+  @include mixins.text("gray");
 }
 .controlSort {
   width: 9rem;
@@ -62,7 +61,7 @@
   padding: 16px 0;
 
   &:not(:first-of-type) {
-    border-top: 1px solid var(--gray7);
+    @include mixins.border-subtle($loc: "top");
   }
 
   display: grid;
@@ -122,15 +121,7 @@
   button {
     border: none;
     border-radius: 4px;
-    color: var(--gray11);
-    font-weight: 400;
 
-    &:hover {
-      color: var(--text);
-      background-color: var(--gray4);
-    }
-    &:active {
-      background-color: var(--gray5);
-    }
+    @include mixins.button("gray");
   }
 }

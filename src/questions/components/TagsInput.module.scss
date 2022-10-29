@@ -1,6 +1,5 @@
 @use "styles/variables" as *;
-
-$border-radius: 4px;
+@use "styles/mixins";
 
 // visible components
 .root {
@@ -19,8 +18,8 @@ $border-radius: 4px;
   width: 100%;
   padding: 0 16px;
 
-  border: 1px solid var(--gray7);
-  border-radius: $border-radius;
+  @include mixins.border;
+  border-radius: $radius-item;
 
   display: flex;
   justify-content: space-between;
@@ -28,17 +27,13 @@ $border-radius: 4px;
   gap: 4px;
   background-color: var(--bg);
 
-  &:focus-within {
-    outline: 3px solid var(--primary8);
-  }
+  @include mixins.focus-within;
 }
 
 .selectedItem {
   font-size: $size-xs;
   text-transform: uppercase;
   font-weight: 600;
-  color: var(--gray11);
-  background-color: var(--gray3);
 
   display: flex;
   padding: 4px 0.5rem;
@@ -46,12 +41,8 @@ $border-radius: 4px;
   gap: 2px;
   border-radius: 0.25rem;
 
-  &:hover,
-  &:focus {
-    outline: none;
-    color: var(--text);
-    background-color: var(--gray4);
-  }
+  @include mixins.button;
+  @include mixins.no-focus;
 }
 
 .inputWrapper {
@@ -73,9 +64,7 @@ $border-radius: 4px;
   cursor: text;
 
   border: none;
-  &:focus {
-    outline: none;
-  }
+  @include mixins.no-focus;
 }
 .selectIcon {
   translate: 8px;
@@ -84,22 +73,14 @@ $border-radius: 4px;
 }
 .emptyIcon {
   background-color: transparent;
-  color: var(--gray11);
   border: none;
 
-  &:hover,
-  &:focus {
-    outline: none;
-    color: var(--text);
-    background-color: var(--gray4);
-  }
-  &:active {
-    background-color: var(--gray5);
-  }
+  @include mixins.button;
+  @include mixins.no-focus;
 }
 .selectIcon,
 .emptyIcon {
-  border-radius: 4px;
+  border-radius: $radius-item;
 }
 
 // content list
@@ -111,8 +92,8 @@ $border-radius: 4px;
   margin-bottom: 0;
 
   background-color: var(--bg);
-  border: 1px solid var(--gray8);
-  border-radius: 8px;
+  @include mixins.border;
+  border-radius: $radius-item;
   box-shadow: $shadow-sm;
 }
 .item,
@@ -123,11 +104,8 @@ $border-radius: 4px;
   align-items: center;
 }
 .item {
-  &:hover,
-  &:focus {
-    outline: none;
-    background-color: var(--primary4);
-  }
+  @include mixins.no-focus;
+  @include mixins.bg-ia(primary);
 }
 .itemEmpty {
   font-style: italic;

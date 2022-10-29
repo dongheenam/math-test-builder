@@ -1,4 +1,5 @@
 @use "styles/variables" as *;
+@use "styles/mixins";
 
 // EditorContainer
 .overlay {
@@ -16,7 +17,7 @@
   background: var(--bg);
   width: min(90vw, 800px);
   padding: 16px;
-  border-radius: 8px;
+  border-radius: $radius-card;
 
   display: flex;
   flex-direction: column;
@@ -36,12 +37,8 @@
 }
 .closeIcon {
   font-size: 20px;
-  color: var(--gray10);
-  border: none;
 
-  &:hover {
-    color: var(--text);
-  }
+  @include mixins.button;
 }
 
 .metaFields {

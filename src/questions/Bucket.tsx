@@ -1,5 +1,6 @@
 import { useRef } from "react";
 import classNames from "classnames";
+import * as ScrollArea from "@radix-ui/react-scroll-area";
 import { IconEdit, IconMenu, IconMinus } from "@tabler/icons";
 
 import useDrag, { DragHandlers } from "common/hooks/useDrag";
@@ -17,10 +18,20 @@ export default function Bucket() {
   }
 
   return (
-    <div className={styles.root} onDragOver={(e) => e.preventDefault()}>
-      {bucketIds.map((id) => (
-        <BucketQuestion key={id} id={id} dragHandlers={dragHandlers} />
-      ))}
+    <div className={styles.root}>
+      <div className={styles.bucketControls}>
+        <button>Empty</button>
+        <button>Empty</button>
+      </div>
+      <ScrollArea.Root>
+        <ScrollArea.Viewport>
+          <div className={styles.qRoot} onDragOver={(e) => e.preventDefault()}>
+            {bucketIds.map((id) => (
+              <BucketQuestion key={id} id={id} dragHandlers={dragHandlers} />
+            ))}
+          </div>
+        </ScrollArea.Viewport>
+      </ScrollArea.Root>
     </div>
   );
 }
@@ -42,9 +53,6 @@ function BucketQuestion({
 
       <span className={styles.qContent}>{bucket[id].content}</span>
 
-      <button className={styles.btn}>
-        <IconEdit stroke={1} />
-      </button>
       <button className={styles.btn} onClick={() => removeFromBucket(id)}>
         <IconMinus stroke={1} />
       </button>

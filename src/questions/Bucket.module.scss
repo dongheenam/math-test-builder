@@ -1,14 +1,16 @@
-.root {
+@use "styles/mixins";
+
+.empty {
+  color: var(--gray9);
+  font-style: italic;
+}
+
+.qRoot {
   padding-right: 12px;
 
   display: flex;
   flex-direction: column;
   gap: 16px;
-}
-
-.empty {
-  color: var(--gray9);
-  font-style: italic;
 }
 
 .q {
@@ -32,16 +34,8 @@
   color: var(--gray11);
   background-color: transparent;
 
-  &:hover {
-    color: var(--text);
-    background-color: var(--gray4);
-  }
-  &:active {
-    background-color: var(--gray5);
-  }
-  &:focus {
-    outline: none;
-  }
+  @include mixins.button;
+  @include mixins.no-focus;
 }
 .dragBtn {
   cursor: grab;
