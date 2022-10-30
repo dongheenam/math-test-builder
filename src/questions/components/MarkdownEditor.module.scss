@@ -1,0 +1,44 @@
+@use "styles/variables" as *;
+@use "styles/mixins";
+
+.root {
+  @include mixins.border;
+  border-radius: $radius-item;
+}
+
+// buttons
+.control {
+  padding: 4px 12px;
+  @include mixins.border-subtle($loc: "bottom");
+}
+
+// input
+.editor {
+  display: grid;
+  grid-template-columns: 50% 50%;
+
+  max-height: 30vh;
+  overflow-y: auto;
+}
+.input,
+.preview {
+  padding: 8px 12px;
+}
+.input {
+  display: block;
+  resize: none;
+  border: none;
+  overflow-y: hidden;
+
+  @include mixins.border-subtle($loc: "right");
+  font-family: $monospace;
+  font-size: $size-lg;
+}
+// rendered
+.preview {
+  background-color: var(--gray2);
+
+  *:first-child {
+    margin-top: 0;
+  }
+}
